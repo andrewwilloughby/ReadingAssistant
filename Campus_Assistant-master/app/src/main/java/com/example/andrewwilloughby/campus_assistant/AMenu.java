@@ -10,6 +10,9 @@ import android.widget.ImageButton;
  */
 
 public abstract class AMenu extends AppCompatActivity {
+
+
+    //Github change.
     
     protected ImageButton safetyBtn;
     protected ImageButton settingsBtn;
