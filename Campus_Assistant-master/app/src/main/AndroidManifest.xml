@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.andrewwilloughby.campus_assistant">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/launcher_icon_rdg"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".StudentInfoMenu" />
+        <activity android:name=".CampusNavigationMenu" />
+        <activity android:name=".TravelInformationMenu" />
+        <activity android:name=".BBEmailMenu" />
+        <activity android:name=".CampusMapsMenu" />
+        <activity android:name=".LatestNews" />
+        <activity android:name=".Timetable" />
+        <activity android:name=".SafetyInfo" />
+        <activity android:name=".Settings" />
+        <activity android:name=".WebpageView" />
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="0f20978bca22528883025bd082b804abbdfd0415" />
+
+        <activity android:name=".RailDepartures"></activity>
+    </application>
+
+</manifest>

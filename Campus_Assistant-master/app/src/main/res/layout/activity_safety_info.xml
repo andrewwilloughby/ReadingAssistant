@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:id="@+id/activity_safety_info"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:paddingBottom="0dp"
+android:paddingLeft="0dp"
+android:paddingRight="0dp"
+android:paddingTop="0dp"
+tools:context="com.example.andrewwilloughby.campus_assistant.SafetyInfo"
+android:background="?android:attr/detailsElementBackground"
+android:overScrollMode="always">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/activityContainer"
+        android:weightSum="1"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/headImageContainer">
+
+            <ImageView
+                android:layout_width="match_parent"
+                app:srcCompat="@drawable/uor_bg_image"
+                android:id="@+id/headBackgroundImage"
+                android:scaleType="fitXY"
+                android:layout_height="175dp" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_gravity="right"
+            android:layout_width="match_parent"
+            android:layout_marginTop="5dp"
+            android:paddingRight="5dp"
+            android:paddingLeft="5dp"
+            android:layout_height="40dp">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_width="wrap_content">
+
+                <ImageButton
+                    android:layout_height="30dp"
+                    app:srcCompat="@drawable/grid_icon"
+                    android:layout_weight="1"
+                    android:layout_width="30dp"
+                    android:background="@android:color/transparent"
+                    android:id="@+id/viewStyleBtn" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_width="260dp"></LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/emergencyMessage1"
+            android:textAlignment="center"
+            android:textSize="14sp"
+            android:text="@string/safetyMessage1"
+            android:textColor="@android:color/black"
+            android:textStyle="normal|bold" />
+
+        <TextView
+            android:text="@string/safetyMessage2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/emergencyMessage2"
+            android:textSize="12sp"
+            android:textAlignment="center"
+            android:textColor="@android:color/black" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:gravity="center_horizontal"
+            android:layout_gravity="center_horizontal">
+
+            <Button
+                android:id="@+id/securityEmergencyBtn"
+                android:text="@string/securityEmergencyBtnText"
+                android:textAllCaps="false"
+                android:textSize="12sp"
+                android:layout_width="150dp"
+                android:layout_height="75dp" />
+
+            <Button
+                android:text="@string/securityNonEmergencyBtnText"
+                android:id="@+id/securityNonEmergencyBtn"
+                android:textSize="12sp"
+                android:textAllCaps="false"
+                android:layout_width="150dp"
+                android:layout_height="75dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            android:id="@+id/gridLayout">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:id="@+id/secondRowLayout"
+                android:paddingBottom="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:layout_height="97dp">
+
+                <Button
+                    android:text="@string/personalSafetyBtnText"
+                    android:id="@+id/personalSafetyBtn"
+                    android:layout_weight="1"
+                    android:layout_width="89dp"
+                    android:background="@color/colorPrimary"
+                    android:textSize="12sp"
+                    android:layout_marginRight="2.5dp"
+                    android:textAllCaps="false"
+                    android:textColor="@color/TextWhite"
+                    android:layout_height="97dp" />
+
+                <Button
+                    android:text="@string/healthAndSafetyBtnText"
+                    android:layout_width="89dp"
+                    android:id="@+id/healthAndSafetyBtn"
+                    android:layout_weight="1"
+                    android:textSize="12sp"
+                    android:background="@color/colorPrimary"
+                    android:layout_marginLeft="2.5dp"
+                    android:textAllCaps="false"
+                    android:textColor="@color/TextWhite"
+                    android:layout_height="97dp" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</RelativeLayout>

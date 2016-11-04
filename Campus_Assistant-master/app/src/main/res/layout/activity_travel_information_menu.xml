@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:id="@+id/activity_travel_information"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:paddingBottom="0dp"
+android:paddingLeft="0dp"
+android:paddingRight="0dp"
+android:paddingTop="0dp"
+tools:context="com.example.andrewwilloughby.campus_assistant.TravelInformationMenu"
+android:background="?android:attr/detailsElementBackground">
+
+
+    <LinearLayout
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+        android:id="@+id/activityContainer"
+        android:layout_alignParentStart="true"
+        android:layout_height="match_parent">
+
+        <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/headImageContainer">
+
+        <ImageView
+            android:layout_width="match_parent"
+            app:srcCompat="@drawable/uor_bg_image"
+            android:id="@+id/headBackgroundImage"
+            android:scaleType="fitXY"
+            android:layout_height="175dp" />
+    </FrameLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_gravity="right"
+            android:layout_width="match_parent"
+            android:layout_marginTop="5dp"
+            android:paddingRight="5dp"
+            android:paddingLeft="5dp"
+            android:layout_height="40dp"
+            android:visibility="visible">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_width="wrap_content">
+
+                <ImageButton
+                    android:layout_height="30dp"
+                    app:srcCompat="@drawable/list_icon"
+                    android:layout_weight="1"
+                    android:layout_width="30dp"
+                    android:background="@android:color/transparent"
+                    android:id="@+id/viewStyleBtn" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_width="260dp"></LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <ImageButton
+                    android:layout_height="30dp"
+                    app:srcCompat="@drawable/safety_icon"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:backgroundTint="@android:color/transparent"
+                    android:id="@+id/safetyBtn"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="0dp"
+                    android:layout_width="50dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <ImageButton
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    app:srcCompat="@drawable/settings_icon"
+                    android:id="@+id/settingsBtn"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:layout_marginLeft="0dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="0dp" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:id="@+id/firstRowLayout"
+        android:layout_height="wrap_content"
+        android:paddingBottom="5dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp">
+
+        <Button
+            android:text="@string/travelInfoBusTimesBtnText"
+            android:layout_width="89dp"
+            android:layout_height="110dp"
+            android:id="@+id/travelInfoBusTimesBtn"
+            android:layout_weight="1"
+            android:textSize="12sp"
+            android:background="@android:color/darker_gray"
+            android:layout_marginRight="2.5dp"
+            android:textAllCaps="false"
+            android:textColor="@color/TextWhite" />
+
+        <Button
+            android:text="@string/travelInfoRailTimesBtnText"
+            android:layout_width="89dp"
+            android:id="@+id/travelInfoRailTimesBtn"
+            android:layout_weight="1"
+            android:layout_height="110dp"
+            android:textSize="12sp"
+            android:background="@color/TravelInformationColor"
+            android:layout_marginLeft="2.5dp"
+            android:textAllCaps="false"
+            android:elevation="22dp"
+            android:textColor="@color/TextWhite" />
+    </LinearLayout>
+
+        <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:id="@+id/secondRowLayout"
+        android:layout_height="wrap_content"
+        android:paddingBottom="5dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp">
+
+        <Button
+            android:text="@string/travelInfoBusTimetableBtnText"
+            android:layout_height="110dp"
+            android:id="@+id/travelInfoBusTimetableBtn"
+            android:layout_weight="1"
+            android:layout_width="89dp"
+            android:background="@color/TravelInformationColor"
+            android:textSize="12sp"
+            android:layout_marginRight="2.5dp"
+            android:textAllCaps="false"
+            android:textColor="@color/TextWhite" />
+
+        <Space
+            android:layout_width="89dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>
