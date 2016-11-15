@@ -39,8 +39,6 @@
     <string name="healthAndSafetyBtnText">Report Health &amp; Safety Incident</string>
 
     <string-array name="menuCategories">
-        <item>Safety</item>
-        <item>Settings</item>
         <item>Student Information</item>
         <item>Latest News</item>
         <item>Campus Navigation</item>

@@ -21,6 +21,8 @@ public class TravelInformationMenu extends AMenu {
         busTimesBtn = (Button) findViewById(R.id.travelInfoBusTimesBtn);
         busTimesBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
+                ReadXMLFile xml = new ReadXMLFile();
+                xml.read("http://opendata.reading-travelinfo.co.uk/api/1/bus/calls/rdgagta.xml?key=");
             }
         });
 
