@@ -35,6 +35,7 @@
             android:value="0f20978bca22528883025bd082b804abbdfd0415" />
 
         <activity android:name=".RailDepartures" />
+        <activity android:name=".BusTimes"></activity>
     </application>
 
 </manifest>

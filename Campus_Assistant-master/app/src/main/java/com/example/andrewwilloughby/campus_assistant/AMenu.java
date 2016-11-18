@@ -89,6 +89,8 @@ public abstract class AMenu extends AppCompatActivity {
             case "rail departures":
                 intent = new Intent(this, RailDepartures.class);
                 break;
+            case "bus times":
+                intent = new Intent(this, BusTimes.class);
             default:
                 //Error.
                 break;
