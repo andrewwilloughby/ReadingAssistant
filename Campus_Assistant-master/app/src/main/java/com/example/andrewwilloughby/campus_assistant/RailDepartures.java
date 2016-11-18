@@ -113,7 +113,6 @@ public class RailDepartures extends AppCompatActivity {
                                     depDelayString = (Long.toString(diffInMins)) + " minute late";
                                 } else{
                                     depDelayString = (Long.toString(diffInMins)) + " minutes late";
-
                                 }
 
 

@@ -15,19 +15,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 
 public class BusTimes extends AppCompatActivity {
 
     private String TAG = BusTimes.class.getSimpleName();
     private ProgressDialog pDialog;
     private ListView lv;
-    private static String url = "http://transportapi.com/v3/uk/bus/stop/039027900001/live.json?app_id=03bf8009&app_key=d9307fd91b0247c607e098d5effedc97&group=route&nextbuses=yes";
+    private static String url = "http://transportapi.com/v3/uk/bus/stop/039027900001/live.json?app_id=03bf8009&app_key=d9307fd91b0247c607e098d5effedc97&group=no&nextbuses=yes";
     ArrayList<HashMap<String, String>> departureList;
 
     @Override
@@ -35,7 +31,7 @@ public class BusTimes extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bus_times);
 
-        setTitle("Live Bus Departures: Chancellor's Way");
+        setTitle("Live buses: UoR - Reading Centre");
 
         departureList = new ArrayList<>();
 
@@ -48,13 +44,13 @@ public class BusTimes extends AppCompatActivity {
         swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                departureList.clear();
                 swipeLayout.setRefreshing(true);
                 new GetDepartures().execute();
                 swipeLayout.setRefreshing(false);
 
             }
         });
-
     }
 
     /**
@@ -83,33 +79,25 @@ public class BusTimes extends AppCompatActivity {
                 try {
                     JSONObject jsonObj = new JSONObject(jsonStr);
                     JSONObject allDepartures = new JSONObject(jsonObj.getString("departures"));
+                    JSONArray departures = allDepartures.getJSONArray("all");
 
-                    Iterator<String> arrayIterator = allDepartures.keys();
+                    for (int i = 0; i < departures.length(); i++) {
+                        JSONObject ob = departures.getJSONObject(i);
 
-                    while (arrayIterator.hasNext()){
-                        String arrayKey = arrayIterator.next();
+                        String routeNumber = ob.getString("line");
+                        String destination = ob.getString("direction");
+                        String expectedDep = ob.getString("aimed_departure_time");
 
-                        JSONArray array = allDepartures.getJSONArray(arrayKey);
+                        // tmp hash map for single contact
+                        HashMap<String, String> busDeparture = new HashMap<>();
 
-                        for (int i = 0; i < array.length(); i++) {
-                            JSONObject ob = array.getJSONObject(i);
+                        busDeparture.put("routeNumber", routeNumber);
+                        busDeparture.put("destination", destination);
+                        busDeparture.put("expectedDepTime", expectedDep);
 
-                            String routeNumber = ob.getString("line");
-                            String destination = ob.getString("direction");
-                            String expectedDep = ob.getString("expected_departure_time");
-
-                            // tmp hash map for single contact
-                            HashMap<String, String> busDeparture = new HashMap<>();
-
-                            busDeparture.put("routeNumber", routeNumber);
-                            busDeparture.put("destination", destination);
-                            busDeparture.put("expectedDepTime", expectedDep);
-
-                            departureList.add(busDeparture);
-                        }
+                        departureList.add(busDeparture);
                     }
-
-                } catch (final JSONException e) {
+                }catch (final JSONException e) {
                     Log.e(TAG, "Json parsing error: " + e.getMessage());
                     runOnUiThread(new Runnable() {
                         @Override
@@ -120,7 +108,6 @@ public class BusTimes extends AppCompatActivity {
                                     .show();
                         }
                     });
-
                 }
             } else {
                 Log.e(TAG, "Couldn't get json from server.");
