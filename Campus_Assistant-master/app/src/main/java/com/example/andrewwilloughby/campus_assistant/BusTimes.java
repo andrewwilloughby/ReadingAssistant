@@ -6,10 +6,15 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
+
+import com.twitter.sdk.android.tweetui.TweetTimelineListAdapter;
+import com.twitter.sdk.android.tweetui.UserTimeline;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,6 +30,10 @@ public class BusTimes extends AppCompatActivity {
     private ListView lv;
     private static String url = "http://transportapi.com/v3/uk/bus/stop/039027900001/live.json?app_id=03bf8009&app_key=d9307fd91b0247c607e098d5effedc97&group=no&nextbuses=yes";
     ArrayList<HashMap<String, String>> departureList;
+
+    private Button chancellorWayBusBtn;
+    private Button whiteknightsHouseBusBtn;
+    private Button readingStationBusBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +55,29 @@ public class BusTimes extends AppCompatActivity {
             public void onRefresh() {
                 departureList.clear();
                 swipeLayout.setRefreshing(true);
-                new GetDepartures().execute();
+                new GetDepartures().execute(url);
                 swipeLayout.setRefreshing(false);
+
+            }
+        });
+
+        chancellorWayBusBtn = (Button) findViewById(R.id.chancellorWayBusBtn);
+        chancellorWayBusBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+
+            }
+        });
+
+        whiteknightsHouseBusBtn = (Button) findViewById(R.id.whiteknightsHouseBusBtn);
+        whiteknightsHouseBusBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+
+            }
+        });
+
+        readingStationBusBtn = (Button) findViewById(R.id.readingStationBusBtn);
+        readingStationBusBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
 
             }
         });
@@ -56,7 +86,7 @@ public class BusTimes extends AppCompatActivity {
     /**
      * Async task class to get json by making HTTP call
      */
-    private class GetDepartures extends AsyncTask<Void, Void, Void> {
+    private class GetDepartures extends AsyncTask<String, Void, Void> {
 
         @Override
         protected void onPreExecute() {
@@ -69,7 +99,7 @@ public class BusTimes extends AppCompatActivity {
         }
 
         @Override
-        protected Void doInBackground(Void... arg0) {
+        protected Void doInBackground(String... arg0) {
             HttpHandler sh = new HttpHandler();
 
             // Making a request to url and getting response

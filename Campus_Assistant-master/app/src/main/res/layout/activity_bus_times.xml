@@ -14,6 +14,55 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:text="@string/chancellorWayBusBtnText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/chancellorWayBusBtn"
+            android:layout_weight="1"
+            android:background="@color/colorPrimary"
+            android:textColor="@color/TextWhite"
+            android:textAllCaps="false" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorPrimaryDark" />
+
+        <Button
+            android:text="@string/whiteknightsHouseBtnBtnText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/whiteknightsHouseBusBtn"
+            android:layout_weight="1"
+            android:background="@color/colorPrimary"
+            android:textColor="@color/TextWhite"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:textAllCaps="false" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorPrimaryDark" />
+
+        <Button
+            android:text="@string/railStationBusBtnText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/readingStationBusBtn"
+            android:layout_weight="1"
+            android:background="@color/colorPrimary"
+            android:textColor="@color/TextWhite"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:textAllCaps="false" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary">
 
@@ -22,7 +71,7 @@
             android:layout_weight="1"
             android:textAlignment="center"
             android:textColor="@color/TextWhite"
-            android:id="@+id/trainHeaderTextView"
+            android:id="@+id/busHeaderTextView"
             android:elevation="21dp"
             android:textAllCaps="false"
             android:layout_height="wrap_content"
