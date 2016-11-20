@@ -38,7 +38,7 @@
     <string name="personalSafetyBtnText">Personal Safety Guide</string>
     <string name="healthAndSafetyBtnText">Report Health &amp; Safety Incident</string>
     <string name="chancellorWayBusBtnText">Chancellor's Way</string>
-    <string name="whiteknightsHouseBtnBtnText">Whiteknight's House</string>
+    <string name="whiteknightsHouseBusBtnText">Whiteknight's House</string>
     <string name="railStationBusBtnText">Reading Station</string>
     <string name="chancellorWayBusUrl">http://transportapi.com/v3/uk/bus/stop/039027900001/live.json?app_id=03bf8009&amp;app_key=d9307fd91b0247c607e098d5effedc97&amp;group=no&amp;nextbuses=yes</string>
     <string name="whiteknightsHouseBusUrl">http://transportapi.com/v3/uk/bus/stop/039027900002/live.json?app_id=03bf8009&amp;app_key=d9307fd91b0247c607e098d5effedc97&amp;group=no&amp;nextbuses=yes</string>

@@ -13,9 +13,6 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
-import com.twitter.sdk.android.tweetui.TweetTimelineListAdapter;
-import com.twitter.sdk.android.tweetui.UserTimeline;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,7 +25,7 @@ public class BusTimes extends AppCompatActivity {
     private String TAG = BusTimes.class.getSimpleName();
     private ProgressDialog pDialog;
     private ListView lv;
-    private static String url = "http://transportapi.com/v3/uk/bus/stop/039027900001/live.json?app_id=03bf8009&app_key=d9307fd91b0247c607e098d5effedc97&group=no&nextbuses=yes";
+    private static String url;
     ArrayList<HashMap<String, String>> departureList;
 
     private Button chancellorWayBusBtn;
@@ -64,21 +61,24 @@ public class BusTimes extends AppCompatActivity {
         chancellorWayBusBtn = (Button) findViewById(R.id.chancellorWayBusBtn);
         chancellorWayBusBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-
+                url = getApplicationContext().getString(R.string.chancellorWayBusBtnText);
+                new GetDepartures().execute(url);
             }
         });
 
         whiteknightsHouseBusBtn = (Button) findViewById(R.id.whiteknightsHouseBusBtn);
         whiteknightsHouseBusBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-
+                url = getApplicationContext().getString(R.string.whiteknightsHouseBusUrl);
+                new GetDepartures().execute(url);
             }
         });
 
         readingStationBusBtn = (Button) findViewById(R.id.readingStationBusBtn);
         readingStationBusBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-
+                url = getApplicationContext().getString(R.string.railStationBusUrl);
+                new GetDepartures().execute(url);
             }
         });
     }
