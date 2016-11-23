@@ -168,7 +168,7 @@ public class MainActivity extends AMenu {
                         launchWebView(selected);
                         break;
                     case "Live Bus Times":
-                        Toast.makeText(getApplicationContext(), "This functionality hasn't been implemented.", Toast.LENGTH_SHORT).show();
+                        launchActivity("bus times");
                         break;
                     case "Live Train Times":
                         launchActivity("rail departures");
@@ -183,6 +183,7 @@ public class MainActivity extends AMenu {
                         launchWebView(selected);
                         break;
                     case "Student Timetable":
+                        Toast.makeText(getApplicationContext(), "This functionality hasn't been implemented.", Toast.LENGTH_SHORT).show();
                         break;
                     default:
                         Toast.makeText(getApplicationContext(), "This functionality hasn't been implemented.", Toast.LENGTH_SHORT).show();

@@ -37,7 +37,7 @@ public class BusTimes extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bus_times);
 
-        setTitle("Live buses: UoR - Reading Centre");
+        setTitle("Live Bus Departures");
 
         departureList = new ArrayList<>();
 
@@ -61,7 +61,8 @@ public class BusTimes extends AppCompatActivity {
         chancellorWayBusBtn = (Button) findViewById(R.id.chancellorWayBusBtn);
         chancellorWayBusBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                url = getApplicationContext().getString(R.string.chancellorWayBusBtnText);
+                departureList.clear();
+                url = getApplicationContext().getString(R.string.chancellorWayBusUrl);
                 new GetDepartures().execute(url);
             }
         });
@@ -69,6 +70,7 @@ public class BusTimes extends AppCompatActivity {
         whiteknightsHouseBusBtn = (Button) findViewById(R.id.whiteknightsHouseBusBtn);
         whiteknightsHouseBusBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
+                departureList.clear();
                 url = getApplicationContext().getString(R.string.whiteknightsHouseBusUrl);
                 new GetDepartures().execute(url);
             }
@@ -77,6 +79,7 @@ public class BusTimes extends AppCompatActivity {
         readingStationBusBtn = (Button) findViewById(R.id.readingStationBusBtn);
         readingStationBusBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
+                departureList.clear();
                 url = getApplicationContext().getString(R.string.railStationBusUrl);
                 new GetDepartures().execute(url);
             }

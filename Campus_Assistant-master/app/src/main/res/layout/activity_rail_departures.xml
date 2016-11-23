@@ -27,7 +27,7 @@ tools:context="com.example.andrewwilloughby.campus_assistant.RailDepartures">
             android:textAllCaps="false"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
-            android:text="@string/trainDepHeaderText" />
+            android:text="@string/refreshHeaderText" />
     </LinearLayout>
 
     <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"

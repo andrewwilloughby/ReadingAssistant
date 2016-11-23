@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_latest_news"
+    android:id="@+id/activity_bus_times"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -32,7 +32,7 @@
             android:background="@color/colorPrimaryDark" />
 
         <Button
-            android:text="@string/whiteknightsHouseBtnBtnText"
+            android:text="@string/whiteknightsHouseBusBtnText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/whiteknightsHouseBusBtn"
@@ -76,13 +76,45 @@
             android:textAllCaps="false"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
-            android:text="@string/trainDepHeaderText" />
+            android:text="@string/refreshHeaderText" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:id="@+id/routeTxtView"
+            android:layout_weight="1"
+            android:textAlignment="center"
+            android:text="@string/routeTxtViewText" />
+
+        <TextView
+            android:text="@string/destinationTxtViewText"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:id="@+id/destinationTxtView"
+            android:layout_weight="1"
+            android:textAlignment="center" />
+
+        <TextView
+            android:text="@string/arrivalTxtViewText"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:id="@+id/arrivalTxtView"
+            android:layout_weight="1"
+            android:textAlignment="center" />
     </LinearLayout>
 
     <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/bus_swipe_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="424dp" >
         <ListView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
