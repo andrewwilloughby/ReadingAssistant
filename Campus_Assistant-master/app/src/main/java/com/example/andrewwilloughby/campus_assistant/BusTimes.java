@@ -54,7 +54,6 @@ public class BusTimes extends AppCompatActivity {
                 swipeLayout.setRefreshing(true);
                 new GetDepartures().execute(url);
                 swipeLayout.setRefreshing(false);
-
             }
         });
 

@@ -10,6 +10,11 @@ buildscript {
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 
+configurations {
+    // referenced in some portable lib. use android internal instead
+    compile.exclude group: 'commons-logging'
+}
+
 repositories {
     maven { url 'https://maven.fabric.io/public' }
 }
@@ -39,11 +44,16 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:24.2.1'
-    compile 'com.android.support:design:24.2.1'
-    compile 'com.android.support:support-v4:24.2.1'
-    testCompile 'junit:junit:4.12'
     compile('com.twitter.sdk.android:twitter:2.1.1@aar') {
         transitive = true;
     }
+    compile 'com.android.support:appcompat-v7:24.2.1'
+    compile 'com.android.support:design:24.2.1'
+    compile 'com.android.support:support-v4:24.2.1'
+    compile 'org.mnode.ical4j:ical4j:1.0.5'
+    compile 'backport-util-concurrent:backport-util-concurrent:3.1'
+    compile 'commons-codec:commons-codec:1.10'
+    compile 'commons-lang:commons-lang:2.6'
+    compile 'com.google.android.gms:play-services:10.0.0'
+    testCompile 'junit:junit:4.12'
 }
