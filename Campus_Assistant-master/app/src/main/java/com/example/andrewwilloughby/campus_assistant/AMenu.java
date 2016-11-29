@@ -80,8 +80,8 @@ public abstract class AMenu extends AppCompatActivity {
             case "settings":
                 intent = new Intent(this, Settings.class);
                 break;
-            case "google maps":
-                //do nothing.
+            case "interactive map":
+                intent = new Intent(this, MapsActivity.class);
                 break;
             case "campus maps":
                 intent = new Intent(this, CampusMapsMenu.class);

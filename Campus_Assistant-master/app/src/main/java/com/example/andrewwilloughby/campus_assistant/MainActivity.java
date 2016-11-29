@@ -156,7 +156,7 @@ public class MainActivity extends AMenu {
                         launchActivity("latest news");
                         break;
                     case "Interactive Google Map":
-                        Toast.makeText(getApplicationContext(), "This functionality hasn't been implemented.", Toast.LENGTH_SHORT).show();
+                        launchActivity("interactive map");
                         break;
                     case "Whiteknights Campus Map":
                         launchWebView(selected);

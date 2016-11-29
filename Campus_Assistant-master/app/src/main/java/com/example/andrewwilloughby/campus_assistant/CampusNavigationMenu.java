@@ -19,7 +19,7 @@ public class CampusNavigationMenu extends AMenu {
 
         googleMapsBtn = (Button) findViewById(R.id.campusNavInteractiveMapBtn);
         googleMapsBtn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view){//launchActivity("google maps");
+            public void onClick(View view){launchActivity("interactive map");
             }
         });
 

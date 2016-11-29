@@ -29,7 +29,7 @@ public class Timetable extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timetable);
-
+/*
         setTitle("Student Timetable");
 
         listView = (ListView) findViewById(R.id.list);
@@ -49,8 +49,9 @@ public class Timetable extends AppCompatActivity {
                 swipeLayout.setRefreshing(false);
             }
         });
+        */
     }
-
+/*
     private class GetTimetable extends AsyncTask<Void, Void, Void>{
 
         @Override
@@ -93,7 +94,7 @@ public class Timetable extends AppCompatActivity {
                 progressDialog.dismiss();
             /**
              * Updating parsed JSON data into ListView
-             * */
+             *
             ListAdapter adapter = new SimpleAdapter(
                     Timetable.this, classList,
                     R.layout.bus_list_item, new String[]{"routeNumber", "destination",
@@ -103,4 +104,7 @@ public class Timetable extends AppCompatActivity {
             listView.setAdapter(adapter);
         }
     }
+
+            */
+
 }
