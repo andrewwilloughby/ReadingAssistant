@@ -72,7 +72,7 @@ public abstract class AMenu extends AppCompatActivity {
                 intent = new Intent(this, BBEmailMenu.class);
                 break;
             case "timetable":
-                intent = new Intent(this, Timetable.class);
+                intent = new Intent(this, CalendarActivity.class);
                 break;
             case "safety":
                 intent = new Intent(this, SafetyInfo.class);
