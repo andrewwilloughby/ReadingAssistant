@@ -11,10 +11,16 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+
 
 public class Timetable extends AppCompatActivity {
 
@@ -29,12 +35,10 @@ public class Timetable extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timetable);
-/*
+
         setTitle("Student Timetable");
 
         listView = (ListView) findViewById(R.id.list);
-
-        File calendarFile;
 
         new GetTimetable().execute();
 
@@ -49,9 +53,8 @@ public class Timetable extends AppCompatActivity {
                 swipeLayout.setRefreshing(false);
             }
         });
-        */
     }
-/*
+
     private class GetTimetable extends AsyncTask<Void, Void, Void>{
 
         @Override
@@ -70,14 +73,11 @@ public class Timetable extends AppCompatActivity {
             HttpHandler sh = new HttpHandler();
 
             // Making a request to url and getting response
-            String calStr = sh.makeServiceCall("https://bc016938:Spandy1591@reading.ac.uk/mytimetable/m");
-
-            Log.d(TAG, calStr);
+            String calStr = sh.makeServiceCall("https://www.reading.ac.uk/mytimetable/m/10051/5eb6628e04674376");
 
             try{
                 outputStream = openFileOutput("timetable", Context.MODE_PRIVATE);
                 outputStream.write(calStr.getBytes());
-
                 outputStream.close();
             } catch (Exception e){
                 e.printStackTrace();
@@ -90,21 +90,25 @@ public class Timetable extends AppCompatActivity {
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
             // Dismiss the progress dialog
-            if (progressDialog.isShowing())
+            if (progressDialog.isShowing()){
                 progressDialog.dismiss();
+            }
+
             /**
              * Updating parsed JSON data into ListView
              *
-            ListAdapter adapter = new SimpleAdapter(
-                    Timetable.this, classList,
-                    R.layout.bus_list_item, new String[]{"routeNumber", "destination",
-                    "expectedDepTime"}, new int[]{R.id.routeNumberTextView,
-                    R.id.busDestinationTextView, R.id.busExpectedDepTextView});
+             * */
 
-            listView.setAdapter(adapter);
-        }
+//            ListAdapter adapter = new SimpleAdapter(
+//                    Timetable.this, classList,
+//                    R.layout.bus_list_item, new String[]{"routeNumber", "destination",
+//                    "expectedDepTime"}, new int[]{R.id.routeNumberTextView,
+//                    R.id.busDestinationTextView, R.id.busExpectedDepTextView});
+//
+//            listView.setAdapter(adapter);
+             }
     }
 
-            */
+
 
 }

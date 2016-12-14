@@ -99,13 +99,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             buildGoogleApiClient();
             mMap.setMyLocationEnabled(true);
         }
-
-
-
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
 
     protected synchronized void buildGoogleApiClient(){
@@ -207,7 +200,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         switch (requestCode){
             case MY_PERMISSIONS_REQUEST_LOCATION: {
-                //If request is cancelled, the result arrarys are empty.
+                //If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     //permission was granted.
                     if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){

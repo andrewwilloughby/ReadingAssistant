@@ -183,7 +183,7 @@ public class MainActivity extends AMenu {
                         launchWebView(selected);
                         break;
                     case "Student Timetable":
-                        Toast.makeText(getApplicationContext(), "This functionality hasn't been implemented.", Toast.LENGTH_SHORT).show();
+                        launchActivity("timetable");
                         break;
                     default:
                         Toast.makeText(getApplicationContext(), "This functionality hasn't been implemented.", Toast.LENGTH_SHORT).show();

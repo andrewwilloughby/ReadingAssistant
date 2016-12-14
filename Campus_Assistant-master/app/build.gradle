@@ -23,6 +23,16 @@ repositories {
 android {
     compileSdkVersion 24
     buildToolsVersion "24.0.2"
+
+    packagingOptions {
+        // prevent duplicate files
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+
+        //!!! andoird buildToolsVersion 19.0.3 does not support exclude with wildcards yet :-(
+        exclude('org/apache/commons/codec/language/bm/*.txt')		//  124 files (uncompressed 215kb) with unused language specific rules
+    }
+
     defaultConfig {
         applicationId "com.example.andrewwilloughby.campus_assistant"
         minSdkVersion 23
