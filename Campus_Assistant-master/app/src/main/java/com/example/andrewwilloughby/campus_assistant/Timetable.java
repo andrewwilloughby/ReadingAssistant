@@ -53,12 +53,12 @@ public class Timetable extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_timetable);
+        setContentView(R.layout.activity_calendar);
 
         setTitle("Student Timetable");
 
 
-        listView = (ListView) findViewById(R.id.list);
+        listView = (ListView) findViewById(R.id.dayEventsListView);
 
         new GetTimetable().execute();
 
@@ -74,6 +74,12 @@ public class Timetable extends AppCompatActivity {
             }
         });
     }
+
+
+
+
+
+
 
     private class GetTimetable extends AsyncTask<String, String, Void>{
 
