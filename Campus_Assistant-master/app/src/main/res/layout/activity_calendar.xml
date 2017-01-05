@@ -11,13 +11,51 @@
     android:orientation="vertical"
     tools:context="com.example.andrewwilloughby.campus_assistant.CalendarActivity">
 
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:paddingTop="5dp"
+        android:paddingEnd="5dp">
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <Button
+            android:text="@string/todayBtnText"
+            android:id="@+id/todayBtn"
+            android:layout_weight="1"
+            android:textSize="12sp"
+            android:layout_height="30dp"
+            android:textColor="@color/TextWhite"
+            android:background="@color/colorAccent"
+            android:layout_width="20dp" />
+
+    </LinearLayout>
+
     <CalendarView
         android:id="@+id/timetableCalendar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></CalendarView>
+        android:layout_height="297dp"
+        android:layout_marginTop="-15dp"
+        style="@android:style/Widget.DeviceDefault.CalendarView"
+        android:elevation="13dp"></CalendarView>
 
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/dayEventsListView" />
+
 </LinearLayout>
