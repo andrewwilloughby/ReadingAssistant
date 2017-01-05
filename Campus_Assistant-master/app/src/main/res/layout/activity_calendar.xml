@@ -11,27 +11,13 @@
     android:orientation="vertical"
     tools:context="com.example.andrewwilloughby.campus_assistant.CalendarActivity">
 
+
     <LinearLayout
         android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:paddingTop="5dp"
-        android:paddingEnd="5dp">
-
-        <Space
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
-
-        <Space
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
-
-        <Space
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
+        android:paddingStart="5dp">
 
         <Button
             android:text="@string/todayBtnText"
@@ -41,17 +27,19 @@
             android:layout_height="30dp"
             android:textColor="@color/TextWhite"
             android:background="@color/colorAccent"
-            android:layout_width="20dp" />
+            android:layout_width="match_parent" />
 
     </LinearLayout>
 
     <CalendarView
         android:id="@+id/timetableCalendar"
         android:layout_width="match_parent"
-        android:layout_height="297dp"
-        android:layout_marginTop="-15dp"
+        android:elevation="13dp"
         style="@android:style/Widget.DeviceDefault.CalendarView"
-        android:elevation="13dp"></CalendarView>
+        android:showWeekNumber="false"
+        android:textSize="12sp"
+        android:layout_height="323dp">
+    </CalendarView>
 
     <ListView
         android:layout_width="match_parent"

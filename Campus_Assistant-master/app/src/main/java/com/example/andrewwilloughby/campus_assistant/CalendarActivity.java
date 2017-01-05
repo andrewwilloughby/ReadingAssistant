@@ -60,6 +60,7 @@ public class CalendarActivity extends AppCompatActivity {
     private Button todayBtn;
     DateFormat eventTimeFormat = new SimpleDateFormat("h:mma");
     DateFormat eventDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    ListAdapter adapter;
 
     private static String file_url = "https://www.reading.ac.uk/mytimetable/m/10051/5eb6628e04674376";
 
@@ -67,6 +68,7 @@ public class CalendarActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
+
 
         setTitle("Student Timetable");
 
@@ -87,12 +89,15 @@ public class CalendarActivity extends AppCompatActivity {
         });
 
         calendarView = (CalendarView) findViewById(R.id.timetableCalendar);
+        calendarView.setFirstDayOfWeek(2);
+
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
                 Date selected = null;
 
                 eventsList.clear();
+                lv.setAdapter(null);
 
                 String yearStr = Integer.toString(year);
                 String monthStr = Integer.toString(month + 1);
@@ -100,36 +105,43 @@ public class CalendarActivity extends AppCompatActivity {
                 String dateStr = dayStr + monthStr + yearStr;
 
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("ddMyyyy");
+
                 try {
                     selected = simpleDateFormat.parse(dateStr);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
 
-                if (selected != null){
-                    Period period = new Period(new DateTime(selected), new Dur(1,0,0,0));
+                if (selected != null) {
+                    Period period = new Period(new DateTime(selected), new Dur(1, 0, 0, 0));
                     Filter filter = new Filter(new PeriodRule(period));
 
-                    for (Object object : filter.filter(studentCalendar.getComponents(Component.VEVENT))){
+                    for (Object object : filter.filter(studentCalendar.getComponents(Component.VEVENT))) {
                         VEvent event = (VEvent) object;
 
                         //get summary of event.
                         String summary = event.getSummary().toString();
                         summary = summary.replace("SUMMARY;LANGUAGE=en-gb:", "");
+                        System.out.println(summary);
 
                         //get location of event.
                         String location = event.getLocation().toString();
                         location = location.replace("LOCATION:", "");
+                        System.out.println(location);
 
                         //get start time of event.
                         DtStart eventStart = (DtStart) event.getProperty(Property.DTSTART);
                         String eventStartDate = eventDateFormat.format(eventStart.getDate());
                         String eventStartTime = eventTimeFormat.format(eventStart.getDate());
+                        System.out.println(eventStartDate);
+                        System.out.println(eventStartTime);
 
                         //get end time of event.
                         DtEnd eventEnd = (DtEnd) event.getProperty(Property.DTEND);
                         String eventEndDate = eventDateFormat.format(eventEnd.getDate());
                         String eventEndTime = eventTimeFormat.format(eventEnd.getDate());
+                        System.out.println(eventEndDate);
+                        System.out.println(eventEndTime);
 
                         String eventTiming = eventStartTime + " to " + eventEndTime;
 
@@ -147,7 +159,7 @@ public class CalendarActivity extends AppCompatActivity {
 
                         ListAdapter adapter = new SimpleAdapter(
                                 CalendarActivity.this, eventsList,
-                                R.layout.timetable_list_item, new String[]{ "summary", "eventTiming"}
+                                R.layout.timetable_list_item, new String[]{"summary", "eventTiming"}
                                 , new int[]{R.id.summaryTextView, R.id.eventTimingTextView});
 
                         lv.setAdapter(adapter);
@@ -200,6 +212,7 @@ public class CalendarActivity extends AppCompatActivity {
                 while ((thisLine = bufferedReader.readLine()) != null){
                     stringBuilder.append(thisLine);
                     stringBuilder.append("\r\n");
+                    System.out.println(thisLine);
                 }
                 calendarString = stringBuilder.toString();
 
