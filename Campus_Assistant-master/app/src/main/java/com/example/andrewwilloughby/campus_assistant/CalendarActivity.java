@@ -31,7 +31,6 @@ import net.fortuna.ical4j.model.property.DtStart;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -60,7 +59,7 @@ public class CalendarActivity extends AppCompatActivity {
     Context context;
     private Button todayBtn;
     DateFormat eventTimeFormat = new SimpleDateFormat("h:mma");
-    DateFormat eventDateFormat = new SimpleDateFormat("yyyyMMdd");
+    DateFormat eventDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     private static String file_url = "https://www.reading.ac.uk/mytimetable/m/10051/5eb6628e04674376";
 
@@ -93,6 +92,8 @@ public class CalendarActivity extends AppCompatActivity {
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
                 Date selected = null;
 
+                eventsList.clear();
+
                 String yearStr = Integer.toString(year);
                 String monthStr = Integer.toString(month + 1);
                 String dayStr = Integer.toString(dayOfMonth);
@@ -107,37 +108,51 @@ public class CalendarActivity extends AppCompatActivity {
 
                 if (selected != null){
                     Period period = new Period(new DateTime(selected), new Dur(1,0,0,0));
-
                     Filter filter = new Filter(new PeriodRule(period));
 
-                    //List eventsToday = (List) filter.filter(studentCalendar.getComponents(Component.VEVENT));
-//                    System.out.println(eventsToday);
-
-                    for (Object o : filter.filter(studentCalendar.getComponents(Component.VEVENT))){
-                        VEvent event = (VEvent) o;
+                    for (Object object : filter.filter(studentCalendar.getComponents(Component.VEVENT))){
+                        VEvent event = (VEvent) object;
 
                         //get summary of event.
                         String summary = event.getSummary().toString();
                         summary = summary.replace("SUMMARY;LANGUAGE=en-gb:", "");
-                        System.out.println(summary);
 
                         //get location of event.
                         String location = event.getLocation().toString();
                         location = location.replace("LOCATION:", "");
-                         System.out.println(location);
-//
+
                         //get start time of event.
-                        DtStart startTime = (DtStart) event.getProperty(Property.DTSTART);
-                        System.out.println("startTime=" + eventTimeFormat.format(startTime.getDate()));
+                        DtStart eventStart = (DtStart) event.getProperty(Property.DTSTART);
+                        String eventStartDate = eventDateFormat.format(eventStart.getDate());
+                        String eventStartTime = eventTimeFormat.format(eventStart.getDate());
 
                         //get end time of event.
-                        DtEnd endTime = (DtEnd) event.getProperty(Property.DTEND);
-                        System.out.println("endTime=" + eventTimeFormat.format(endTime.getDate()));
+                        DtEnd eventEnd = (DtEnd) event.getProperty(Property.DTEND);
+                        String eventEndDate = eventDateFormat.format(eventEnd.getDate());
+                        String eventEndTime = eventTimeFormat.format(eventEnd.getDate());
 
+                        String eventTiming = eventStartTime + " to " + eventEndTime;
+
+                        HashMap<String, String> calendarEvent = new HashMap<>();
+
+                        calendarEvent.put("summary", summary);
+                        calendarEvent.put("location", location);
+                        calendarEvent.put("startTime", eventStartTime);
+                        calendarEvent.put("startDate", eventStartDate);
+                        calendarEvent.put("endTime", eventEndTime);
+                        calendarEvent.put("endDate", eventEndDate);
+                        calendarEvent.put("eventTiming", eventTiming);
+
+                        eventsList.add(calendarEvent);
+
+                        ListAdapter adapter = new SimpleAdapter(
+                                CalendarActivity.this, eventsList,
+                                R.layout.timetable_list_item, new String[]{ "summary", "eventTiming"}
+                                , new int[]{R.id.summaryTextView, R.id.eventTimingTextView});
+
+                        lv.setAdapter(adapter);
                     }
                 }
-
-
             }
         });
     }

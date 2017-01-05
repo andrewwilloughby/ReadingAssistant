@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<TableLayout android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content">
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="textStart"
+        android:paddingTop="5dp"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp">
+
+        <TextView
+            android:id="@+id/summaryTextView"
+            android:textColor="@color/tw__composer_black"
+            android:textStyle="bold"
+            android:textAlignment="viewStart"
+            android:layout_height="50dp"
+            android:layout_width="250dp" />
+
+        <Button
+            android:text="@string/directionsBtnText"
+            android:layout_height="wrap_content"
+            android:id="@+id/directionsBtn"
+            android:layout_width="wrap_content"
+            android:textSize="12sp"
+            android:background="@color/colorAccent"
+            android:textColor="@color/TextWhite" />
+
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:layout_height="20dp"
+            android:id="@+id/eventTimingTextView"
+            android:textColor="@color/tw__composer_black"
+            android:layout_width="match_parent"
+            android:textAlignment="viewStart" />
+
+    </TableRow>
+
+</TableLayout>
+

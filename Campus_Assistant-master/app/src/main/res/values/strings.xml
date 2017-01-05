@@ -47,6 +47,7 @@
     <string name="destinationTxtViewText">Destination</string>
     <string name="arrivalTxtViewText">Time</string>
     <string name="todayBtnText">Today</string>
+    <string name="directionsBtnText">Directions</string>
 
     <string-array name="menuCategories">
         <item>Student Information</item>
