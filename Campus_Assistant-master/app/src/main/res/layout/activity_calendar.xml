@@ -35,10 +35,11 @@
         android:id="@+id/timetableCalendar"
         android:layout_width="match_parent"
         android:elevation="13dp"
-        style="@android:style/Widget.DeviceDefault.CalendarView"
+        style="@android:style/Widget.Holo.Light.CalendarView"
         android:showWeekNumber="false"
         android:textSize="12sp"
-        android:layout_height="323dp">
+        android:layout_height="250dp"
+        android:paddingBottom="5dp">
     </CalendarView>
 
     <ListView

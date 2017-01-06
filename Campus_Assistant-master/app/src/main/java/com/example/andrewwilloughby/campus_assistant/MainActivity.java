@@ -137,58 +137,25 @@ public class MainActivity extends AMenu {
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
                 final String selected = (String) adapter.getChild(groupPosition, childPosition);
                 switch (selected){
-                    case "Student Services":
-                        launchWebView(selected);
-                        break;
-                    case "Library":
-                        launchWebView(selected);
-                        break;
-                    case "University Payments":
-                        launchWebView(selected);
-                        break;
-                    case "RISIS":
-                        launchWebView(selected);
-                        break;
-                    case "Staff Search":
-                        launchWebView(selected);
-                        break;
-                    case "Latest Tweets":
-                        launchActivity("latest news");
-                        break;
-                    case "Interactive Google Map":
-                        launchActivity("interactive map");
-                        break;
-                    case "Whiteknights Campus Map":
-                        launchWebView(selected);
-                        break;
-                    case "London Road Campus Map":
-                        launchWebView(selected);
-                        break;
-                    case "Student Halls Map":
-                        launchWebView(selected);
-                        break;
-                    case "Live Bus Times":
-                        launchActivity("bus times");
-                        break;
-                    case "Live Train Times":
-                        launchActivity("rail departures");
-                        break;
-                    case "University Bus Timetable":
-                        launchWebView(selected);
-                        break;
-                    case "Blackboard":
-                        launchWebView(selected);
-                        break;
-                    case "University Email":
-                        launchWebView(selected);
-                        break;
-                    case "Student Timetable":
-                        launchActivity("timetable");
-                        break;
+                    case "Student Services": launchWebView(selected); break;
+                    case "Library": launchWebView(selected); break;
+                    case "University Payments": launchWebView(selected); break;
+                    case "RISIS": launchWebView(selected); break;
+                    case "Staff Search": launchWebView(selected); break;
+                    case "Latest Tweets": launchActivity("latest news"); break;
+                    case "Interactive Google Map": launchActivity("interactive map"); break;
+                    case "Whiteknights Campus Map": launchWebView(selected); break;
+                    case "London Road Campus Map": launchWebView(selected); break;
+                    case "Student Halls Map": launchWebView(selected); break;
+                    case "Live Bus Times": launchActivity("bus times"); break;
+                    case "Live Train Times": launchActivity("rail departures"); break;
+                    case "University Bus Timetable": launchWebView(selected); break;
+                    case "Blackboard": launchWebView(selected); break;
+                    case "University Email": launchWebView(selected); break;
+                    case "Student Timetable": launchActivity("timetable"); break;
                     default:
                         Toast.makeText(getApplicationContext(), "This functionality hasn't been implemented.", Toast.LENGTH_SHORT).show();
                         break;
-
                 }
                 return true;
             }
@@ -218,7 +185,6 @@ public class MainActivity extends AMenu {
         Toast.makeText(this, "Click Back button again to exit", Toast.LENGTH_SHORT).show();
 
         new Handler().postDelayed(new Runnable() {
-
             @Override
             public void run() {
                 doubleBackToExitPressedOnce=false;

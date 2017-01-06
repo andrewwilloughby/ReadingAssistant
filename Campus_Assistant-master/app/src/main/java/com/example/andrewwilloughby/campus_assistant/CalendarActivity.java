@@ -2,11 +2,13 @@ package com.example.andrewwilloughby.campus_assistant;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.ListAdapter;
@@ -46,7 +48,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 
 public class CalendarActivity extends AppCompatActivity {
 
@@ -61,7 +62,7 @@ public class CalendarActivity extends AppCompatActivity {
     DateFormat eventTimeFormat = new SimpleDateFormat("h:mma");
     DateFormat eventDateFormat = new SimpleDateFormat("dd/MM/yyyy");
     ListAdapter adapter;
-
+    HashMap<String, String> calendarEvent;
     private static String file_url = "https://www.reading.ac.uk/mytimetable/m/10051/5eb6628e04674376";
 
     @Override
@@ -69,14 +70,25 @@ public class CalendarActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
 
-
         setTitle("Student Timetable");
 
         context = this;
-
         eventsList = new ArrayList<>();
+        calendarEvent = new HashMap<>();
 
         lv = (ListView) findViewById(R.id.dayEventsListView);
+
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                HashMap<String, String> event =  (HashMap<String, String>) lv.getItemAtPosition(position);
+                String location = event.get("location");
+
+                Intent intent = new Intent(context, MapsActivity.class);
+                intent.putExtra("search value", location);
+                startActivity(intent);
+            }
+        });
 
         String file_url = "https://www.reading.ac.uk/mytimetable/m/10051/5eb6628e04674376";
         new DownloadTimetable().execute(file_url);
@@ -96,6 +108,7 @@ public class CalendarActivity extends AppCompatActivity {
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
                 Date selected = null;
 
+                calendarEvent.clear();
                 eventsList.clear();
                 lv.setAdapter(null);
 
@@ -145,8 +158,6 @@ public class CalendarActivity extends AppCompatActivity {
 
                         String eventTiming = eventStartTime + " to " + eventEndTime;
 
-                        HashMap<String, String> calendarEvent = new HashMap<>();
-
                         calendarEvent.put("summary", summary);
                         calendarEvent.put("location", location);
                         calendarEvent.put("startTime", eventStartTime);
@@ -159,8 +170,8 @@ public class CalendarActivity extends AppCompatActivity {
 
                         ListAdapter adapter = new SimpleAdapter(
                                 CalendarActivity.this, eventsList,
-                                R.layout.timetable_list_item, new String[]{"summary", "eventTiming"}
-                                , new int[]{R.id.summaryTextView, R.id.eventTimingTextView});
+                                R.layout.timetable_list_item, new String[]{"summary", "eventTiming", "location"}
+                                , new int[]{R.id.summaryTextView, R.id.eventTimingTextView, R.id.locationTextView});
 
                         lv.setAdapter(adapter);
                     }
@@ -188,12 +199,9 @@ public class CalendarActivity extends AppCompatActivity {
             StringBuilder stringBuilder = null;
             String calendarString = null;
 
-
             try{
                 URL url = new URL(f_url[0]);
-
                 connection = (HttpURLConnection) url.openConnection();
-
                 inputStream = new BufferedInputStream(connection.getInputStream());
 
             } catch (MalformedURLException e) {
@@ -220,7 +228,6 @@ public class CalendarActivity extends AppCompatActivity {
                 Log.e("Encoding Error: ", e.getMessage());
             } catch (UnknownHostException e) {
                 Toast.makeText(context, "Download failed, no network connection.", Toast.LENGTH_SHORT);
-
             } catch (IOException e) {
                 Log.e("IO Error: ", e.getMessage());
             }
