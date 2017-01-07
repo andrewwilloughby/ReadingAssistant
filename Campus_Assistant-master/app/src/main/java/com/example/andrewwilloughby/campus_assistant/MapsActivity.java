@@ -35,7 +35,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.io.IOException;
 import java.util.List;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, GoogleMap.OnMarkerClickListener {
 
     private GoogleMap mMap;
     private int PROXIMITY_RADIUS = 10000;
@@ -47,11 +47,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     double longitude;
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     private Button search_Btn;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
+        context = this;
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             checkPermissionLocation();
@@ -107,10 +110,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            Address address = addressList.get(0);
-            LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
-            mMap.addMarker(new MarkerOptions().position(latLng).title(address.getFeatureName()));
-            mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+
+
+            if(addressList.size() < 1){
+                System.out.println(addressList.size());
+            } else {
+                Address address = addressList.get(0);
+                LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+                mMap.addMarker(new MarkerOptions().position(latLng).title(address.getAddressLine(0)));
+                mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+            }
         }
     }
 
@@ -127,6 +136,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+        mMap.setOnMarkerClickListener(this);
 
         //Initialise Google Play Services
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
@@ -255,5 +265,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 return;
             }
         }
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+
     }
 }
