@@ -62,8 +62,8 @@ public class CalendarActivity extends AppCompatActivity {
     DateFormat eventTimeFormat = new SimpleDateFormat("h:mma");
     DateFormat eventDateFormat = new SimpleDateFormat("dd/MM/yyyy");
     ListAdapter adapter;
-    HashMap<String, String> calendarEvent;
-    private static String file_url = "https://www.reading.ac.uk/mytimetable/m/10051/5eb6628e04674376";
+
+    private static String file_url = "https://bc016938:Spandy1591@reading.ac.uk/mytimetable/m/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,20 +73,24 @@ public class CalendarActivity extends AppCompatActivity {
         setTitle("Student Timetable");
 
         context = this;
+
         eventsList = new ArrayList<>();
-        calendarEvent = new HashMap<>();
 
         lv = (ListView) findViewById(R.id.dayEventsListView);
-
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 HashMap<String, String> event =  (HashMap<String, String>) lv.getItemAtPosition(position);
                 String location = event.get("location");
 
-                Intent intent = new Intent(context, MapsActivity.class);
-                intent.putExtra("search value", location);
-                startActivity(intent);
+                String addressToPass = getBuildingAddress(location);
+                if (addressToPass != null){
+                    Intent intent = new Intent(context, MapsActivity.class);
+                    intent.putExtra("search_value", addressToPass);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(context, "Unable to perform search on that location.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -108,7 +112,6 @@ public class CalendarActivity extends AppCompatActivity {
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
                 Date selected = null;
 
-                calendarEvent.clear();
                 eventsList.clear();
                 lv.setAdapter(null);
 
@@ -158,6 +161,8 @@ public class CalendarActivity extends AppCompatActivity {
 
                         String eventTiming = eventStartTime + " to " + eventEndTime;
 
+                        HashMap<String, String> calendarEvent = new HashMap<>();
+
                         calendarEvent.put("summary", summary);
                         calendarEvent.put("location", location);
                         calendarEvent.put("startTime", eventStartTime);
@@ -170,8 +175,8 @@ public class CalendarActivity extends AppCompatActivity {
 
                         ListAdapter adapter = new SimpleAdapter(
                                 CalendarActivity.this, eventsList,
-                                R.layout.timetable_list_item, new String[]{"summary", "eventTiming", "location"}
-                                , new int[]{R.id.summaryTextView, R.id.eventTimingTextView, R.id.locationTextView});
+                                R.layout.timetable_list_item, new String[]{"summary", "eventTiming"}
+                                , new int[]{R.id.summaryTextView, R.id.eventTimingTextView});
 
                         lv.setAdapter(adapter);
                     }
@@ -180,6 +185,37 @@ public class CalendarActivity extends AppCompatActivity {
         });
     }
 
+    protected String getBuildingAddress(String buildingName){
+
+        String building = buildingName.substring(0, 3).toLowerCase();
+        switch (building){
+            case "agr"  : return "Agriculture building, Reading RG6 6BZ";
+            case "arch" : return "Archaeology Building, Reading RG6 6AX";
+            case "all"  : return "The Allen Laboratory, Earley, Reading RG6 6AX";
+            case "bus"  : return "Centre for Entrepreneurship, Henley Business School, Reading RG6 6UD";
+            case "car"  : return "Carrington Building, Reading RG6 6UA";
+            case "cha"  : return "51.440210, -0.949907"; //Currently co-ordinates as new building.
+            case "che"  : return "Chemistry and Pharmacy Building, Reading RG6 6LA";
+            case "whi"  : return "Whiteknights House, Reading RG6";
+            case "eng"  : return "Engineering Building, Pepper Lane, Earley";
+            case "foo"  : return "Food Biosciences Building, Reading RG6 6LA";
+            case "fox"  : return "Foxhill House, Reading RG6 7BY Reading RG6 6LA";
+            case "har"  : return "Harbone Building, Reading, RG6 6LA"; //[sic] Google incorrect spelling.
+            case "hop"  : return "Hopkins Building, Reading RG6 6LA";
+            case "hum"  : return "Humss Building, Earley";
+            case "jjt"  : return "JJ Thomson Building, Reading RG6 6AX";
+            case "kni"  : return "Knight Building, Reading RG6 6UA";
+            case "lyl"  : return "Philip Lyle Building, Reading RG6 6LA";
+            case "mat"  : return "Mathematics and IT Services, Reading RG6 6AX";
+            case "met"  : return "Meteorology building, Reading RG6 6BB";
+            case "mil"  : return "Miller Building, Reading RG6";
+            case "pal"  : return "Palmer Building, Reading, Wokingham RG6 6UA, England";
+            case "sys"  : return "Systems Engineering Building, Reading RG6 6AX";
+            case "tpy"  : return "TOB2, Reading RG6 6BZ";
+            default:
+                return null;
+        }
+    }
     private class DownloadTimetable extends AsyncTask<String, Void, Void>{
 
         protected void onPreExecute(){
@@ -199,9 +235,12 @@ public class CalendarActivity extends AppCompatActivity {
             StringBuilder stringBuilder = null;
             String calendarString = null;
 
+
             try{
                 URL url = new URL(f_url[0]);
+
                 connection = (HttpURLConnection) url.openConnection();
+
                 inputStream = new BufferedInputStream(connection.getInputStream());
 
             } catch (MalformedURLException e) {
@@ -228,6 +267,7 @@ public class CalendarActivity extends AppCompatActivity {
                 Log.e("Encoding Error: ", e.getMessage());
             } catch (UnknownHostException e) {
                 Toast.makeText(context, "Download failed, no network connection.", Toast.LENGTH_SHORT);
+
             } catch (IOException e) {
                 Log.e("IO Error: ", e.getMessage());
             }

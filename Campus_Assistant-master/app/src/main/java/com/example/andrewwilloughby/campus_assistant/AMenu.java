@@ -1,6 +1,9 @@
 package com.example.andrewwilloughby.campus_assistant;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageButton;
@@ -149,6 +152,18 @@ public abstract class AMenu extends AppCompatActivity {
         intent.putExtra("webpageURL", url);
         intent.putExtra("webpageName", webpageName);
         startActivity(intent);
+    }
+
+    protected boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+
+        if (null != activeNetworkInfo){
+            return true;
+        } else {
+            return false;
+        }
     }
 
     protected int getMENU_MODE(){

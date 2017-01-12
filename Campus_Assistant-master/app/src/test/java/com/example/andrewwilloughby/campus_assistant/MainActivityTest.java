@@ -1,5 +1,7 @@
 package com.example.andrewwilloughby.campus_assistant;
 
+import android.test.ActivityUnitTestCase;
+
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -13,4 +15,7 @@ public class MainActivityTest {
 
     }
 
+    public void testStudentInfoBtn(){
+
+    }
 }

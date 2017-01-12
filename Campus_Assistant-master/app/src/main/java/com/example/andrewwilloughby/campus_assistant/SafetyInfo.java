@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 public class SafetyInfo extends AMenu {
 
@@ -29,6 +30,22 @@ public class SafetyInfo extends AMenu {
 
         final Activity thisActivity = this;
         setTitle("Safety Information");
+
+        setMENU_MODE(1);
+
+        viewStyleBtn = (ImageButton) findViewById(R.id.viewStyleBtn);
+        viewStyleBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view){
+                if(getMENU_MODE() == 1){
+                    viewStyleBtn.setImageResource(R.drawable.grid_icon);
+                    setMENU_MODE(2);
+                    launchActivity("main menu");
+                } else if(getMENU_MODE() == 2){
+                    viewStyleBtn.setImageResource(R.drawable.list_icon);
+                    setMENU_MODE(1);
+                }
+            }
+        });
 
         emergencyContactBtn = (Button) findViewById(R.id.securityEmergencyBtn);
         emergencyContactBtn.setOnClickListener(new View.OnClickListener() {

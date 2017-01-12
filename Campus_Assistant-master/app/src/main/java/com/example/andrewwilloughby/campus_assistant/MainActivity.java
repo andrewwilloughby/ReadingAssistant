@@ -1,5 +1,6 @@
 package com.example.andrewwilloughby.campus_assistant;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -33,6 +34,7 @@ public class MainActivity extends AMenu {
     private Button timetableBtn;
     private ExpandableListView expList;
     private int lastExpandedPosition = -1;
+    private Context context;
 
     HashMap<String, List<String>> menuItemsList = new HashMap<String, List<String>>();
     List<String> menuCategory = new ArrayList<String>();
@@ -50,6 +52,8 @@ public class MainActivity extends AMenu {
         Fabric.with(this, new Twitter(authConfig));
         setContentView(R.layout.activity_main);
         final LinearLayout gridLayout = (LinearLayout) findViewById(R.id.gridLayout);
+
+        context = this;
 
         initialiseSafetySettingsBtns();
 
@@ -137,13 +141,42 @@ public class MainActivity extends AMenu {
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
                 final String selected = (String) adapter.getChild(groupPosition, childPosition);
                 switch (selected){
-                    case "Student Services": launchWebView(selected); break;
-                    case "Library": launchWebView(selected); break;
-                    case "University Payments": launchWebView(selected); break;
+                    case "Student Services":
+                        if (isNetworkAvailable()) {
+                            launchWebView(selected);
+                        }else {
+                            Toast.makeText(context, "This functionality requires an active network connection.", Toast.LENGTH_SHORT).show();
+                        }
+                        break;
+                    case "Library":
+                        if (isNetworkAvailable()) {
+                            launchWebView(selected);
+                        }else {
+                            Toast.makeText(context, "This functionality requires an active network connection.", Toast.LENGTH_SHORT).show();
+                        }
+                        break;
+                    case "University Payments":
+                        if (isNetworkAvailable()) {
+                            launchWebView(selected);
+                        }else {
+                            Toast.makeText(context, "This functionality requires an active network connection.", Toast.LENGTH_SHORT).show();
+                        }
+                        break;
                     case "RISIS": launchWebView(selected); break;
                     case "Staff Search": launchWebView(selected); break;
-                    case "Latest Tweets": launchActivity("latest news"); break;
-                    case "Interactive Google Map": launchActivity("interactive map"); break;
+                    case "Latest Tweets":
+                        if (isNetworkAvailable()) {
+                        launchActivity("latest news");
+                        } else {
+                            Toast.makeText(context, "This functionality requires an active network connection.", Toast.LENGTH_SHORT).show();
+                        }
+                        break;
+                    case "Interactive Google Map":
+                        if (isNetworkAvailable()) {
+                            launchActivity("interactive map"); break;
+                        } else {
+                            Toast.makeText(context, "This functionality requires an active network connection.", Toast.LENGTH_SHORT).show();
+                        }
                     case "Whiteknights Campus Map": launchWebView(selected); break;
                     case "London Road Campus Map": launchWebView(selected); break;
                     case "Student Halls Map": launchWebView(selected); break;
@@ -152,7 +185,13 @@ public class MainActivity extends AMenu {
                     case "University Bus Timetable": launchWebView(selected); break;
                     case "Blackboard": launchWebView(selected); break;
                     case "University Email": launchWebView(selected); break;
-                    case "Student Timetable": launchActivity("timetable"); break;
+                    case "Student Timetable":
+                        if (isNetworkAvailable()){
+                            launchActivity("timetable");
+                        } else {
+                            Toast.makeText(context, "This functionality requires an active network connection.", Toast.LENGTH_SHORT).show();
+                        }
+                         break;
                     default:
                         Toast.makeText(getApplicationContext(), "This functionality hasn't been implemented.", Toast.LENGTH_SHORT).show();
                         break;
