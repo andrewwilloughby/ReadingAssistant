@@ -16,7 +16,7 @@ public class TravelInformationMenu extends AMenu {
         setContentView(R.layout.activity_travel_information_menu);
 
         setTitle("Travel Information");
-        initialiseSafetySettingsBtns();
+        initialiseToolbarBtns();
 
         busTimesBtn = (Button) findViewById(R.id.travelInfoBusTimesBtn);
         busTimesBtn.setOnClickListener(new View.OnClickListener() {

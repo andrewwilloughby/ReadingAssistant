@@ -55,7 +55,7 @@ public class MainActivity extends AMenu {
 
         context = this;
 
-        initialiseSafetySettingsBtns();
+        initialiseToolbarBtns();
 
         viewStyleBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){

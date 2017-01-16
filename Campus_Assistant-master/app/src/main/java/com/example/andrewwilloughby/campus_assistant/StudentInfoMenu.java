@@ -18,7 +18,7 @@ public class StudentInfoMenu extends AMenu {
         setContentView(R.layout.activity_student_info_menu);
 
         setTitle("Student Information");
-        initialiseSafetySettingsBtns();
+        initialiseToolbarBtns();
 
         studentServicesBtn = (Button) findViewById(R.id.studentInfoServicesBtn);
         studentServicesBtn.setOnClickListener(new View.OnClickListener() {

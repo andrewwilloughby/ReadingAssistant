@@ -18,12 +18,17 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
-import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.PopupMenu;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -45,6 +50,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.vision.text.Text;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -59,26 +65,32 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, AdapterView.OnItemSelectedListener {
     private GoogleMap map;
-    private int PROXIMITY_RADIUS = 10000;
+    private int PROXIMITY_RADIUS = 5000;
     GoogleApiClient googleApiClient;
     LocationRequest locationRequest;
     Location lastLocation;
     Marker currentLocationMarker;
-    double latitude;
-    double longitude;
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     private Button search_Btn;
     private Context context;
     private String searchValue;
-    Marker searchMarker;
-    LatLng currentLatLng;
-    String directionsData;
+    private Marker searchMarker;
+    private LatLng currentLatLng;
     private ProgressDialog pDialog;
     private static String url;
-    Polyline routeLine;
-
+    private Polyline routeLine;
+    private LinearLayout navDetailsLayout;
+    private String distance = null;
+    private String duration = null;
+    private TextView distanceTextView;
+    private TextView durationTextView;
+    private ImageButton cancelRouteBtn;
+    private EditText searchBox;
+    private Spinner searchNearbySpinner;
+    private boolean spinnerTouched = false;
+    MarkerOptions currentLocationMarkerOptions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,14 +99,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         context = this;
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-            checkPermissionLocation();
-        }
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){ checkPermissionLocation(); }
 
         //Check whether Google Play Services are available
-        if (!CheckGooglePlayServices()){
-            finish();
-        }
+        if (!CheckGooglePlayServices()){ finish();}
+
+
+        searchBox = (EditText) findViewById(R.id.searchBox);
+        searchBox.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view){
+                searchBox.setText("");
+            }
+        });
 
         search_Btn = (Button) findViewById(R.id.searchBtn);
         search_Btn.setOnClickListener(new View.OnClickListener() {
@@ -103,11 +119,80 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
+        navDetailsLayout = (LinearLayout) findViewById(R.id.navDetails);
+        distanceTextView = (TextView) findViewById(R.id.distanceTxtView);
+        durationTextView = (TextView) findViewById(R.id.durationTxtView);
+
+        cancelRouteBtn = (ImageButton) findViewById(R.id.cancelRouteBtn);
+        cancelRouteBtn.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view){
+                if (routeLine != null){
+                    map.clear();
+                    map.addMarker(currentLocationMarkerOptions);
+                    searchBox.setText("");
+                }
+
+                if (navDetailsLayout.getVisibility() == View.VISIBLE){
+                    navDetailsLayout.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        searchNearbySpinner = (Spinner) findViewById(R.id.searchNearbySpinner);
+        searchNearbySpinner.setOnItemSelectedListener(this);
+        searchNearbySpinner.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                spinnerTouched = true;
+                return false;
+            }
+        });
+
+        List<String> searchItems = new ArrayList<String>();
+        searchItems.add("Cafe");
+        searchItems.add("Restaurant");
+        searchItems.add("Bank");
+        searchItems.add("Bicycle store");
+        searchItems.add("Convenience Store");
+        searchItems.add("Doctor");
+        searchItems.add("Pharmacy");
+        searchItems.add("Hospital");
+        searchItems.add("Police");
+
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, searchItems);
+
+        spinnerAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        searchNearbySpinner.setAdapter(spinnerAdapter);
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+    }
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        if (!spinnerTouched){ return; }
+
+        map.clear();
+        map.addMarker(currentLocationMarkerOptions);
+
+        if (navDetailsLayout.getVisibility() == View.VISIBLE){
+            navDetailsLayout.setVisibility(View.GONE);
+        }
+
+        // On selecting a spinner item
+        String item = parent.getItemAtPosition(position).toString().toLowerCase().replace(" ", "_");
+
+        String url = getPlacesUrl(currentLatLng.latitude, currentLatLng.longitude, item);
+        Object[] DataTransfer = new Object[2];
+        DataTransfer[0] = map;
+        DataTransfer[1] = url;
+        GetNearbyPlacesData getNearbyPlacesData = new GetNearbyPlacesData();
+        getNearbyPlacesData.execute(DataTransfer);
+    }
+    public void onNothingSelected(AdapterView<?> arg0) {
+        // TODO Auto-generated method stub
     }
 
     private boolean CheckGooglePlayServices(){
@@ -124,9 +209,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void onMapSearch(View view) {
-        EditText locationSearch = (EditText) findViewById(R.id.editText);
+        EditText locationSearch = (EditText) findViewById(R.id.searchBox);
         String location = locationSearch.getText().toString();
         List<Address> addressList = null;
+
+        // Variables to express lat/lng of England bounding box. Enables Google Maps to prioritise results found within the bounding box.
+        double lowerLeftLat = 49.871159;
+        double lowerLeftLng = -6.37988;
+        double upperRightLat = 55.811741;
+        double upperRightLng = 1.76896;
+
+        if (navDetailsLayout.getVisibility() == View.VISIBLE){
+            navDetailsLayout.setVisibility(View.GONE);
+        }
 
         if (isNetworkAvailable()) {
 
@@ -139,14 +234,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             if (location != null) {
                 Geocoder geocoder = new Geocoder(this);
                 try {
-                    addressList = geocoder.getFromLocationName(location, 1);
-
+                    addressList = geocoder.getFromLocationName(location, 1, lowerLeftLat, lowerLeftLng, upperRightLat, upperRightLng);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
 
                 if (addressList.size() < 1) {
-                    System.out.println(addressList.size());
+                    Toast.makeText(this, "No locations found.", Toast.LENGTH_SHORT);
                 } else {
                     //Clear existing search marker.
                     if (searchMarker != null){
@@ -158,7 +252,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     searchMarker = map.addMarker(searchMarkerOptions);
                     map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
                     map.animateCamera(CameraUpdateFactory.zoomTo(11));
-
                 }
             }
         } else {
@@ -197,12 +290,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 LatLngBounds.Builder builder = new LatLngBounds.Builder();
                 builder.include(currentLocationMarker.getPosition());
-                builder.include(searchMarker.getPosition());
+                builder.include(marker.getPosition());
 
                 LatLngBounds bounds = builder.build();
 
                 CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, 100);
                 map.animateCamera(cameraUpdate);
+
+                navDetailsLayout.setVisibility(View.VISIBLE);
+                distanceTextView.setText(distance);
+                durationTextView.setText(duration);
+
             }
         });
 
@@ -226,7 +324,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
         if (searchValue!= null) {
-            EditText searchBar = (EditText) findViewById(R.id.editText);
+            EditText searchBar = (EditText) findViewById(R.id.searchBox);
             searchBar.setText(searchValue);
             search_Btn.performClick();
         }
@@ -293,11 +391,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         //Place a marker for current location.
         currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-        MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(currentLatLng);
-        markerOptions.title("Current Location");
-        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
-        currentLocationMarker = map.addMarker(markerOptions);
+        currentLocationMarkerOptions = new MarkerOptions();
+        currentLocationMarkerOptions.position(currentLatLng);
+        currentLocationMarkerOptions.title("Current Location");
+        currentLocationMarkerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+        currentLocationMarker = map.addMarker(currentLocationMarkerOptions);
 
         map.moveCamera(CameraUpdateFactory.newLatLng(currentLatLng));
         map.animateCamera(CameraUpdateFactory.zoomTo(11));
@@ -372,6 +470,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             //Tranform the string into a json object
             final JSONObject json = new JSONObject(result);
             JSONArray routeArray = json.getJSONArray("routes");
+            final JSONArray legArray = routeArray.getJSONObject(0).getJSONArray("legs");
+
+            //Distance
+            JSONObject distanceObj = legArray.getJSONObject(0).getJSONObject("distance");
+            distance = distanceObj.getString("text"); //String that contains the distance value formated
+
+            JSONObject durationObj = legArray.getJSONObject(0).getJSONObject("duration");
+            duration = durationObj.getString("text");
+
             JSONObject routes = routeArray.getJSONObject(0);
             JSONObject overviewPolylines = routes.getJSONObject("overview_polyline");
             String encodedString = overviewPolylines.getString("points");
@@ -448,6 +555,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             HttpHandler sh = new HttpHandler();
 
             String jsonStr = sh.makeServiceCall(url);
+            System.out.println(jsonStr);
 
             return jsonStr;
         }

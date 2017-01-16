@@ -14,6 +14,9 @@ import java.util.List;
  * Created by andrewwilloughby on 27/11/2016.
  */
 
+// Code developed from tutorial: https://www.androidtutorialpoint.com/intermediate/google-maps-search-nearby-displaying-nearby-places-using-google-places-api-google-maps-api-v2/
+
+
 public class DataParser {
 
     public List<HashMap<String, String>> parse(String jsonData){

@@ -15,7 +15,7 @@ public class BBEmailMenu extends AMenu {
         setContentView(R.layout.activity_bbemail_menu);
 
         setTitle("Blackboard & Email");
-        initialiseSafetySettingsBtns();
+        initialiseToolbarBtns();
 
         blackboardBtn = (Button) findViewById(R.id.bbemailMenuBlackboardBtn);
         blackboardBtn.setOnClickListener(new View.OnClickListener() {

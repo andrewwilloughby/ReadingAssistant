@@ -7,6 +7,7 @@ import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 /**
  * Created by andrewwilloughby on 13/10/2016.
@@ -14,14 +15,19 @@ import android.widget.ImageButton;
 
 public abstract class AMenu extends AppCompatActivity {
 
-    //Github change.
-    
+    // Defines the buttons used within the top toolbar.
     protected ImageButton safetyBtn;
-    protected ImageButton settingsBtn;
     protected ImageButton viewStyleBtn;
+
+    // Used to define which menu layout to use (1 = grid buttons, 2 = Expandable menu list).
     public int MENU_MODE = 2;
 
-    protected void initialiseSafetySettingsBtns(){
+    /**
+     * Set up the
+     */
+    protected void initialiseToolbarBtns(){
+
+        // Calls the 'safety' activity when clicked.
         safetyBtn = (ImageButton) findViewById(R.id.safetyBtn);
         safetyBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){
@@ -29,20 +35,17 @@ public abstract class AMenu extends AppCompatActivity {
             }
         });
 
-        settingsBtn = (ImageButton) findViewById(R.id.settingsBtn);
-        settingsBtn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view){
-                launchActivity("settings");
-            }
-        });
-
         viewStyleBtn = (ImageButton) findViewById(R.id.viewStyleBtn);
         viewStyleBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){
+
+                // When the current menu view is grid buttons, change viewStyleBtn to show grid, change MENU_MODE to 2 and launch the main menu activity.
                 if(getMENU_MODE() == 1){
                     viewStyleBtn.setImageResource(R.drawable.grid_icon);
                     setMENU_MODE(2);
                     launchActivity("main menu");
+
+                // Otherwise do the opposite, but no need to launch the main menu activity again.
                 } else if(getMENU_MODE() == 2){
                     viewStyleBtn.setImageResource(R.drawable.list_icon);
                     setMENU_MODE(1);
@@ -53,6 +56,8 @@ public abstract class AMenu extends AppCompatActivity {
 
     protected void launchActivity(String activityName){
         Intent intent = null;
+
+        // Self explanatory, open the activity the correlates to the String passed, otherwise display an error message.
         switch (activityName){
             case "main menu":
                 intent = new Intent(this, MainActivity.class);
@@ -74,13 +79,10 @@ public abstract class AMenu extends AppCompatActivity {
                 intent = new Intent(this, BBEmailMenu.class);
                 break;
             case "timetable":
-                intent = new Intent(this, CalendarActivity.class);
+                intent = new Intent(this, LoginActivity.class);
                 break;
             case "safety":
                 intent = new Intent(this, SafetyInfo.class);
-                break;
-            case "settings":
-                intent = new Intent(this, Settings.class);
                 break;
             case "interactive map":
                 intent = new Intent(this, MapsActivity.class);
@@ -94,7 +96,7 @@ public abstract class AMenu extends AppCompatActivity {
             case "bus times":
                 intent = new Intent(this, BusTimes.class);
             default:
-                //Error.
+                Toast.makeText(this, "No activity exists for that command.", Toast.LENGTH_SHORT);
                 break;
         }
         startActivity(intent);
@@ -155,10 +157,13 @@ public abstract class AMenu extends AppCompatActivity {
     }
 
     protected boolean isNetworkAvailable() {
+
+        // Simple, but important, check for an active network connection.
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
 
+        // Returns true or false indicating whether network is available.
         if (null != activeNetworkInfo){
             return true;
         } else {

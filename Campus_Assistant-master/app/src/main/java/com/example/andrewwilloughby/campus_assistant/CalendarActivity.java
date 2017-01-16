@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -61,9 +62,9 @@ public class CalendarActivity extends AppCompatActivity {
     private Button todayBtn;
     DateFormat eventTimeFormat = new SimpleDateFormat("h:mma");
     DateFormat eventDateFormat = new SimpleDateFormat("dd/MM/yyyy");
-    ListAdapter adapter;
-
-    private static String file_url = "https://bc016938:Spandy1591@reading.ac.uk/mytimetable/m/";
+    private String username = null;
+    private String password = null;
+    private static String file_url = "https://www.reading.ac.uk/mytimetable/m/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,10 +72,11 @@ public class CalendarActivity extends AppCompatActivity {
         setContentView(R.layout.activity_calendar);
 
         setTitle("Student Timetable");
-
         context = this;
-
         eventsList = new ArrayList<>();
+
+        username = getIntent().getExtras().getString("username");
+        password = getIntent().getExtras().getString("password");
 
         lv = (ListView) findViewById(R.id.dayEventsListView);
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -94,8 +96,14 @@ public class CalendarActivity extends AppCompatActivity {
             }
         });
 
-        String file_url = "https://www.reading.ac.uk/mytimetable/m/10051/5eb6628e04674376";
-        new DownloadTimetable().execute(file_url);
+        if ((username != null) && (password != null)){
+            System.out.println(username);
+            System.out.println(password);
+
+            new DownloadTimetable().execute(file_url);
+        } else {
+            Toast.makeText(context, "Please enter credentials in settings.", Toast.LENGTH_SHORT).show();
+        }
 
         todayBtn = (Button) findViewById(R.id.todayBtn);
         todayBtn.setOnClickListener(new View.OnClickListener() {
@@ -186,7 +194,6 @@ public class CalendarActivity extends AppCompatActivity {
     }
 
     protected String getBuildingAddress(String buildingName){
-
         String building = buildingName.substring(0, 3).toLowerCase();
         switch (building){
             case "agr"  : return "Agriculture building, Reading RG6 6BZ";
@@ -194,7 +201,7 @@ public class CalendarActivity extends AppCompatActivity {
             case "all"  : return "The Allen Laboratory, Earley, Reading RG6 6AX";
             case "bus"  : return "Centre for Entrepreneurship, Henley Business School, Reading RG6 6UD";
             case "car"  : return "Carrington Building, Reading RG6 6UA";
-            case "cha"  : return "51.440210, -0.949907"; //Currently co-ordinates as new building.
+            case "cha"  : return "51.440210, -0.949907"; //Currently co-ordinates for the new building.
             case "che"  : return "Chemistry and Pharmacy Building, Reading RG6 6LA";
             case "whi"  : return "Whiteknights House, Reading RG6";
             case "eng"  : return "Engineering Building, Pepper Lane, Earley";
@@ -212,10 +219,10 @@ public class CalendarActivity extends AppCompatActivity {
             case "pal"  : return "Palmer Building, Reading, Wokingham RG6 6UA, England";
             case "sys"  : return "Systems Engineering Building, Reading RG6 6AX";
             case "tpy"  : return "TOB2, Reading RG6 6BZ";
-            default:
-                return null;
+            default: return null;
         }
     }
+
     private class DownloadTimetable extends AsyncTask<String, Void, Void>{
 
         protected void onPreExecute(){
@@ -228,21 +235,21 @@ public class CalendarActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(String... f_url) {
-            int count;
-            HttpURLConnection connection = null;
-            String fileName = "timetable.ics";
+            HttpURLConnection connection;
             InputStream inputStream = null;
-            StringBuilder stringBuilder = null;
+            StringBuilder stringBuilder;
             String calendarString = null;
-
 
             try{
                 URL url = new URL(f_url[0]);
-
                 connection = (HttpURLConnection) url.openConnection();
-
+                String userpass = username + ":" + password;
+                String basicAuth = "Basic " + Base64.encodeToString(userpass.getBytes(), Base64.DEFAULT);
+                connection.setRequestProperty("Authorization", basicAuth);
+                
                 inputStream = new BufferedInputStream(connection.getInputStream());
 
+                System.out.println(inputStream);
             } catch (MalformedURLException e) {
                 Log.e("URL Error: ", e.getMessage());
             } catch (IOException e) {
@@ -252,9 +259,7 @@ public class CalendarActivity extends AppCompatActivity {
             try{
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "utf-8"), 8);
                 stringBuilder = new StringBuilder();
-                char symbol;
-                int counter = 0;
-                String thisLine = null;
+                String thisLine;
 
                 while ((thisLine = bufferedReader.readLine()) != null){
                     stringBuilder.append(thisLine);
@@ -268,8 +273,8 @@ public class CalendarActivity extends AppCompatActivity {
             } catch (UnknownHostException e) {
                 Toast.makeText(context, "Download failed, no network connection.", Toast.LENGTH_SHORT);
 
-            } catch (IOException e) {
-                Log.e("IO Error: ", e.getMessage());
+            } catch (Exception e) {
+                Log.e("Error: ", e.getMessage());
             }
 
             if (calendarString != null){
@@ -289,9 +294,7 @@ public class CalendarActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-
-            if (progressDialog.isShowing())
-                progressDialog.dismiss();
+            if (progressDialog.isShowing()){ progressDialog.dismiss(); }
         }
     }
 }

@@ -86,6 +86,8 @@ public class BusTimes extends AppCompatActivity {
                 new GetDepartures().execute(url);
             }
         });
+
+        chancellorWayBusBtn.performClick();
     }
 
     /**

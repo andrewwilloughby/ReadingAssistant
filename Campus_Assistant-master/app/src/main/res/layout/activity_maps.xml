@@ -1,7 +1,18 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:map="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.example.andrewwilloughby.campus_assistant.MapsActivity" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
@@ -10,10 +21,11 @@
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
 
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+        android:background="@color/TextWhite">
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/searchBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="4"
@@ -29,6 +41,7 @@
         android:onClick="onMapSearch"
         android:text="@string/mapSearchBtnText"
         android:background="@color/CampusNavigationColor"
+        android:textAllCaps="false"
         android:textColor="@color/TextWhite" />
 
     </LinearLayout>
@@ -37,55 +50,68 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:background="@color/CampusNavigationColor"
+        android:id="@+id/navDetails"
+        android:visibility="gone"
         android:layout_height="40dp">
 
-        <Space
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
+        <TextView
+            android:text="@string/distanceTxtViewText"
+            android:layout_height="match_parent"
+            android:id="@+id/distanceTxtView"
+            android:layout_weight="1"
+            android:layout_width="150dp"
+            android:textStyle="normal|bold"
+            android:textAlignment="center"
+            android:gravity="center_vertical"
+            android:textColor="@color/TextWhite"
+            android:textSize="16sp" />
 
-        <Button
-            android:text="Button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/button4"
-            android:layout_weight="1" />
+        <TextView
+            android:text="@string/timeTxtViewText"
+            android:layout_height="match_parent"
+            android:id="@+id/durationTxtView"
+            android:layout_weight="1"
+            android:layout_width="150dp"
+            android:textStyle="normal|bold"
+            android:textAlignment="center"
+            android:gravity="center_vertical"
+            android:textColor="@color/TextWhite"
+            android:textSize="16sp" />
 
-        <Space
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
-
-        <Button
-            android:text="Button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/button3"
-            android:layout_weight="1" />
-
-        <Space
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
-
-        <Button
-            android:text="Button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/button2"
-            android:layout_weight="1" />
+        <ImageButton
+            android:id="@+id/cancelRouteBtn"
+            android:layout_weight="1"
+            android:background="@drawable/ic_close_dark"
+            android:elevation="0dp"
+            android:layout_height="match_parent"
+            android:layout_width="25dp"
+            android:contentDescription="Cancel current route." />
 
         <Space
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
+
     </LinearLayout>
 
-    <fragment
-        android:id="@+id/map"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context="com.example.andrewwilloughby.campus_assistant.MapsActivity" />
+        <TextView
+            android:text="@string/search_nearby_textView_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/searchNearbyTextView"
+            android:textSize="18sp"
+            android:layout_marginLeft="8dp" />
 
-</LinearLayout>
+        <Spinner
+            android:layout_height="40dp"
+            android:id="@+id/searchNearbySpinner"
+            android:layout_width="wrap_content"
+            android:prompt="@string/search_nearby_prompt"
+            android:entries="@array/search_nearby_items"
+            android:background="@color/CampusNavigationColor"
+            android:layout_marginLeft="8dp"
+            android:spinnerMode="dialog" />
+
+    </LinearLayout>
+
+</FrameLayout>

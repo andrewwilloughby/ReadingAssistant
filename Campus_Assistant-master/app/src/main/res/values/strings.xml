@@ -49,6 +49,13 @@
     <string name="todayBtnText">Today</string>
     <string name="mapSearchHintText">Search here</string>
     <string name="mapSearchBtnText">Search</string>
+    <string name="distanceTxtViewText">[distance]</string>
+    <string name="timeTxtViewText">[time]</string>
+    <string name="englandMapBounds">55.811741, 1.76896, 49.871159, -6.37988</string>
+    <string name="uniUsernameTextView">University Username:</string>
+    <string name="uniPasswordTextView">University Password:</string>
+    <string name="saveBtnText">Log in</string>
+    <string name="loginTextViewText">Please log in to view your Student Timetable</string>
 
     <string-array name="menuCategories">
         <item>Student Information</item>
@@ -93,6 +100,12 @@
         <item>Student Timetable</item>
     </string-array>
 
+    <string name="search_nearby_textView_text">Show nearby:</string>
+    <string name="search_nearby_prompt">Show nearby</string>
+    <string-array name="search_nearby_items">
+        <item>Food &amp; Drink</item>
+        <item>Bike Racks</item>
+    </string-array>
     <!-- Example General settings -->
     <string name="pref_header_general">General</string>
 

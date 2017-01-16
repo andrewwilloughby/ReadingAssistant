@@ -16,7 +16,7 @@ public class CampusMapsMenu extends AMenu {
         setContentView(R.layout.activity_campus_maps_menu);
 
         setTitle("Campus Maps");
-        initialiseSafetySettingsBtns();
+        initialiseToolbarBtns();
 
         whiteknightsBtn = (Button) findViewById(R.id.campusMapsMenuWhiteknightsBtn);
         whiteknightsBtn.setOnClickListener(new View.OnClickListener() {

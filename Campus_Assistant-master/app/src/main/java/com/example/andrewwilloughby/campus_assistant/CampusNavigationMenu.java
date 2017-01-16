@@ -15,7 +15,7 @@ public class CampusNavigationMenu extends AMenu {
         setContentView(R.layout.activity_campus_navigation_menu);
 
         setTitle("Campus Navigation");
-        initialiseSafetySettingsBtns();
+        initialiseToolbarBtns();
 
         googleMapsBtn = (Button) findViewById(R.id.campusNavInteractiveMapBtn);
         googleMapsBtn.setOnClickListener(new View.OnClickListener() {
