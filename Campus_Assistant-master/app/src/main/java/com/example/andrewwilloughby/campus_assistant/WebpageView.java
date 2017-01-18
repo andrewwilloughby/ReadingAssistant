@@ -24,7 +24,7 @@ public class WebpageView extends AppCompatActivity {
         setTitle(pageName);
 
         if (pageURL.contains(".pdf")){
-            pageURL = "http://drive.google.com/viewerng/viewer?embedded=true&url=" + pageURL;
+            pageURL = "https://docs.google.com/gview?embedded=true&url=" + pageURL;
         }
 
         webView = new WebView(this);

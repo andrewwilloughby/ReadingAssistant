@@ -5,11 +5,7 @@ xmlns:tools="http://schemas.android.com/tools"
 android:id="@+id/activity_bbemail_menu"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
-android:paddingBottom="0dp"
-android:paddingLeft="0dp"
-android:paddingRight="0dp"
-android:paddingTop="0dp"
-tools:context="com.example.andrewwilloughby.campus_assistant.BBEmailMenu"
+    tools:context="com.example.andrewwilloughby.campus_assistant.BBEmailMenu"
 android:background="?android:attr/detailsElementBackground">
 
 
@@ -95,15 +91,15 @@ android:background="?android:attr/detailsElementBackground">
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:id="@+id/first_row_layout"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
             android:paddingBottom="5dp"
             android:paddingLeft="5dp"
             android:paddingRight="5dp">
 
             <Button
                 android:text="@string/bbemailBlackboardBtnText"
-                android:layout_width="89dp"
-                android:layout_height="110dp"
+                android:layout_width="90dp"
+                android:layout_height="95dp"
                 android:id="@+id/bbemailMenuBlackboardBtn"
                 android:layout_weight="1"
                 android:textSize="12sp"
@@ -114,10 +110,10 @@ android:background="?android:attr/detailsElementBackground">
 
             <Button
                 android:text="@string/bbemailEmailBtnText"
-                android:layout_width="89dp"
+                android:layout_width="90dp"
                 android:id="@+id/bbemailMenuEmailBtn"
                 android:layout_weight="1"
-                android:layout_height="110dp"
+                android:layout_height="95dp"
                 android:textSize="12sp"
                 android:background="@color/BBEmailColour"
                 android:layout_marginLeft="2.5dp"

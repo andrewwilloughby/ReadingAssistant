@@ -97,28 +97,28 @@ android:background="?android:attr/detailsElementBackground">
 
         <Button
             android:text="@string/travelInfoBusTimesBtnText"
-            android:layout_width="89dp"
-            android:layout_height="110dp"
+            android:layout_width="90dp"
             android:id="@+id/travelInfoBusTimesBtn"
             android:layout_weight="1"
             android:textSize="12sp"
             android:background="@color/TravelInformationColor"
             android:layout_marginRight="2.5dp"
             android:textAllCaps="false"
-            android:textColor="@color/TextWhite" />
+            android:textColor="@color/TextWhite"
+            android:layout_height="95dp" />
 
         <Button
             android:text="@string/travelInfoRailTimesBtnText"
-            android:layout_width="89dp"
+            android:layout_width="90dp"
             android:id="@+id/travelInfoRailTimesBtn"
             android:layout_weight="1"
-            android:layout_height="110dp"
             android:textSize="12sp"
             android:background="@color/TravelInformationColor"
             android:layout_marginLeft="2.5dp"
             android:textAllCaps="false"
             android:elevation="22dp"
-            android:textColor="@color/TextWhite" />
+            android:textColor="@color/TextWhite"
+            android:layout_height="95dp" />
     </LinearLayout>
 
         <LinearLayout
@@ -132,15 +132,15 @@ android:background="?android:attr/detailsElementBackground">
 
         <Button
             android:text="@string/travelInfoBusTimetableBtnText"
-            android:layout_height="110dp"
             android:id="@+id/travelInfoBusTimetableBtn"
             android:layout_weight="1"
-            android:layout_width="89dp"
+            android:layout_width="90dp"
             android:background="@color/TravelInformationColor"
             android:textSize="12sp"
             android:layout_marginRight="2.5dp"
             android:textAllCaps="false"
-            android:textColor="@color/TextWhite" />
+            android:textColor="@color/TextWhite"
+            android:layout_height="95dp" />
 
         <Space
             android:layout_width="89dp"

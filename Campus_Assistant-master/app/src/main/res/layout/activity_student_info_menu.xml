@@ -45,7 +45,7 @@ tools:context="com.example.andrewwilloughby.campus_assistant.StudentInfoMenu">
                 android:layout_marginTop="5dp"
                 android:paddingRight="5dp"
                 android:paddingLeft="5dp"
-                android:layout_height="40dp">
+                android:layout_height="wrap_content">
 
                 <LinearLayout
                     android:orientation="horizontal"
@@ -92,14 +92,14 @@ tools:context="com.example.andrewwilloughby.campus_assistant.StudentInfoMenu">
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:id="@+id/firstRowLayout"
-                android:layout_height="97dp"
+                android:layout_height="wrap_content"
                 android:paddingBottom="5dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp">
 
                 <Button
                     android:text="@string/studentInfoServicesBtnText"
-                    android:layout_width="89dp"
+                    android:layout_width="90dp"
                     android:id="@+id/studentInfoServicesBtn"
                     android:layout_weight="1"
                     android:textSize="12sp"
@@ -107,11 +107,11 @@ tools:context="com.example.andrewwilloughby.campus_assistant.StudentInfoMenu">
                     android:layout_marginRight="2.5dp"
                     android:textColor="@color/TextWhite"
                     android:textAllCaps="false"
-                    android:layout_height="98dp" />
+                    android:layout_height="95dp" />
 
                 <Button
                     android:text="@string/studentInfoLibraryBtnText"
-                    android:layout_width="89dp"
+                    android:layout_width="90dp"
                     android:id="@+id/studentInfoLibraryBtn"
                     android:layout_weight="1"
                     android:textSize="12sp"
@@ -120,14 +120,14 @@ tools:context="com.example.andrewwilloughby.campus_assistant.StudentInfoMenu">
                     android:textColor="@color/TextWhite"
                     android:textAllCaps="false"
                     android:textAlignment="center"
-                    android:layout_height="98dp" />
+                    android:layout_height="95dp" />
             </LinearLayout>
 
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:id="@+id/secondRowLayout"
-                android:layout_height="97dp"
+                android:layout_height="wrap_content"
                 android:paddingBottom="5dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp">
@@ -136,17 +136,17 @@ tools:context="com.example.andrewwilloughby.campus_assistant.StudentInfoMenu">
                     android:text="@string/studentInfoPaymentsBtnText"
                     android:id="@+id/studentInfoPaymentsBtn"
                     android:layout_weight="1"
-                    android:layout_width="89dp"
+                    android:layout_width="90dp"
                     android:background="@color/StudentInfoColor"
                     android:textSize="12sp"
                     android:layout_marginRight="2.5dp"
                     android:textColor="@color/TextWhite"
                     android:textAllCaps="false"
-                    android:layout_height="97dp" />
+                    android:layout_height="95dp" />
 
                 <Button
                     android:text="@string/studentInfoRisisBtnText"
-                    android:layout_width="89dp"
+                    android:layout_width="90dp"
                     android:id="@+id/studentInfoRisisBtn"
                     android:layout_weight="1"
                     android:textSize="12sp"
@@ -154,21 +154,21 @@ tools:context="com.example.andrewwilloughby.campus_assistant.StudentInfoMenu">
                     android:layout_marginLeft="2.5dp"
                     android:textColor="@color/TextWhite"
                     android:textAllCaps="false"
-                    android:layout_height="97dp" />
+                    android:layout_height="95dp" />
             </LinearLayout>
 
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:id="@+id/thirdRowLayout"
-                android:layout_height="97dp"
+                android:layout_height="wrap_content"
                 android:paddingBottom="5dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp">
 
                 <Button
                     android:text="@string/studentInfoStaffDirectoryBtnText"
-                    android:layout_width="89dp"
+                    android:layout_width="90dp"
                     android:id="@+id/studentInfoStaffDirectoryBtn"
                     android:layout_weight="1"
                     android:textSize="12sp"
@@ -177,7 +177,7 @@ tools:context="com.example.andrewwilloughby.campus_assistant.StudentInfoMenu">
                     android:textColor="@color/TextWhite"
                     android:capitalize="none"
                     android:textAllCaps="false"
-                    android:layout_height="97dp" />
+                    android:layout_height="95dp" />
 
                 <Space
                     android:layout_width="89dp"

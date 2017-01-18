@@ -69,7 +69,6 @@ public class LatestNews extends AppCompatActivity {
 
         final SwipeRefreshLayout swipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_layout);
 
-
         final UserTimeline userTimeline = new UserTimeline.Builder()
                 .screenName("UniofReading")
                 .build();

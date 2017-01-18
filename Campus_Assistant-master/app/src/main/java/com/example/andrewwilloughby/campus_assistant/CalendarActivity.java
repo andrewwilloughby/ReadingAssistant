@@ -223,6 +223,14 @@ public class CalendarActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        Intent intent = new Intent(context, MainActivity.class);
+        startActivity(intent);
+    }
+
     private class DownloadTimetable extends AsyncTask<String, Void, Void>{
 
         protected void onPreExecute(){
@@ -246,10 +254,7 @@ public class CalendarActivity extends AppCompatActivity {
                 String userpass = username + ":" + password;
                 String basicAuth = "Basic " + Base64.encodeToString(userpass.getBytes(), Base64.DEFAULT);
                 connection.setRequestProperty("Authorization", basicAuth);
-                
                 inputStream = new BufferedInputStream(connection.getInputStream());
-
-                System.out.println(inputStream);
             } catch (MalformedURLException e) {
                 Log.e("URL Error: ", e.getMessage());
             } catch (IOException e) {
@@ -264,7 +269,6 @@ public class CalendarActivity extends AppCompatActivity {
                 while ((thisLine = bufferedReader.readLine()) != null){
                     stringBuilder.append(thisLine);
                     stringBuilder.append("\r\n");
-                    System.out.println(thisLine);
                 }
                 calendarString = stringBuilder.toString();
 

@@ -34,6 +34,7 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.fitness.data.Goal;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
@@ -47,6 +48,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PointOfInterest;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -62,10 +64,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, AdapterView.OnItemSelectedListener {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, AdapterView.OnItemSelectedListener, GoogleMap.OnPoiClickListener {
     private GoogleMap map;
     private int PROXIMITY_RADIUS = 5000;
     GoogleApiClient googleApiClient;
@@ -77,7 +80,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Context context;
     private String searchValue;
     private Marker searchMarker;
+    private Marker poiMarker;
     private LatLng currentLatLng;
+    private LatLng poiLatLng;
     private ProgressDialog pDialog;
     private static String url;
     private Polyline routeLine;
@@ -91,6 +96,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Spinner searchNearbySpinner;
     private boolean spinnerTouched = false;
     MarkerOptions currentLocationMarkerOptions;
+    private LinearLayout searchNearbyItems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +110,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //Check whether Google Play Services are available
         if (!CheckGooglePlayServices()){ finish();}
 
+        searchNearbyItems = (LinearLayout) findViewById(R.id.searchNearbyItems);
 
         searchBox = (EditText) findViewById(R.id.searchBox);
         searchBox.setOnClickListener(new View.OnClickListener(){
@@ -134,6 +141,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 if (navDetailsLayout.getVisibility() == View.VISIBLE){
                     navDetailsLayout.setVisibility(View.GONE);
+                }
+
+                if (searchNearbyItems.getVisibility() == View.GONE){
+                    searchNearbyItems.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -246,6 +257,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     if (searchMarker != null){
                         searchMarker.remove();
                     }
+
+                    if (poiMarker != null){
+                        poiMarker.remove();
+                    }
                     Address address = addressList.get(0);
                     LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
                     MarkerOptions searchMarkerOptions = new MarkerOptions().position(latLng).title(address.getAddressLine(0));
@@ -260,15 +275,41 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     @Override
+    public void onPoiClick(PointOfInterest poi) {
+
+        if (poiMarker != null){
+            poiMarker.remove();
+        }
+
+        //Place a marker for current location.
+        poiLatLng = new LatLng(poi.latLng.latitude, poi.latLng.longitude);
+
+        MarkerOptions poiMarkerOptions = new MarkerOptions();
+        poiMarkerOptions.position(poiLatLng);
+        poiMarkerOptions.title(poi.name);
+        poiMarkerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+        poiMarker = map.addMarker(poiMarkerOptions);
+
+        poiMarker.showInfoWindow();
+
+        map.moveCamera(CameraUpdateFactory.newLatLng(poiLatLng));
+    }
+
+    @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
         map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
+        map.setOnPoiClickListener(this);
+
         map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
-                if (routeLine != null){
-                    routeLine.remove();
+
+                if (routeLine != null){ routeLine.remove(); }
+
+                if (searchNearbyItems.getVisibility() == View.VISIBLE){
+                    searchNearbyItems.setVisibility(View.GONE);
                 }
 
                 LatLng originLatLng = currentLocationMarker.getPosition();
@@ -555,8 +596,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             HttpHandler sh = new HttpHandler();
 
             String jsonStr = sh.makeServiceCall(url);
-            System.out.println(jsonStr);
-
             return jsonStr;
         }
 
@@ -569,4 +608,59 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         }
     }
+
+    // Code developed from tutorial: https://www.androidtutorialpoint.com/intermediate/google-maps-search-nearby-displaying-nearby-places-using-google-places-api-google-maps-api-v2/
+    private class GetNearbyPlacesData extends AsyncTask<Object, String, String> {
+
+        String placesData;
+        GoogleMap map;
+        String url;
+
+        @Override
+        protected String doInBackground(Object... params) {
+            try {
+                Log.d("GetNearbyPlacesData", "doInBackground entered");
+                map = (GoogleMap) params[0];
+                url = (String) params[1];
+                DownloadUrl downloadUrl = new DownloadUrl();
+                placesData = downloadUrl.readUrl(url);
+            } catch (Exception e){
+                Log.d("GooglePlacesReadTask", e.toString());
+            }
+            return placesData;
+        }
+
+        @Override
+        protected void onPostExecute(String result){
+            Log.d("GooglePlacesReadTask", "onPostExecute entered");
+            List<HashMap<String, String>> nearbyPlacesList = null;
+            DataParser dataParser = new DataParser();
+            nearbyPlacesList = dataParser.parse(result);
+            ShowNearbyPlaces(nearbyPlacesList);
+            Log.d("GooglePlacesReadTask", "onPostExecute exit");
+        }
+
+        private void ShowNearbyPlaces(List<HashMap<String, String>> nearbyPlacesList){
+            for (int i = 0; i < nearbyPlacesList.size(); i++){
+                Log.d("onPostExecute", "entered into showing locations");
+                MarkerOptions markerOptions = new MarkerOptions();
+                HashMap<String, String> googlePlace = nearbyPlacesList.get(i);
+                double lat = Double.parseDouble(googlePlace.get("lat"));
+                double lng = Double.parseDouble(googlePlace.get("lng"));
+                String placeName = googlePlace.get("place_name");
+                String vicinity = googlePlace.get("vicinity");
+                LatLng latLng = new LatLng(lat, lng);
+                markerOptions.position(latLng);
+                markerOptions.title(placeName + " : " + vicinity);
+                map.addMarker(markerOptions);
+                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+                //move map camera
+                map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                map.animateCamera(CameraUpdateFactory.zoomTo(11));
+            }
+        }
+    }
+
+
+
 }

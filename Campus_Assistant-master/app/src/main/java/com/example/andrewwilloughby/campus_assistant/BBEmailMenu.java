@@ -1,5 +1,6 @@
 package com.example.andrewwilloughby.campus_assistant;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -14,6 +15,7 @@ public class BBEmailMenu extends AMenu {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bbemail_menu);
 
+        final Context context = this;
         setTitle("Blackboard & Email");
         initialiseToolbarBtns();
 

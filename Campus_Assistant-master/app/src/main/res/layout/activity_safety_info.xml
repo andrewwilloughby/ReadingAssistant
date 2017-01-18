@@ -138,35 +138,35 @@ android:overScrollMode="always">
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:id="@+id/secondRowLayout"
+                android:id="@+id/safetyGridLayout"
                 android:paddingBottom="5dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:layout_height="97dp">
+                android:layout_height="wrap_content">
 
                 <Button
                     android:text="@string/personalSafetyBtnText"
                     android:id="@+id/personalSafetyBtn"
                     android:layout_weight="1"
-                    android:layout_width="89dp"
+                    android:layout_width="90dp"
                     android:background="@color/colorPrimary"
-                    android:textSize="12sp"
+                    android:textSize="11sp"
                     android:layout_marginRight="2.5dp"
                     android:textAllCaps="false"
                     android:textColor="@color/TextWhite"
-                    android:layout_height="97dp" />
+                    android:layout_height="95dp" />
 
                 <Button
                     android:text="@string/healthAndSafetyBtnText"
-                    android:layout_width="89dp"
+                    android:layout_width="90dp"
                     android:id="@+id/healthAndSafetyBtn"
                     android:layout_weight="1"
-                    android:textSize="12sp"
+                    android:textSize="11sp"
                     android:background="@color/colorPrimary"
                     android:layout_marginLeft="2.5dp"
                     android:textAllCaps="false"
                     android:textColor="@color/TextWhite"
-                    android:layout_height="97dp" />
+                    android:layout_height="95dp" />
             </LinearLayout>
 
         </LinearLayout>

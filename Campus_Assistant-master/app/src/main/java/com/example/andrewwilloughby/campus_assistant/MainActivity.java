@@ -35,6 +35,7 @@ public class MainActivity extends AMenu {
     private ExpandableListView expList;
     private int lastExpandedPosition = -1;
     private Context context;
+    boolean doubleBackToExitPressedOnce = false;
 
     HashMap<String, List<String>> menuItemsList = new HashMap<String, List<String>>();
     List<String> menuCategory = new ArrayList<String>();
@@ -52,6 +53,8 @@ public class MainActivity extends AMenu {
         Fabric.with(this, new Twitter(authConfig));
         setContentView(R.layout.activity_main);
         final LinearLayout gridLayout = (LinearLayout) findViewById(R.id.gridLayout);
+        expList = (ExpandableListView) findViewById(R.id.expandableList);
+
 
         context = this;
 
@@ -132,7 +135,6 @@ public class MainActivity extends AMenu {
         menuItemsList.put(menuCategory.get(4), bbEmailItemsList);
         menuItemsList.put(menuCategory.get(5), timetableItemsList);
 
-        expList = (ExpandableListView) findViewById(R.id.expandableList);
         final ExpandableListAdapter adapter = new MainMenuExpListAdapter(this, menuItemsList, menuCategory);
         expList.setAdapter(adapter);
 
@@ -193,7 +195,7 @@ public class MainActivity extends AMenu {
                         }
                          break;
                     default:
-                        Toast.makeText(getApplicationContext(), "This functionality hasn't been implemented.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Unknown request.", Toast.LENGTH_SHORT).show();
                         break;
                 }
                 return true;
@@ -210,8 +212,6 @@ public class MainActivity extends AMenu {
             }
         });
     }
-
-    boolean doubleBackToExitPressedOnce = false;
 
     @Override
     public void onBackPressed() {

@@ -25,7 +25,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        setTitle("Student Login");
+        setTitle("Authentication required");
 
         context = this;
 
@@ -49,32 +49,33 @@ public class LoginActivity extends AppCompatActivity {
                 if ((username != null) && (password != null)){
                     validationError = validateUserNameEditText(username);
 
-                    if (validationError == null){
-                        Intent intent = new Intent(context, CalendarActivity.class);
-                        intent.putExtra("username", username);
-                        intent.putExtra("password", password);
+                    switch (validationError){
+                        case "valid": {
+                            Intent intent = new Intent(context, CalendarActivity.class);
+                            intent.putExtra("username", username);
+                            intent.putExtra("password", password);
 
-                        startActivity(intent);
-
-                    } else if (validationError == "invalid length"){
-                        Toast.makeText(context, "Invalid username length.", Toast.LENGTH_SHORT).show();
-                    } else if (validationError == "invalid format"){
-                        Toast.makeText(context, "Invalid username format.", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(context, "An unknown error occured.", Toast.LENGTH_SHORT).show();
+                            startActivity(intent);
+                        }
+                        case "invalid length": Toast.makeText(context, "Invalid username length.", Toast.LENGTH_SHORT).show(); break;
+                        case "special characters": Toast.makeText(context, "Special Characters in username are not permitted.", Toast.LENGTH_SHORT).show(); break;
+                        default:
+                            Toast.makeText(context, "An unknown error occured.", Toast.LENGTH_SHORT).show(); break;
                     }
                 }
             }
         });
     }
 
-    private String validateUserNameEditText(String username){
+    public String validateUserNameEditText(String username){
         if (username.length() != 8){
             return "invalid length";
         } else if (!username.matches("^[a-zA-Z0-9]*$")){
+            return "special characters";
+        } else if (!username.matches(("^[a-zA-Z]{2}\\d{6}"))){
             return "invalid format";
         }
 
-        return null;
+        return "valid";
     }
 }

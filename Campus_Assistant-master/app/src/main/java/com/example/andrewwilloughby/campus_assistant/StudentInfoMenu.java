@@ -1,5 +1,6 @@
 package com.example.andrewwilloughby.campus_assistant;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -19,6 +20,7 @@ public class StudentInfoMenu extends AMenu {
 
         setTitle("Student Information");
         initialiseToolbarBtns();
+        final Context context = this;
 
         studentServicesBtn = (Button) findViewById(R.id.studentInfoServicesBtn);
         studentServicesBtn.setOnClickListener(new View.OnClickListener() {

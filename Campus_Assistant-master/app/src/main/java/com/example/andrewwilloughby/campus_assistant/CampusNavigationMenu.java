@@ -6,7 +6,7 @@ import android.widget.Button;
 
 public class CampusNavigationMenu extends AMenu {
 
-    private Button googleMapsBtn;
+    private Button interactiveMapBtn;
     private Button campusMapsBtn;
 
     @Override
@@ -17,8 +17,8 @@ public class CampusNavigationMenu extends AMenu {
         setTitle("Campus Navigation");
         initialiseToolbarBtns();
 
-        googleMapsBtn = (Button) findViewById(R.id.campusNavInteractiveMapBtn);
-        googleMapsBtn.setOnClickListener(new View.OnClickListener() {
+        interactiveMapBtn = (Button) findViewById(R.id.campusNavInteractiveMapBtn);
+        interactiveMapBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){launchActivity("interactive map");
             }
         });

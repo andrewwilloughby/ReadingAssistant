@@ -41,7 +41,7 @@
         android:layout_marginTop="15dp"
         android:paddingRight="5dp"
         android:paddingLeft="5dp"
-        android:layout_height="40dp">
+        android:layout_height="20dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -51,6 +51,20 @@
             android:textAlignment="center"
             android:textStyle="normal|bold"
             android:text="@string/loginTextViewText" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="30dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/loginTextView2"
+            android:layout_weight="1"
+            android:textAlignment="center"
+            android:text="@string/loginTextView2Text" />
     </LinearLayout>
 
     <LinearLayout

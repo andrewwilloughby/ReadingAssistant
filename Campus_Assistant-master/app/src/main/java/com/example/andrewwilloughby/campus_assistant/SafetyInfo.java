@@ -2,6 +2,7 @@ package com.example.andrewwilloughby.campus_assistant;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -29,6 +30,7 @@ public class SafetyInfo extends AMenu {
         setContentView(R.layout.activity_safety_info);
 
         final Activity thisActivity = this;
+        final Context context = this;
         setTitle("Safety Information");
 
         setMENU_MODE(1);

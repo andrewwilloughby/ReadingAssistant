@@ -55,7 +55,8 @@
     <string name="uniUsernameTextView">University Username:</string>
     <string name="uniPasswordTextView">University Password:</string>
     <string name="saveBtnText">Log in</string>
-    <string name="loginTextViewText">Please log in to view your Student Timetable</string>
+    <string name="loginTextViewText">Authentication required</string>
+    <string name="loginTextView2Text">Please enter your university credentials</string>
 
     <string-array name="menuCategories">
         <item>Student Information</item>

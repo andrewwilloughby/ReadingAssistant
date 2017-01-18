@@ -89,7 +89,7 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="gone"
+            android:visibility="visible"
             android:id="@+id/gridLayout">
 
             <LinearLayout
@@ -99,11 +99,11 @@
                 android:paddingBottom="5dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:layout_height="97dp">
+                android:layout_height="wrap_content">
 
                 <Button
                     android:text="@string/mainStudentInfoBtnText"
-                    android:layout_width="89dp"
+                    android:layout_width="90dp"
                     android:id="@+id/mainStudentInfoBtn"
                     android:layout_weight="1"
                     android:textSize="12sp"
@@ -112,11 +112,11 @@
                     android:textAllCaps="false"
                     android:textColor="@color/TextWhite"
                     android:elevation="4dp"
-                    android:layout_height="98dp" />
+                    android:layout_height="95dp" />
 
                 <Button
                     android:text="@string/mainLatestNewsBtnText"
-                    android:layout_width="89dp"
+                    android:layout_width="90dp"
                     android:id="@+id/mainLatestNewsBtn"
                     android:layout_weight="1"
                     android:textSize="12sp"
@@ -125,7 +125,7 @@
                     android:textAllCaps="false"
                     android:elevation="4dp"
                     android:textColor="@color/TextWhite"
-                    android:layout_height="98dp" />
+                    android:layout_height="95dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -135,23 +135,24 @@
                 android:paddingBottom="5dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:layout_height="97dp">
+                android:layout_height="wrap_content">
 
                 <Button
                     android:text="@string/mainCampusNavBtnText"
                     android:id="@+id/mainCampusNavBtn"
                     android:layout_weight="1"
-                    android:layout_width="89dp"
+                    android:layout_width="90dp"
                     android:background="@color/CampusNavigationColor"
                     android:textSize="12sp"
                     android:layout_marginRight="2.5dp"
                     android:textAllCaps="false"
                     android:textColor="@color/TextWhite"
-                    android:layout_height="97dp" />
+                    android:elevation="4dp"
+                    android:layout_height="95dp" />
 
                 <Button
                     android:text="@string/mainTravelInfoBtnText"
-                    android:layout_width="89dp"
+                    android:layout_width="90dp"
                     android:id="@+id/mainTravelInfoBtn"
                     android:layout_weight="1"
                     android:textSize="12sp"
@@ -159,7 +160,8 @@
                     android:layout_marginLeft="2.5dp"
                     android:textAllCaps="false"
                     android:textColor="@color/TextWhite"
-                    android:layout_height="97dp" />
+                    android:elevation="4dp"
+                    android:layout_height="95dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -173,7 +175,7 @@
 
                 <Button
                     android:text="@string/mainBbEmailBtnText"
-                    android:layout_width="89dp"
+                    android:layout_width="90dp"
                     android:id="@+id/mainBbEmailBtn"
                     android:layout_weight="1"
                     android:textSize="12sp"
@@ -181,11 +183,11 @@
                     android:background="@color/BBEmailColour"
                     android:textAllCaps="false"
                     android:textColor="@color/TextWhite"
-                    android:layout_height="98dp" />
+                    android:layout_height="95dp" />
 
                 <Button
                     android:text="@string/mainTimetableBtnText"
-                    android:layout_width="89dp"
+                    android:layout_width="90dp"
                     android:id="@+id/mainTimetableBtn"
                     android:layout_weight="1"
                     android:textSize="12sp"
@@ -193,7 +195,7 @@
                     android:background="@color/TimetableColor"
                     android:textAllCaps="false"
                     android:textColor="@color/TextWhite"
-                    android:layout_height="98dp" />
+                    android:layout_height="95dp" />
             </LinearLayout>
         </LinearLayout>
 
@@ -204,7 +206,7 @@
             android:indicatorLeft="?android:attr/expandableListPreferredItemIndicatorLeft"
             android:divider="#000000"
             android:dividerHeight="0.1dp"
-            android:visibility="visible"></ExpandableListView>
+            android:visibility="gone"></ExpandableListView>
 
 
     </LinearLayout>

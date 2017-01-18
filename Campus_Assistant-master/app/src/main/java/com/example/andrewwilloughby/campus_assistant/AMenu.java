@@ -20,11 +20,16 @@ public abstract class AMenu extends AppCompatActivity {
     protected ImageButton viewStyleBtn;
 
     // Used to define which menu layout to use (1 = grid buttons, 2 = Expandable menu list).
-    public int MENU_MODE = 2;
+    public int MENU_MODE;
 
     /**
      * Set up the
      */
+
+    AMenu(){
+        setMENU_MODE(2);
+    }
+
     protected void initialiseToolbarBtns(){
 
         // Calls the 'safety' activity when clicked.
@@ -43,12 +48,15 @@ public abstract class AMenu extends AppCompatActivity {
                 if(getMENU_MODE() == 1){
                     viewStyleBtn.setImageResource(R.drawable.grid_icon);
                     setMENU_MODE(2);
+                    System.out.println(getMENU_MODE());
                     launchActivity("main menu");
 
-                // Otherwise do the opposite, but no need to launch the main menu activity again.
+                    // Otherwise do the opposite, but no need to launch the main menu activity again.
                 } else if(getMENU_MODE() == 2){
                     viewStyleBtn.setImageResource(R.drawable.list_icon);
                     setMENU_MODE(1);
+                    System.out.println(getMENU_MODE());
+                    launchActivity("main menu");
                 }
             }
         });
@@ -153,7 +161,9 @@ public abstract class AMenu extends AppCompatActivity {
 
         intent.putExtra("webpageURL", url);
         intent.putExtra("webpageName", webpageName);
+
         startActivity(intent);
+
     }
 
     protected boolean isNetworkAvailable() {
@@ -171,11 +181,11 @@ public abstract class AMenu extends AppCompatActivity {
         }
     }
 
-    protected int getMENU_MODE(){
+    public int getMENU_MODE(){
         return MENU_MODE;
     }
 
-    protected void setMENU_MODE(int value){
+    public void setMENU_MODE(int value){
         MENU_MODE = value;
     }
 }

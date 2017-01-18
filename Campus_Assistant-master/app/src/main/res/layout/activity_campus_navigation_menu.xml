@@ -91,34 +91,34 @@ tools:context="com.example.andrewwilloughby.campus_assistant.CampusNavigationMen
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:id="@+id/firstRowLayout"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
             android:paddingBottom="5dp"
             android:paddingLeft="5dp"
             android:paddingRight="5dp">
 
             <Button
                 android:text="@string/campusNavInteractiveMapBtnText"
-                android:layout_width="89dp"
-                android:layout_height="110dp"
+                android:layout_width="90dp"
                 android:id="@+id/campusNavInteractiveMapBtn"
                 android:layout_weight="1"
                 android:textSize="12sp"
                 android:background="@color/CampusNavigationColor"
                 android:layout_marginRight="2.5dp"
                 android:textColor="@color/TextWhite"
-                android:textAllCaps="false" />
+                android:textAllCaps="false"
+                android:layout_height="95dp" />
 
             <Button
                 android:text="@string/campusNavMapsBtnText"
-                android:layout_width="89dp"
+                android:layout_width="90dp"
                 android:id="@+id/campusNavMapsBtn"
                 android:layout_weight="1"
-                android:layout_height="110dp"
                 android:textSize="12sp"
                 android:background="@color/CampusNavigationColor"
                 android:layout_marginLeft="2.5dp"
                 android:textColor="@color/TextWhite"
-                android:textAllCaps="false" />
+                android:textAllCaps="false"
+                android:layout_height="95dp" />
         </LinearLayout>
     </LinearLayout>
     </ScrollView>
