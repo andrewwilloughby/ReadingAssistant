@@ -168,6 +168,7 @@ public class MainActivity extends AMenu {
                         } else {
                             Toast.makeText(context, "This functionality requires an active network connection.", Toast.LENGTH_SHORT).show();
                         }
+                        break;
                     case "Whiteknights Campus Map": launchWebView(selected); break;
                     case "London Road Campus Map": launchWebView(selected); break;
                     case "Student Halls Map": launchWebView(selected); break;

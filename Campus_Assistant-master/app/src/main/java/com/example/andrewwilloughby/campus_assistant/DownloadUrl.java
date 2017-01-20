@@ -1,6 +1,5 @@
 package com.example.andrewwilloughby.campus_assistant;
 
-import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,7 +15,7 @@ import java.net.URL;
 public class DownloadUrl {
 
     public String readUrl(String string) throws IOException {
-        String data = "";
+        String data = null;
         InputStream inputStream = null;
         HttpURLConnection httpURLConnection = null;
 
@@ -37,18 +36,17 @@ public class DownloadUrl {
             StringBuffer stringBuffer = new StringBuffer();
 
             String line = "";
-            while ((line = bufferedReader.readLine()) != null){
+            while ((line = bufferedReader.readLine()) != null) {
                 stringBuffer.append(line);
             }
 
             data = stringBuffer.toString();
-            Log.d("downloadUrl", data.toString());
             bufferedReader.close();
-        } catch (Exception e){
-            Log.d("Exception", e.toString());
-        } finally {
             inputStream.close();
+
             httpURLConnection.disconnect();
+        } catch (Exception e){
+            return null;
         }
         return data;
     }

@@ -17,6 +17,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -91,7 +92,7 @@ public class BusTimes extends AppCompatActivity {
     }
 
     /**
-     * Async task class to get json by making HTTP call
+     * Async task class to get JSON by making HTTP call
      */
     private class GetDepartures extends AsyncTask<String, Void, Void> {
 
@@ -107,10 +108,15 @@ public class BusTimes extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(String... arg0) {
-            HttpHandler sh = new HttpHandler();
 
-            // Making a request to url and getting response
-            String jsonStr = sh.makeServiceCall(url);
+            DownloadUrl downloadUrl = new DownloadUrl();
+            String jsonStr;
+
+            try {
+                jsonStr = downloadUrl.readUrl(url);
+            } catch (IOException e){
+                jsonStr = null;
+            }
 
             if (jsonStr != null) {
                 try {

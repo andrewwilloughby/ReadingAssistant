@@ -48,9 +48,8 @@ public class RailDepartures extends AppCompatActivity {
             @Override
             public void onRefresh() {
                 swipeLayout.setRefreshing(true);
-               new GetDepartures().execute();
+                new GetDepartures().execute();
                 swipeLayout.setRefreshing(false);
-
             }
         });
     }
@@ -114,7 +113,6 @@ public class RailDepartures extends AppCompatActivity {
                                     depDelayString = (Long.toString(diffInMins)) + " minutes late";
                                 }
 
-
                             } catch (ParseException e){
                                 //Invalid date obtained.
                             }
@@ -122,7 +120,7 @@ public class RailDepartures extends AppCompatActivity {
                             departure.put("departureTime", scheduledDep);
                             departure.put("expectedDepTime", expectedDep);
                             departure.put("minsLate", depDelayString);
-                        } else if (status == "CANCELLED"){
+                        } else if (status.equals("CANCELLED")){
                             departure.put("departureTime", "-");
                         } else {
                             departure.put("departureTime", scheduledDep);
@@ -131,12 +129,11 @@ public class RailDepartures extends AppCompatActivity {
 
                         departure.put("destination", destination);
 
-                        if(platform == "null"){
+                        if(platform.equals("null")){
                             departure.put("platform", "-");
-                        }else {
+                        } else {
                             departure.put("platform", "Plat. " + platform);
                         }
-
 
                         departureList.add(departure);
                     }

@@ -40,41 +40,45 @@ public class LatestNews extends AppCompatActivity {
         TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
         Fabric.with(this, new Twitter(authConfig));
 
-        final Context ctx = this;
+        final Context context = this;
 
         setTitle("Latest News");
-
-        if (!isInternetConnected(getApplicationContext())) {
-            Toast.makeText(getApplicationContext(), "No network connection deteced", Toast.LENGTH_LONG).show();
-        }
 
         uorButton = (Button) findViewById(R.id.uniTweetsBtn);
         uorButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                final UserTimeline userTimeline = new UserTimeline.Builder()
-                        .screenName("UniofReading")
-                        .build();
-                final TweetTimelineListAdapter adapter = new TweetTimelineListAdapter.Builder(ctx)
-                        .setTimeline(userTimeline)
-                        .build();
+                if (isNetworkAvailable()) {
+                    final UserTimeline userTimeline = new UserTimeline.Builder()
+                            .screenName("UniofReading")
+                            .build();
+                    final TweetTimelineListAdapter adapter = new TweetTimelineListAdapter.Builder(context)
+                            .setTimeline(userTimeline)
+                            .build();
 
-                ListView listView = (ListView) findViewById(R.id.tweetsListView);
-                listView.setAdapter(adapter);
+                    ListView listView = (ListView) findViewById(R.id.tweetsListView);
+                    listView.setAdapter(adapter);
+                } else {
+                    Toast.makeText(context, "Internet connection has been lost.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
         rusuButton = (Button) findViewById(R.id.rusuTweetsBtn);
         rusuButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                final UserTimeline userTimeline = new UserTimeline.Builder()
-                        .screenName("RUSUtweets")
-                        .build();
-                final TweetTimelineListAdapter adapter = new TweetTimelineListAdapter.Builder(ctx)
-                        .setTimeline(userTimeline)
-                        .build();
+                if (isNetworkAvailable()) {
+                    final UserTimeline userTimeline = new UserTimeline.Builder()
+                            .screenName("RUSUtweets")
+                            .build();
+                    final TweetTimelineListAdapter adapter = new TweetTimelineListAdapter.Builder(context)
+                            .setTimeline(userTimeline)
+                            .build();
 
-                ListView listView = (ListView) findViewById(R.id.tweetsListView);
-                listView.setAdapter(adapter);
+                    ListView listView = (ListView) findViewById(R.id.tweetsListView);
+                    listView.setAdapter(adapter);
+                } else {
+                    Toast.makeText(context, "Internet connection has been lost.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -109,14 +113,18 @@ public class LatestNews extends AppCompatActivity {
         });
     }
 
-    private boolean isInternetConnected(Context applicationContext){
-        ConnectivityManager connection = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo info = connection.getActiveNetworkInfo();
-        if (info == null) {
-            Toast.makeText(getApplicationContext(), "No network connection detected", Toast.LENGTH_LONG).show();
-            return false;
-        } else
-            return true;
+    protected boolean isNetworkAvailable() {
 
+        // Simple, but important, check for an active network connection.
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+
+        // Returns true or false indicating whether network is available.
+        if (null != activeNetworkInfo){
+            return true;
+        } else {
+            return false;
+        }
     }
 }

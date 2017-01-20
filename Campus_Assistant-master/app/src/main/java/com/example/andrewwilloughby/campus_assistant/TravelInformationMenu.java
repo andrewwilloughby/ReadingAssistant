@@ -1,11 +1,10 @@
 package com.example.andrewwilloughby.campus_assistant;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-public class TravelInformationMenu extends AMenu {
+public class TravelInformationMenu extends AMenu implements View.OnClickListener {
 
     private Button busTimesBtn;
     private Button railTimesBtn;
@@ -18,28 +17,31 @@ public class TravelInformationMenu extends AMenu {
 
         setTitle("Travel Information");
         initialiseToolbarBtns();
-        final Context context = this;
 
         busTimesBtn = (Button) findViewById(R.id.travelInfoBusTimesBtn);
-        busTimesBtn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                launchActivity("bus times");
-            }
-        });
+        busTimesBtn.setOnClickListener(this);
 
         railTimesBtn = (Button) findViewById(R.id.travelInfoRailTimesBtn);
-        railTimesBtn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                launchActivity("rail departures");
-            }
-        });
+        railTimesBtn.setOnClickListener(this);
 
         busTimetableBtn = (Button) findViewById(R.id.travelInfoBusTimetableBtn);
-        busTimetableBtn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
+        busTimetableBtn.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.travelInfoBusTimesBtn:{
+                launchActivity("bus times");
+                break;
+            }
+            case R.id.travelInfoRailTimesBtn:{
+                launchActivity("rail departures");
+                break;
+            }
+            case R.id.travelInfoBusTimetableBtn:{
                 launchWebView("University Bus Timetable");
             }
-        });
-
+        }
     }
 }

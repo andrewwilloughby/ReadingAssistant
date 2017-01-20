@@ -63,7 +63,7 @@ import java.util.concurrent.ExecutionException;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, AdapterView.OnItemSelectedListener, GoogleMap.OnPoiClickListener {
     private GoogleMap map;
-    private int PROXIMITY_RADIUS = 5000;
+    private int PROXIMITY_RADIUS = 50;
     GoogleApiClient googleApiClient;
     LocationRequest locationRequest;
     Location lastLocation;
@@ -90,6 +90,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private boolean spinnerTouched = false;
     MarkerOptions currentLocationMarkerOptions;
     private LinearLayout searchNearbyItems;
+    private Boolean dataUnparsableFlag = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -195,6 +196,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             DataTransfer[1] = url;
             GetNearbyPlacesData getNearbyPlacesData = new GetNearbyPlacesData();
             getNearbyPlacesData.execute(DataTransfer);
+
+            if (dataUnparsableFlag){
+                Toast.makeText(context, "Error obtaining data from Google Maps", Toast.LENGTH_SHORT).show();
+            }
         }
     }
     public void onNothingSelected(AdapterView<?> arg0) {
@@ -256,6 +261,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     if (poiMarker != null){
                         poiMarker.remove();
                     }
+
                     Address address = addressList.get(0);
                     LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
                     MarkerOptions searchMarkerOptions = new MarkerOptions().position(latLng).title(address.getAddressLine(0));
@@ -635,8 +641,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             List<HashMap<String, String>> nearbyPlacesList = null;
             DataParser dataParser = new DataParser();
             nearbyPlacesList = dataParser.parse(result);
-            ShowNearbyPlaces(nearbyPlacesList);
-            Log.d("GooglePlacesReadTask", "onPostExecute exit");
+
+            if (nearbyPlacesList != null){
+                ShowNearbyPlaces(nearbyPlacesList);
+            } else {
+                dataUnparsableFlag = true;
+            }
         }
 
         private void ShowNearbyPlaces(List<HashMap<String, String>> nearbyPlacesList){
@@ -649,10 +659,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 String placeName = googlePlace.get("place_name");
                 String vicinity = googlePlace.get("vicinity");
                 LatLng latLng = new LatLng(lat, lng);
+                String iconPath = googlePlace.get("icon");
+
                 markerOptions.position(latLng);
                 markerOptions.title(placeName + " : " + vicinity);
                 map.addMarker(markerOptions);
-                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+                markerOptions.icon(BitmapDescriptorFactory.fromPath(iconPath));
                 //move map camera
                 map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
                 map.animateCamera(CameraUpdateFactory.zoomTo(11));
