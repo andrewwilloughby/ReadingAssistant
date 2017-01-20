@@ -14,7 +14,7 @@ import static org.junit.Assert.*;
 @RunWith(MockitoJUnitRunner.class)
 public class LoginActivityUnitTests {
 
-    LoginActivity loginActivity = new LoginActivity();
+    private LoginActivity loginActivity = new LoginActivity();
 
     @Test
     public void testUsernameValidation_ValidUsername() {

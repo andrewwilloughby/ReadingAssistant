@@ -7,13 +7,13 @@ package com.example.andrewwilloughby.campus_assistant;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import org.hamcrest.CoreMatchers;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
@@ -21,6 +21,7 @@ import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExt
 import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.equalTo;
 
@@ -45,7 +46,7 @@ public class BBEmailMenuInstrumentedTests {
 
     @Test
     public void testViewStyleButtonFiresCorrectIntent(){
-        onView(withId(R.id.viewStyleBtn)).perform(scrollTo(), click());
+        onView(withId(R.id.viewStyleBtn)).perform(click());
         intended(hasComponent("com.example.andrewwilloughby.campus_assistant.MainActivity"));
     }
 
@@ -56,7 +57,7 @@ public class BBEmailMenuInstrumentedTests {
 
     @Test
     public void testSafetyButtonClickFiresCorrectIntent(){
-        onView(withId(R.id.safetyBtn)).perform(scrollTo(), click());
+        onView(withId(R.id.safetyBtn)).perform(click());
         intended(hasComponent("com.example.andrewwilloughby.campus_assistant.SafetyInfo"));
     }
 
@@ -66,8 +67,13 @@ public class BBEmailMenuInstrumentedTests {
     }
 
     @Test
+    public void testBlackboardButtonHasCorrectText(){
+        onView(CoreMatchers.allOf(withId(R.id.bbemailMenuBlackboardBtn), withText(R.string.bbemailBlackboardBtnText)));
+    }
+
+    @Test
     public void testBlackboardButtonFiresCorrectIntent(){
-        onView(withId(R.id.bbemailMenuBlackboardBtn)).perform(scrollTo(), click());
+        onView(withId(R.id.bbemailMenuBlackboardBtn)).perform(click());
 
         intended(allOf(
                 hasExtra(equalTo("webpageURL"), equalTo("https://bb.reading.ac.uk/")),
@@ -81,8 +87,13 @@ public class BBEmailMenuInstrumentedTests {
     }
 
     @Test
+    public void testEmailButtonHasCorrectText(){
+        onView(CoreMatchers.allOf(withId(R.id.bbemailMenuEmailBtn), withText(R.string.bbemailEmailBtnText)));
+    }
+
+    @Test
     public void testEmailButtonFiresCorrectIntent(){
-        onView(withId(R.id.bbemailMenuEmailBtn)).perform(scrollTo(), click());
+        onView(withId(R.id.bbemailMenuEmailBtn)).perform(click());
 
         intended(allOf(
                 hasExtra(equalTo("webpageURL"), equalTo("http://mail.live.reading.ac.uk/")),

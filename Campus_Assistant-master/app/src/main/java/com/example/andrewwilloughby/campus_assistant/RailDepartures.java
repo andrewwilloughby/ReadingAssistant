@@ -25,7 +25,7 @@ public class RailDepartures extends AppCompatActivity {
 
     private String TAG = RailDepartures.class.getSimpleName();
     private ProgressDialog pDialog;
-    private ListView lv;
+    private ListView railList;
     private static String url = "http://transportapi.com/v3/uk/train/station/RDG/live.json?app_id=03bf8009&app_key=d9307fd91b0247c607e098d5effedc97&darwin=false&train_status=passenger";
     ArrayList<HashMap<String, String>> departureList;
 
@@ -38,7 +38,7 @@ public class RailDepartures extends AppCompatActivity {
 
         departureList = new ArrayList<>();
 
-        lv = (ListView) findViewById(R.id.list);
+        railList = (ListView) findViewById(R.id.railList);
 
         new GetDepartures().execute();
 
@@ -183,7 +183,7 @@ public class RailDepartures extends AppCompatActivity {
                     "platform", "expectedDepTime", "minsLate"}, new int[]{R.id.scheduledArrTextView,
                     R.id.destinationTextView, R.id.platformTextView, R.id.expectedDepTextView, R.id.minsLateTextView});
 
-            lv.setAdapter(adapter);
+            railList.setAdapter(adapter);
         }
     }
 }

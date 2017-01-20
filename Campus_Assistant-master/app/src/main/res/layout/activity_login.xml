@@ -88,7 +88,7 @@
             android:id="@+id/usernameEditText"
             android:layout_weight="1"
             android:textAlignment="center"
-            android:hint="Username"
+            android:hint="@string/loginUsernameEditTextHint"
             android:textSize="14sp" />
 
     </LinearLayout>
@@ -115,7 +115,7 @@
             android:layout_weight="1"
             android:textAlignment="center"
             android:singleLine="true"
-            android:hint="Password"
+            android:hint="@string/loginPasswordEditTextHint"
             android:textSize="14sp" />
 
     </LinearLayout>
@@ -126,10 +126,10 @@
         android:layout_height="wrap_content">
 
         <Button
-            android:text="@string/saveBtnText"
+            android:text="@string/loginBtnText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/saveBtn"
+            android:id="@+id/loginButton"
             android:layout_weight="1"
             android:background="@color/colorAccent"
             android:layout_marginLeft="10dp"

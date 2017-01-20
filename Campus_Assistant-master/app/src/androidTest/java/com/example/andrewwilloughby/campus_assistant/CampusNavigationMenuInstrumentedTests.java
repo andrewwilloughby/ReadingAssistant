@@ -15,6 +15,8 @@ import static android.support.test.espresso.intent.matcher.IntentMatchers.hasCom
 import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.allOf;
 
 /**
  * Created by andrewwilloughby on 18/01/2017.
@@ -60,6 +62,12 @@ public class CampusNavigationMenuInstrumentedTests {
     public void testInteractiveMapButtonIsClickable(){
         onView(withId(R.id.campusNavInteractiveMapBtn)).check(matches(isClickable()));
     }
+
+    @Test
+    public void testInteractiveMapButtonHasCorrectText(){
+        onView(allOf(withId(R.id.campusNavInteractiveMapBtn), withText(R.string.campusNavInteractiveMapBtnText)));
+    }
+
     @Test
     public void testInteractiveMapButtonFiresCorrectIntent(){
         onView(withId(R.id.campusNavInteractiveMapBtn)).perform(click());
@@ -69,6 +77,11 @@ public class CampusNavigationMenuInstrumentedTests {
     @Test
     public void testCampusMapsButtonIsClickable(){
         onView(withId(R.id.campusNavMapsBtn)).check(matches(isClickable()));
+    }
+
+    @Test
+    public void testCampusMapsButtonHasCorrectText(){
+        onView(allOf(withId(R.id.campusNavMapsBtn), withText(R.string.campusNavMapsBtnText)));
     }
 
     @Test

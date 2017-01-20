@@ -11,20 +11,11 @@ import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.twitter.sdk.android.Twitter;
-import com.twitter.sdk.android.core.TwitterAuthConfig;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import io.fabric.sdk.android.Fabric;
-
 public class MainActivity extends AMenu {
-
-    // Note: Your consumer key and secret should be obfuscated in your source code before shipping.
-    private static final String TWITTER_KEY = "icXPlnJKZL9eTOpDgtmSOklhi";
-    private static final String TWITTER_SECRET = "ObkVdHNrCOFUvarHzS0OWvHkwCsCSefDpInYlJdGk2jVvnBima";
 
     private Button studentInfoBtn;
     private Button latestNewsBtn;
@@ -49,8 +40,6 @@ public class MainActivity extends AMenu {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
-        Fabric.with(this, new Twitter(authConfig));
         setContentView(R.layout.activity_main);
         final LinearLayout gridLayout = (LinearLayout) findViewById(R.id.gridLayout);
         expList = (ExpandableListView) findViewById(R.id.expandableList);

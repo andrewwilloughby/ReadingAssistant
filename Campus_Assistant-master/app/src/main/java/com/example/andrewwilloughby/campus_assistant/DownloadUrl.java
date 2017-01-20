@@ -9,8 +9,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import okhttp3.HttpUrl;
-
 /**
  * Created by andrewwilloughby on 27/11/2016.
  */

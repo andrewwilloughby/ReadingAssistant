@@ -2,8 +2,8 @@ package com.example.andrewwilloughby.campus_assistant;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -14,7 +14,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText usernameEditText;
     private EditText passwordEditText;
-    private Button saveButton;
+    private Button loginButton;
     private Context context;
     private String validationError;
     private String username;
@@ -39,8 +39,8 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        saveButton = (Button) findViewById(R.id.saveBtn);
-        saveButton.setOnClickListener(new View.OnClickListener() {
+        loginButton = (Button) findViewById(R.id.loginButton);
+        loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 username = usernameEditText.getText().toString().toLowerCase();
@@ -56,6 +56,8 @@ public class LoginActivity extends AppCompatActivity {
                             intent.putExtra("password", password);
 
                             startActivity(intent);
+
+                            break;
                         }
                         case "invalid length": Toast.makeText(context, "Invalid username length.", Toast.LENGTH_SHORT).show(); break;
                         case "special characters": Toast.makeText(context, "Special Characters in username are not permitted.", Toast.LENGTH_SHORT).show(); break;
@@ -69,6 +71,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public String validateUserNameEditText(String username){
         if (username.length() != 8){
+
             return "invalid length";
         } else if (!username.matches("^[a-zA-Z0-9]*$")){
             return "special characters";

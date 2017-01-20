@@ -54,9 +54,13 @@
     <string name="englandMapBounds">55.811741, 1.76896, 49.871159, -6.37988</string>
     <string name="uniUsernameTextView">University Username:</string>
     <string name="uniPasswordTextView">University Password:</string>
-    <string name="saveBtnText">Log in</string>
+    <string name="loginBtnText">Log in</string>
     <string name="loginTextViewText">Authentication required</string>
     <string name="loginTextView2Text">Please enter your university credentials</string>
+    <string name="loginUsernameEditTextHint">Username</string>
+    <string name="loginPasswordEditTextHint">Password</string>
+    <string name="emergencyContactNumber">07590917581</string>
+    <string name="nonEmergencyContactNumber">07590917581</string>
 
     <string-array name="menuCategories">
         <item>Student Information</item>

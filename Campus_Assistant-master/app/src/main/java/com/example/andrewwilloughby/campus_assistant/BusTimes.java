@@ -24,7 +24,7 @@ public class BusTimes extends AppCompatActivity {
 
     private String TAG = BusTimes.class.getSimpleName();
     private ProgressDialog pDialog;
-    private ListView lv;
+    private ListView busListView;
     private static String url;
     ArrayList<HashMap<String, String>> departureList;
 
@@ -43,7 +43,7 @@ public class BusTimes extends AppCompatActivity {
 
         departureList = new ArrayList<>();
 
-        lv = (ListView) findViewById(R.id.list);
+        busListView = (ListView) findViewById(R.id.busList);
 
         final SwipeRefreshLayout swipeLayout = (SwipeRefreshLayout) findViewById(R.id.bus_swipe_layout);
 
@@ -188,7 +188,7 @@ public class BusTimes extends AppCompatActivity {
                     "expectedDepTime"}, new int[]{R.id.routeNumberTextView,
                     R.id.busDestinationTextView, R.id.busExpectedDepTextView});
 
-            lv.setAdapter(adapter);
+            busListView.setAdapter(adapter);
         }
     }
 

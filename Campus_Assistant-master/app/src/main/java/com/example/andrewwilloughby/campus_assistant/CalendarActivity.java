@@ -4,8 +4,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -33,7 +33,6 @@ import net.fortuna.ical4j.model.property.DtStart;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -65,6 +64,9 @@ public class CalendarActivity extends AppCompatActivity {
     private String username = null;
     private String password = null;
     private static String file_url = "https://www.reading.ac.uk/mytimetable/m/";
+    String calendarString = null;
+    Boolean credentialsFailFlag = false;
+    Boolean noCredentialsFlag = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,8 +77,19 @@ public class CalendarActivity extends AppCompatActivity {
         context = this;
         eventsList = new ArrayList<>();
 
-        username = getIntent().getExtras().getString("username");
-        password = getIntent().getExtras().getString("password");
+        try{
+            username = getIntent().getExtras().getString("username");
+            password = getIntent().getExtras().getString("password");
+        } catch (NullPointerException e){
+            noCredentialsFlag = true;
+        }
+
+        if (!noCredentialsFlag){
+            new DownloadTimetable().execute(file_url);
+
+        } else {
+            Toast.makeText(context, "Please enter credentials in settings.", Toast.LENGTH_SHORT).show();
+        }
 
         lv = (ListView) findViewById(R.id.dayEventsListView);
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -96,14 +109,6 @@ public class CalendarActivity extends AppCompatActivity {
             }
         });
 
-        if ((username != null) && (password != null)){
-            System.out.println(username);
-            System.out.println(password);
-
-            new DownloadTimetable().execute(file_url);
-        } else {
-            Toast.makeText(context, "Please enter credentials in settings.", Toast.LENGTH_SHORT).show();
-        }
 
         todayBtn = (Button) findViewById(R.id.todayBtn);
         todayBtn.setOnClickListener(new View.OnClickListener() {
@@ -118,75 +123,77 @@ public class CalendarActivity extends AppCompatActivity {
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
-                Date selected = null;
+                if (credentialsFailFlag == false){
+                    Date selected = null;
 
-                eventsList.clear();
-                lv.setAdapter(null);
+                    eventsList.clear();
+                    lv.setAdapter(null);
 
-                String yearStr = Integer.toString(year);
-                String monthStr = Integer.toString(month + 1);
-                String dayStr = Integer.toString(dayOfMonth);
-                String dateStr = dayStr + monthStr + yearStr;
+                    String yearStr = Integer.toString(year);
+                    String monthStr = Integer.toString(month + 1);
+                    String dayStr = Integer.toString(dayOfMonth);
+                    String dateStr = dayStr + monthStr + yearStr;
 
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("ddMyyyy");
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("ddMyyyy");
 
-                try {
-                    selected = simpleDateFormat.parse(dateStr);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+                    try {
+                        selected = simpleDateFormat.parse(dateStr);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
 
-                if (selected != null) {
-                    Period period = new Period(new DateTime(selected), new Dur(1, 0, 0, 0));
-                    Filter filter = new Filter(new PeriodRule(period));
+                    if (selected != null) {
+                        Period period = new Period(new DateTime(selected), new Dur(1, 0, 0, 0));
+                        Filter filter = new Filter(new PeriodRule(period));
 
-                    for (Object object : filter.filter(studentCalendar.getComponents(Component.VEVENT))) {
-                        VEvent event = (VEvent) object;
+                        for (Object object : filter.filter(studentCalendar.getComponents(Component.VEVENT))) {
+                            VEvent event = (VEvent) object;
 
-                        //get summary of event.
-                        String summary = event.getSummary().toString();
-                        summary = summary.replace("SUMMARY;LANGUAGE=en-gb:", "");
-                        System.out.println(summary);
+                            //get summary of event.
+                            String summary = event.getSummary().toString();
+                            summary = summary.replace("SUMMARY;LANGUAGE=en-gb:", "");
+                            System.out.println(summary);
 
-                        //get location of event.
-                        String location = event.getLocation().toString();
-                        location = location.replace("LOCATION:", "");
-                        System.out.println(location);
+                            //get location of event.
+                            String location = event.getLocation().toString();
+                            location = location.replace("LOCATION:", "");
+                            System.out.println(location);
 
-                        //get start time of event.
-                        DtStart eventStart = (DtStart) event.getProperty(Property.DTSTART);
-                        String eventStartDate = eventDateFormat.format(eventStart.getDate());
-                        String eventStartTime = eventTimeFormat.format(eventStart.getDate());
-                        System.out.println(eventStartDate);
-                        System.out.println(eventStartTime);
+                            //get start time of event.
+                            DtStart eventStart = (DtStart) event.getProperty(Property.DTSTART);
+                            String eventStartDate = eventDateFormat.format(eventStart.getDate());
+                            String eventStartTime = eventTimeFormat.format(eventStart.getDate());
+                            System.out.println(eventStartDate);
+                            System.out.println(eventStartTime);
 
-                        //get end time of event.
-                        DtEnd eventEnd = (DtEnd) event.getProperty(Property.DTEND);
-                        String eventEndDate = eventDateFormat.format(eventEnd.getDate());
-                        String eventEndTime = eventTimeFormat.format(eventEnd.getDate());
-                        System.out.println(eventEndDate);
-                        System.out.println(eventEndTime);
+                            //get end time of event.
+                            DtEnd eventEnd = (DtEnd) event.getProperty(Property.DTEND);
+                            String eventEndDate = eventDateFormat.format(eventEnd.getDate());
+                            String eventEndTime = eventTimeFormat.format(eventEnd.getDate());
+                            System.out.println(eventEndDate);
+                            System.out.println(eventEndTime);
 
-                        String eventTiming = eventStartTime + " to " + eventEndTime;
+                            String eventTiming = eventStartTime + " to " + eventEndTime;
 
-                        HashMap<String, String> calendarEvent = new HashMap<>();
+                            HashMap<String, String> calendarEvent = new HashMap<>();
 
-                        calendarEvent.put("summary", summary);
-                        calendarEvent.put("location", location);
-                        calendarEvent.put("startTime", eventStartTime);
-                        calendarEvent.put("startDate", eventStartDate);
-                        calendarEvent.put("endTime", eventEndTime);
-                        calendarEvent.put("endDate", eventEndDate);
-                        calendarEvent.put("eventTiming", eventTiming);
+                            calendarEvent.put("summary", summary);
+                            calendarEvent.put("location", location);
+                            calendarEvent.put("startTime", eventStartTime);
+                            calendarEvent.put("startDate", eventStartDate);
+                            calendarEvent.put("endTime", eventEndTime);
+                            calendarEvent.put("endDate", eventEndDate);
+                            calendarEvent.put("eventTiming", eventTiming);
 
-                        eventsList.add(calendarEvent);
+                            eventsList.add(calendarEvent);
 
-                        ListAdapter adapter = new SimpleAdapter(
-                                CalendarActivity.this, eventsList,
-                                R.layout.timetable_list_item, new String[]{"summary", "eventTiming"}
-                                , new int[]{R.id.summaryTextView, R.id.eventTimingTextView});
+                            ListAdapter adapter = new SimpleAdapter(
+                                    CalendarActivity.this, eventsList,
+                                    R.layout.timetable_list_item, new String[]{"summary", "eventTiming"}
+                                    , new int[]{R.id.summaryTextView, R.id.eventTimingTextView});
 
-                        lv.setAdapter(adapter);
+                            lv.setAdapter(adapter);
+                        }
                     }
                 }
             }
@@ -246,7 +253,6 @@ public class CalendarActivity extends AppCompatActivity {
             HttpURLConnection connection;
             InputStream inputStream = null;
             StringBuilder stringBuilder;
-            String calendarString = null;
 
             try{
                 URL url = new URL(f_url[0]);
@@ -291,6 +297,8 @@ public class CalendarActivity extends AppCompatActivity {
                 } catch (ParserException e) {
                     Log.e(TAG + "Parsing Error: ", e.getMessage());
                 }
+            } else {
+                credentialsFailFlag = true;
             }
             return null;
         }
@@ -299,6 +307,9 @@ public class CalendarActivity extends AppCompatActivity {
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
             if (progressDialog.isShowing()){ progressDialog.dismiss(); }
+            if (credentialsFailFlag){
+                Toast.makeText(context, "Couldn't load timetable : Invalid credentials.", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }

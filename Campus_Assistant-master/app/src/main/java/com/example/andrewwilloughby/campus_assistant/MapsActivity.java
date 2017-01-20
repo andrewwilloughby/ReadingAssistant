@@ -13,9 +13,9 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -34,7 +34,6 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.fitness.data.Goal;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
@@ -49,20 +48,14 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PointOfInterest;
-import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.android.gms.vision.text.Text;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -160,10 +153,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
 
         List<String> searchItems = new ArrayList<String>();
+        searchItems.add("None Selected");
         searchItems.add("Cafe");
         searchItems.add("Restaurant");
         searchItems.add("Bank");
-        searchItems.add("Bicycle store");
         searchItems.add("Convenience Store");
         searchItems.add("Doctor");
         searchItems.add("Pharmacy");
@@ -195,12 +188,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // On selecting a spinner item
         String item = parent.getItemAtPosition(position).toString().toLowerCase().replace(" ", "_");
 
-        String url = getPlacesUrl(currentLatLng.latitude, currentLatLng.longitude, item);
-        Object[] DataTransfer = new Object[2];
-        DataTransfer[0] = map;
-        DataTransfer[1] = url;
-        GetNearbyPlacesData getNearbyPlacesData = new GetNearbyPlacesData();
-        getNearbyPlacesData.execute(DataTransfer);
+        if (!item.equals("none_selected")){
+            String url = getPlacesUrl(currentLatLng.latitude, currentLatLng.longitude, item);
+            Object[] DataTransfer = new Object[2];
+            DataTransfer[0] = map;
+            DataTransfer[1] = url;
+            GetNearbyPlacesData getNearbyPlacesData = new GetNearbyPlacesData();
+            getNearbyPlacesData.execute(DataTransfer);
+        }
     }
     public void onNothingSelected(AdapterView<?> arg0) {
         // TODO Auto-generated method stub
@@ -242,7 +237,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
             }
 
-            if (location != null) {
+            if (!location.equals("")) {
                 Geocoder geocoder = new Geocoder(this);
                 try {
                     addressList = geocoder.getFromLocationName(location, 1, lowerLeftLat, lowerLeftLng, upperRightLat, upperRightLng);
@@ -251,7 +246,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
 
                 if (addressList.size() < 1) {
-                    Toast.makeText(this, "No locations found.", Toast.LENGTH_SHORT);
+                    Toast.makeText(this, "No locations found.", Toast.LENGTH_SHORT).show();
                 } else {
                     //Clear existing search marker.
                     if (searchMarker != null){
@@ -265,9 +260,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
                     MarkerOptions searchMarkerOptions = new MarkerOptions().position(latLng).title(address.getAddressLine(0));
                     searchMarker = map.addMarker(searchMarkerOptions);
+                    searchMarker.showInfoWindow();
                     map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
                     map.animateCamera(CameraUpdateFactory.zoomTo(11));
                 }
+            } else {
+                Toast.makeText(this, "No search value entered.", Toast.LENGTH_SHORT).show();
             }
         } else {
             Toast.makeText(context, "No network available.", Toast.LENGTH_SHORT).show();
@@ -368,6 +366,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             EditText searchBar = (EditText) findViewById(R.id.searchBox);
             searchBar.setText(searchValue);
             search_Btn.performClick();
+            searchBar.setText("");
         }
 
     }
@@ -438,8 +437,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         currentLocationMarkerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
         currentLocationMarker = map.addMarker(currentLocationMarkerOptions);
 
-        map.moveCamera(CameraUpdateFactory.newLatLng(currentLatLng));
-        map.animateCamera(CameraUpdateFactory.zoomTo(11));
+//        map.moveCamera(CameraUpdateFactory.newLatLng(currentLatLng));
+//        map.animateCamera(CameraUpdateFactory.zoomTo(11));
 
         if (googleApiClient != null){
             LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, this);

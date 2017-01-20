@@ -89,7 +89,7 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="visible"
+            android:visibility="gone"
             android:id="@+id/gridLayout">
 
             <LinearLayout
@@ -206,7 +206,7 @@
             android:indicatorLeft="?android:attr/expandableListPreferredItemIndicatorLeft"
             android:divider="#000000"
             android:dividerHeight="0.1dp"
-            android:visibility="gone"></ExpandableListView>
+            android:visibility="visible"></ExpandableListView>
 
 
     </LinearLayout>
