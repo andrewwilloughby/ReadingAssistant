@@ -70,7 +70,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     Marker currentLocationMarker;
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     private Button search_Btn;
-    private Context context;
     private String searchValue;
     private Marker searchMarker;
     private Marker poiMarker;
@@ -100,10 +99,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         List<String> searchItems = new ArrayList<String>();
         searchItems.add("None Selected");
         searchItems.add("Cafe");
-        searchItems.add("Restaurant");
-        searchItems.add("Bank");
+        searchItems.add("Parking");
         searchItems.add("Convenience Store");
-        searchItems.add("Doctor");
         searchItems.add("Pharmacy");
         searchItems.add("Hospital");
         searchItems.add("Police");
@@ -270,7 +267,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 Toast.makeText(this, "No search value entered.", Toast.LENGTH_SHORT).show();
             }
         } else {
-            Toast.makeText(context, "No network available.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "No network available.", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -569,10 +566,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private class getJSONStr extends AsyncTask<Void, Void, String> {
-
         @Override
         protected void onPreExecute() {
-            // TODO Auto-generated method stub
             super.onPreExecute();
             pDialog = new ProgressDialog(MapsActivity.this);
             pDialog.setMessage("Fetching route, Please wait...");
@@ -583,9 +578,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         @Override
         protected String doInBackground(Void... arg0) {
             DownloadUrl downloadUrl = new DownloadUrl();
-            String jsonStr = downloadUrl.readUrl(url);
-
-            return jsonStr;
+            return downloadUrl.readUrl(url);
         }
 
         @Override
@@ -599,7 +592,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     // Code developed from tutorial: https://www.androidtutorialpoint.com/intermediate/google-maps-search-nearby-displaying-nearby-places-using-google-places-api-google-maps-api-v2/
     private class GetNearbyPlacesData extends AsyncTask<Object, String, String> {
-
         String placesData;
         GoogleMap map;
         String url;
@@ -641,7 +633,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 String placeName = googlePlace.get("place_name");
                 String vicinity = googlePlace.get("vicinity");
                 LatLng latLng = new LatLng(lat, lng);
-                String iconPath = googlePlace.get("icon");
 
                 markerOptions.position(latLng);
                 markerOptions.title(placeName + " : " + vicinity);

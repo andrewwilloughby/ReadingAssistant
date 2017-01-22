@@ -9,6 +9,7 @@ buildscript {
 }
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
+apply plugin: 'jacoco-android'
 
 configurations {
     // referenced in some portable lib. use android internal instead
@@ -52,6 +53,9 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            testCoverageEnabled = true
         }
     }
 }

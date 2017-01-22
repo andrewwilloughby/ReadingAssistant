@@ -63,10 +63,8 @@ public class CalendarActivity extends AppCompatActivity {
     DateFormat eventDateFormat = new SimpleDateFormat("dd/MM/yyyy");
     private String username = null;
     private String password = null;
-    private static String file_url = "https://www.reading.ac.uk/mytimetable/m/";
     String calendarString = null;
     Boolean credentialsFailFlag = false;
-    Boolean noCredentialsFlag = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,14 +79,7 @@ public class CalendarActivity extends AppCompatActivity {
             username = getIntent().getExtras().getString("username");
             password = getIntent().getExtras().getString("password");
         } catch (NullPointerException e){
-            noCredentialsFlag = true;
-        }
-
-        if (!noCredentialsFlag){
-            new DownloadTimetable().execute(file_url);
-
-        } else {
-            Toast.makeText(context, "Please enter credentials in settings.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Please enter credentials in settings.", Toast.LENGTH_SHORT).show();
         }
 
         lv = (ListView) findViewById(R.id.dayEventsListView);
@@ -309,7 +300,9 @@ public class CalendarActivity extends AppCompatActivity {
             super.onPostExecute(result);
             if (progressDialog.isShowing()){ progressDialog.dismiss(); }
             if (credentialsFailFlag){
-                Toast.makeText(context, "Couldn't load timetable : Invalid credentials.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Couldn't load timetable : Invalid credentials.", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(intent);
             }
         }
     }
