@@ -9,10 +9,6 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-/**
- * Created by andrewwilloughby on 13/10/2016.
- */
-
 public abstract class AMenu extends AppCompatActivity {
 
     // Defines the buttons used within the top toolbar.
@@ -22,11 +18,7 @@ public abstract class AMenu extends AppCompatActivity {
     // Used to define which menu layout to use (1 = grid buttons, 2 = Expandable menu list).
     public int MENU_MODE;
 
-    /**
-     * Set up the
-     */
-
-    AMenu(){
+    public AMenu(){
         setMENU_MODE(2);
     }
 

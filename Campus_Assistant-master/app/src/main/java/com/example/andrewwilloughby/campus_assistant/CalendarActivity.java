@@ -99,7 +99,7 @@ public class CalendarActivity extends AppCompatActivity {
                 String location = event.get("location");
 
                 String addressToPass = getBuildingAddress(location);
-                if (addressToPass != null){
+                if ((addressToPass != null) && (addressToPass != "non existent")){
                     Intent intent = new Intent(context, MapsActivity.class);
                     intent.putExtra("search_value", addressToPass);
                     startActivity(intent);
@@ -202,6 +202,7 @@ public class CalendarActivity extends AppCompatActivity {
 
     protected String getBuildingAddress(String buildingName){
         String building = buildingName.substring(0, 3).toLowerCase();
+
         switch (building){
             case "agr"  : return "Agriculture building, Reading RG6 6BZ";
             case "arch" : return "Archaeology Building, Reading RG6 6AX";
@@ -214,7 +215,7 @@ public class CalendarActivity extends AppCompatActivity {
             case "eng"  : return "Engineering Building, Pepper Lane, Earley";
             case "foo"  : return "Food Biosciences Building, Reading RG6 6LA";
             case "fox"  : return "Foxhill House, Reading RG6 7BY Reading RG6 6LA";
-            case "har"  : return "Harbone Building, Reading, RG6 6LA"; //[sic] Google incorrect spelling.
+            case "har"  : return "Harbone Building, Reading, RG6 6LA";
             case "hop"  : return "Hopkins Building, Reading RG6 6LA";
             case "hum"  : return "Humss Building, Earley";
             case "jjt"  : return "JJ Thomson Building, Reading RG6 6AX";

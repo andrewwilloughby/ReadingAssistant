@@ -17,7 +17,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -108,15 +107,8 @@ public class BusTimes extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(String... arg0) {
-
             DownloadUrl downloadUrl = new DownloadUrl();
-            String jsonStr;
-
-            try {
-                jsonStr = downloadUrl.readUrl(url);
-            } catch (IOException e){
-                jsonStr = null;
-            }
+            String jsonStr = downloadUrl.readUrl(url);
 
             if (jsonStr != null) {
                 try {

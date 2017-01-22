@@ -22,13 +22,16 @@ public class SafetyInfo extends AMenu {
     private Activity activity = this;
     private Intent callIntent = new Intent(Intent.ACTION_DIAL);
 
+    public SafetyInfo(){
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_safety_info);
 
         final Activity thisActivity = this;
-        final Context context = this;
         setTitle("Safety Information");
 
         emergencyContactBtn = (Button) findViewById(R.id.securityEmergencyBtn);

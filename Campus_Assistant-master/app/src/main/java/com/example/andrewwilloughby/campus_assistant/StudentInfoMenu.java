@@ -13,6 +13,10 @@ public class StudentInfoMenu extends AMenu {
     private Button risisBtn;
     private Button staffDirectoryBtn;
 
+    public StudentInfoMenu(){
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

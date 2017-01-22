@@ -9,6 +9,10 @@ public class CampusNavigationMenu extends AMenu {
     private Button interactiveMapBtn;
     private Button campusMapsBtn;
 
+    public CampusNavigationMenu(){
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

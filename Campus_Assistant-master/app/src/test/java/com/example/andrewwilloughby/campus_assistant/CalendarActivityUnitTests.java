@@ -1,13 +1,11 @@
 package com.example.andrewwilloughby.campus_assistant;
 
-/**
- * Created by andrewwilloughby on 16/01/2017.
- */
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -24,9 +22,7 @@ public class CalendarActivityUnitTests {
 
     @Test
     public void testGetBuildingAddress_NonExistentBuilding(){
-        String expected = null;
-        String actual = calendarActivity.getBuildingAddress("XXXXXX");
-        assertThat(actual, is(expected));
+        String actual = calendarActivity.getBuildingAddress("xxxxxx");
+        assertThat(actual, is(nullValue()));
     }
-
 }

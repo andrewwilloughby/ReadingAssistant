@@ -1,5 +1,7 @@
 package com.example.andrewwilloughby.campus_assistant;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,19 +16,20 @@ import java.util.List;
 
 // Code developed from tutorial: https://www.androidtutorialpoint.com/intermediate/google-maps-search-nearby-displaying-nearby-places-using-google-places-api-google-maps-api-v2/
 
-
 public class DataParser {
 
     public List<HashMap<String, String>> parse(String jsonData){
         JSONArray jsonArray = null;
         JSONObject jsonObject;
 
+        System.out.println(jsonData);
         try {
-            jsonObject = new JSONObject((String) jsonData);
+            jsonObject = new JSONObject(jsonData);
             jsonArray = jsonObject.getJSONArray("results");
-            System.out.println(getPlaces(jsonArray));
+            System.out.println("reached");
+
             return getPlaces(jsonArray);
-        } catch (JSONException e){
+        } catch (Exception e){
             return null;
         }
     }
@@ -44,6 +47,7 @@ public class DataParser {
                 e.printStackTrace();
             }
         }
+        System.out.println(placesList);
         return placesList;
     }
 
@@ -54,7 +58,6 @@ public class DataParser {
         String latitude;
         String longitude;
         String reference;
-        String icon;
 
         try {
             if (!googlePlaceJson.isNull("name")){
@@ -66,13 +69,11 @@ public class DataParser {
             latitude = googlePlaceJson.getJSONObject("geometry").getJSONObject("location").getString("lat");
             longitude = googlePlaceJson.getJSONObject("geometry").getJSONObject("location").getString("lng");
             reference = googlePlaceJson.getString("reference");
-            icon = googlePlaceJson.getString("icon");
             googlePlaceMap.put("place_name", placeName);
             googlePlaceMap.put("vicinity", vicinity);
             googlePlaceMap.put("lat", latitude);
             googlePlaceMap.put("lng", longitude);
             googlePlaceMap.put("reference", reference);
-            googlePlaceMap.put("icon", icon);
         } catch (JSONException e){
             e.printStackTrace();
         }

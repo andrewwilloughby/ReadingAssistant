@@ -10,6 +10,10 @@ public class TravelInformationMenu extends AMenu implements View.OnClickListener
     private Button railTimesBtn;
     private Button busTimetableBtn;
 
+    public TravelInformationMenu(){
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

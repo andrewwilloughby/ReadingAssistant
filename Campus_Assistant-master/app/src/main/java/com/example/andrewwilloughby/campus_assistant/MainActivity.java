@@ -37,6 +37,10 @@ public class MainActivity extends AMenu {
     List<String> bbEmailItemsList = new ArrayList<String>();
     List<String> timetableItemsList = new ArrayList<String>();
 
+    public MainActivity(){
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

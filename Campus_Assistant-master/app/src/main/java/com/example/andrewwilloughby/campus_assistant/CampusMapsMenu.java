@@ -11,6 +11,10 @@ public class CampusMapsMenu extends AMenu {
     private Button loroBtn;
     private Button hallsBtn;
 
+    public CampusMapsMenu(){
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

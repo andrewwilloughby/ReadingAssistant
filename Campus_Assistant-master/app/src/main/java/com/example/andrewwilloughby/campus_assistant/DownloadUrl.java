@@ -14,7 +14,7 @@ import java.net.URL;
 
 public class DownloadUrl {
 
-    public String readUrl(String string) throws IOException {
+    public String readUrl(String string){
         String data = null;
         InputStream inputStream = null;
         HttpURLConnection httpURLConnection = null;
@@ -48,6 +48,7 @@ public class DownloadUrl {
         } catch (Exception e){
             return null;
         }
+        System.out.println(data);
         return data;
     }
 }

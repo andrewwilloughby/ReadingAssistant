@@ -15,6 +15,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -54,15 +55,11 @@ public class RailDepartures extends AppCompatActivity {
         });
     }
 
-    /**
-     * Async task class to get json by making HTTP call
-     */
     private class GetDepartures extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            // Showing progress dialog
             pDialog = new ProgressDialog(RailDepartures.this);
             pDialog.setMessage("Please wait...");
             pDialog.setCancelable(false);
@@ -71,10 +68,8 @@ public class RailDepartures extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... arg0) {
-            HttpHandler sh = new HttpHandler();
-
-            // Making a request to url and getting response
-            String jsonStr = sh.makeServiceCall(url);
+            DownloadUrl downloadUrl = new DownloadUrl();
+            String jsonStr = downloadUrl.readUrl(url);
 
             if (jsonStr != null) {
                 try {

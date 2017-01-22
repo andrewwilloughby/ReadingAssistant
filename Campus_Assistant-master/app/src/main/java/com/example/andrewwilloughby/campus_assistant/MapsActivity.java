@@ -62,8 +62,8 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, AdapterView.OnItemSelectedListener, GoogleMap.OnPoiClickListener {
-    private GoogleMap map;
-    private int PROXIMITY_RADIUS = 50;
+    protected GoogleMap map;
+    protected int PROXIMITY_RADIUS = 5000;
     GoogleApiClient googleApiClient;
     LocationRequest locationRequest;
     Location lastLocation;
@@ -90,16 +90,27 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private boolean spinnerTouched = false;
     MarkerOptions currentLocationMarkerOptions;
     private LinearLayout searchNearbyItems;
-    private Boolean dataUnparsableFlag = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
-        context = this;
+        List<String> searchItems = new ArrayList<String>();
+        searchItems.add("None Selected");
+        searchItems.add("Cafe");
+        searchItems.add("Restaurant");
+        searchItems.add("Bank");
+        searchItems.add("Convenience Store");
+        searchItems.add("Doctor");
+        searchItems.add("Pharmacy");
+        searchItems.add("Hospital");
+        searchItems.add("Police");
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){ checkPermissionLocation(); }
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            checkPermissionLocation();
+        }
 
         //Check whether Google Play Services are available
         if (!CheckGooglePlayServices()){ finish();}
@@ -153,17 +164,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
-        List<String> searchItems = new ArrayList<String>();
-        searchItems.add("None Selected");
-        searchItems.add("Cafe");
-        searchItems.add("Restaurant");
-        searchItems.add("Bank");
-        searchItems.add("Convenience Store");
-        searchItems.add("Doctor");
-        searchItems.add("Pharmacy");
-        searchItems.add("Hospital");
-        searchItems.add("Police");
-
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, searchItems);
 
         spinnerAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
@@ -196,10 +196,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             DataTransfer[1] = url;
             GetNearbyPlacesData getNearbyPlacesData = new GetNearbyPlacesData();
             getNearbyPlacesData.execute(DataTransfer);
-
-            if (dataUnparsableFlag){
-                Toast.makeText(context, "Error obtaining data from Google Maps", Toast.LENGTH_SHORT).show();
-            }
         }
     }
     public void onNothingSelected(AdapterView<?> arg0) {
@@ -397,18 +393,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    private String getPlacesUrl(double latitude, double longitude, String nearbyPlace){
+    protected String getPlacesUrl(double latitude, double longitude, String nearbyPlace){
+
         StringBuilder placesUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
         placesUrl.append("location=" + latitude + "," + longitude);
         placesUrl.append("&radius=" + PROXIMITY_RADIUS);
         placesUrl.append("&type=" + nearbyPlace);
         placesUrl.append("&sensor=true");
         placesUrl.append("&key=" + "AIzaSyATuUiZUkEc_UgHuqsBJa1oqaODI-3mLs0");
-        Log.d("getUrl", placesUrl.toString());
         return (placesUrl.toString());
     }
 
-    private String makeDirectionsURL(String originLatLng, String destLatLng){
+    protected String makeDirectionsURL(String originLatLng, String destLatLng){
+        if ((!originLatLng.matches("^(\\-?\\d+(\\.\\d+)?),\\s*(\\-?\\d+(\\.\\d+)?)$")) || (!destLatLng.matches("^(\\-?\\d+(\\.\\d+)?),\\s*(\\-?\\d+(\\.\\d+)?)$"))){
+            return null;
+        }
+
         StringBuilder urlString = new StringBuilder();
         urlString.append("https://maps.googleapis.com/maps/api/directions/json");
         urlString.append("?origin=");
@@ -442,9 +442,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         currentLocationMarkerOptions.title("Current Location");
         currentLocationMarkerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
         currentLocationMarker = map.addMarker(currentLocationMarkerOptions);
-
-//        map.moveCamera(CameraUpdateFactory.newLatLng(currentLatLng));
-//        map.animateCamera(CameraUpdateFactory.zoomTo(11));
 
         if (googleApiClient != null){
             LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, this);
@@ -510,17 +507,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    public void drawPath(String  result) {
-
+    public Boolean drawPath(String result) {
         try {
-            //Tranform the string into a json object
             final JSONObject json = new JSONObject(result);
             JSONArray routeArray = json.getJSONArray("routes");
             final JSONArray legArray = routeArray.getJSONObject(0).getJSONArray("legs");
 
-            //Distance
             JSONObject distanceObj = legArray.getJSONObject(0).getJSONObject("distance");
-            distance = distanceObj.getString("text"); //String that contains the distance value formated
+            distance = distanceObj.getString("text");
 
             JSONObject durationObj = legArray.getJSONObject(0).getJSONObject("duration");
             duration = durationObj.getString("text");
@@ -532,23 +526,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             routeLine = map.addPolyline(new PolylineOptions()
                     .addAll(list)
                     .width(12)
-                    .color(Color.parseColor("#05b1fb"))//Google maps blue color
+                    .color(Color.parseColor("#05b1fb"))
                     .geodesic(true)
             );
-           /*
-           for(int z = 0; z<list.size()-1;z++){
-                LatLng src= list.get(z);
-                LatLng dest= list.get(z+1);
-                Polyline line = mMap.addPolyline(new PolylineOptions()
-                .add(new LatLng(src.latitude, src.longitude), new LatLng(dest.latitude,   dest.longitude))
-                .width(2)
-                .color(Color.BLUE).geodesic(true));
-            }
-           */
+        } catch (Exception e) {
+            return false;
         }
-        catch (JSONException e) {
-
-        }
+        return true;
     }
 
     private List<LatLng> decodePoly(String encoded) {
@@ -598,9 +582,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         @Override
         protected String doInBackground(Void... arg0) {
-            HttpHandler sh = new HttpHandler();
+            DownloadUrl downloadUrl = new DownloadUrl();
+            String jsonStr = downloadUrl.readUrl(url);
 
-            String jsonStr = sh.makeServiceCall(url);
             return jsonStr;
         }
 
@@ -608,9 +592,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         protected void onPostExecute(String jsonStr) {
             super.onPostExecute(jsonStr);
 
-            if(pDialog.isShowing()){
+            if(pDialog.isShowing())
                 pDialog.dismiss();
-            }
         }
     }
 
@@ -624,13 +607,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         @Override
         protected String doInBackground(Object... params) {
             try {
-                Log.d("GetNearbyPlacesData", "doInBackground entered");
                 map = (GoogleMap) params[0];
                 url = (String) params[1];
                 DownloadUrl downloadUrl = new DownloadUrl();
                 placesData = downloadUrl.readUrl(url);
             } catch (Exception e){
-                Log.d("GooglePlacesReadTask", e.toString());
+                placesData = null;
             }
             return placesData;
         }
@@ -645,7 +627,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             if (nearbyPlacesList != null){
                 ShowNearbyPlaces(nearbyPlacesList);
             } else {
-                dataUnparsableFlag = true;
+                Toast.makeText(getApplicationContext(), "Error obtaining data from Google Maps", Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -664,14 +646,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 markerOptions.position(latLng);
                 markerOptions.title(placeName + " : " + vicinity);
                 map.addMarker(markerOptions);
-                markerOptions.icon(BitmapDescriptorFactory.fromPath(iconPath));
-                //move map camera
+
                 map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
                 map.animateCamera(CameraUpdateFactory.zoomTo(11));
             }
         }
     }
-
-
-
 }

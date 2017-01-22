@@ -18,8 +18,6 @@ public class WebpageView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_view);
 
-        final Context context = this;
-
         Intent intent = getIntent();
         String pageURL = intent.getExtras().getString("webpageURL");
         String pageName = intent.getExtras().getString("webpageName");
@@ -33,10 +31,9 @@ public class WebpageView extends AppCompatActivity {
         webView = new WebView(this);
         webView.getSettings().setJavaScriptEnabled(true);
 
-
         webView.setWebViewClient(new WebViewClient() {
             public void onReceivedError(WebView view, int errorCode, String description, String failingUrl){
-                Toast.makeText(context, description, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), description, Toast.LENGTH_SHORT).show();
             }
         });
 
