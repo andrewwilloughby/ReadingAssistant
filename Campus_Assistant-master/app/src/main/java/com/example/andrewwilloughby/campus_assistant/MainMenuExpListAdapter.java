@@ -12,17 +12,13 @@ import android.widget.TextView;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * Created by andrewwilloughby on 17/10/2016.
- */
-
-public class MainMenuExpListAdapter extends BaseExpandableListAdapter {
+class MainMenuExpListAdapter extends BaseExpandableListAdapter {
 
     private Activity context;
     private HashMap<String, List<String>> menuItems;
     private List<String> itemsList;
 
-    public MainMenuExpListAdapter(Activity context, HashMap<String, List<String>> menuItems, List<String> itemsList){
+    MainMenuExpListAdapter(Activity context, HashMap<String, List<String>> menuItems, List<String> itemsList){
         this.context = context;
         this.menuItems = menuItems;
         this.itemsList = itemsList;

@@ -108,9 +108,15 @@
     <string name="search_nearby_textView_text">Show nearby:</string>
     <string name="search_nearby_prompt">Show nearby</string>
     <string-array name="search_nearby_items">
-        <item>Food &amp; Drink</item>
-        <item>Bike Racks</item>
+        <item>None Selected</item>
+        <item>Cafe</item>
+        <item>Parking</item>
+        <item>Convenience Store</item>
+        <item>Pharmacy</item>
+        <item>Hospital</item>
+        <item>Police</item>
     </string-array>
+
     <!-- Example General settings -->
     <string name="pref_header_general">General</string>
 

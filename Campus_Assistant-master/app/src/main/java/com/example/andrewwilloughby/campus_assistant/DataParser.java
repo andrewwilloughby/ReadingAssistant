@@ -1,7 +1,5 @@
 package com.example.andrewwilloughby.campus_assistant;
 
-import android.util.Log;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -9,10 +7,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-/**
- * Created by andrewwilloughby on 27/11/2016.
- */
 
 // Code developed from tutorial: https://www.androidtutorialpoint.com/intermediate/google-maps-search-nearby-displaying-nearby-places-using-google-places-api-google-maps-api-v2/
 
@@ -22,12 +16,9 @@ public class DataParser {
         JSONArray jsonArray = null;
         JSONObject jsonObject;
 
-        System.out.println(jsonData);
         try {
             jsonObject = new JSONObject(jsonData);
             jsonArray = jsonObject.getJSONArray("results");
-            System.out.println("reached");
-
             return getPlaces(jsonArray);
         } catch (Exception e){
             return null;

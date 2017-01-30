@@ -16,7 +16,7 @@ public abstract class AMenu extends AppCompatActivity {
     protected ImageButton viewStyleBtn;
 
     // Used to define which menu layout to use (1 = grid buttons, 2 = Expandable menu list).
-    public int MENU_MODE;
+    protected int MENU_MODE;
 
     public AMenu(){
         setMENU_MODE(2);
@@ -35,7 +35,6 @@ public abstract class AMenu extends AppCompatActivity {
         viewStyleBtn = (ImageButton) findViewById(R.id.viewStyleBtn);
         viewStyleBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){
-
                 // When the current menu view is grid buttons, change viewStyleBtn to show grid, change MENU_MODE to 2 and launch the main menu activity.
                 if(getMENU_MODE() == 1){
                     viewStyleBtn.setImageResource(R.drawable.grid_icon);
@@ -96,7 +95,7 @@ public abstract class AMenu extends AppCompatActivity {
             case "bus times":
                 intent = new Intent(this, BusTimes.class);
             default:
-                Toast.makeText(this, "No activity exists for that command.", Toast.LENGTH_SHORT);
+                displayToast("No activity exists for that command.");
                 break;
         }
         startActivity(intent);
@@ -170,6 +169,12 @@ public abstract class AMenu extends AppCompatActivity {
             return true;
         } else {
             return false;
+        }
+    }
+
+    protected void displayToast(String toastContent){
+        if (!toastContent.isEmpty()){
+            Toast.makeText(getApplicationContext(), toastContent, Toast.LENGTH_SHORT).show();
         }
     }
 

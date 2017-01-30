@@ -6,16 +6,15 @@ import android.widget.Button;
 
 public class BBEmailMenu extends AMenu {
 
-    private Button blackboardBtn;
-    private Button emailBtn;
-
-    public BBEmailMenu(){
-
-    }
+    public BBEmailMenu(){}
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Button blackboardBtn;
+        Button emailBtn;
+
         setContentView(R.layout.activity_bbemail_menu);
 
         setTitle("Blackboard & Email");

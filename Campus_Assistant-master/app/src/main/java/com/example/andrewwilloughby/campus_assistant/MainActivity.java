@@ -1,6 +1,5 @@
 package com.example.andrewwilloughby.campus_assistant;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -9,47 +8,34 @@ import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
 public class MainActivity extends AMenu {
 
-    private Button studentInfoBtn;
-    private Button latestNewsBtn;
-    private Button campusNavBtn;
-    private Button travelInfoBtn;
-    private Button bbEmailBtn;
-    private Button timetableBtn;
     private ExpandableListView expList;
     private int lastExpandedPosition = -1;
-    private Context context;
     boolean doubleBackToExitPressedOnce = false;
 
-    HashMap<String, List<String>> menuItemsList = new HashMap<String, List<String>>();
-    List<String> menuCategory = new ArrayList<String>();
-    List<String> studentInfoItemsList = new ArrayList<String>();
-    List<String> latestNewsItemsList = new ArrayList<String>();
-    List<String> campusNavigationItemsList = new ArrayList<String>();
-    List<String> travelInfoItemsList = new ArrayList<String>();
-    List<String> bbEmailItemsList = new ArrayList<String>();
-    List<String> timetableItemsList = new ArrayList<String>();
-
-    public MainActivity(){
-
-    }
+    public MainActivity(){}
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Button studentInfoBtn;
+        Button latestNewsBtn;
+        Button campusNavBtn;
+        Button travelInfoBtn;
+        Button bbEmailBtn;
+        Button timetableBtn;
+
         setContentView(R.layout.activity_main);
         final LinearLayout gridLayout = (LinearLayout) findViewById(R.id.gridLayout);
         expList = (ExpandableListView) findViewById(R.id.expandableList);
-
-
-        context = this;
 
         initialiseToolbarBtns();
 
@@ -69,13 +55,34 @@ public class MainActivity extends AMenu {
             }
         });
 
+        HashMap<String, List<String>> menuItemsList = new HashMap<>();
+
         String menu_categories[] = getResources().getStringArray(R.array.menuCategories);
+        List<String> menuCategory = new ArrayList<>(Arrays.asList(menu_categories));
+
         String studentInfoItems[] = getResources().getStringArray(R.array.studentInfoItems);
+        List<String> studentInfoItemsList = new ArrayList<>(Arrays.asList(studentInfoItems));
+        menuItemsList.put(menuCategory.get(0), studentInfoItemsList);
+
         String latestNewsItems[] = getResources().getStringArray(R.array.latestNewsItems);
+        List<String> latestNewsItemsList = new ArrayList<>(Arrays.asList(latestNewsItems));
+        menuItemsList.put(menuCategory.get(1), latestNewsItemsList);
+
         String campusNavigationItems[] = getResources().getStringArray(R.array.campusNavigationItems);
+        List<String> campusNavigationItemsList = new ArrayList<>(Arrays.asList(campusNavigationItems));
+        menuItemsList.put(menuCategory.get(2), campusNavigationItemsList);
+
         String travelInfoItems[] = getResources().getStringArray(R.array.travelInformationItems);
+        List<String> travelInfoItemsList = new ArrayList<>(Arrays.asList(travelInfoItems));
+        menuItemsList.put(menuCategory.get(3), travelInfoItemsList);
+
         String bbEmailItems[] = getResources().getStringArray(R.array.bbEmailItems);
+        List<String> bbEmailItemsList = new ArrayList<>(Arrays.asList(bbEmailItems));
+        menuItemsList.put(menuCategory.get(4), bbEmailItemsList);
+
         String timetableItems[] = getResources().getStringArray(R.array.timetableItems);
+        List<String> timetableItemsList = new ArrayList<>(Arrays.asList(timetableItems));
+        menuItemsList.put(menuCategory.get(5), timetableItemsList);
 
         studentInfoBtn = (Button) findViewById(R.id.mainStudentInfoBtn);
         studentInfoBtn.setOnClickListener(new View.OnClickListener() {
@@ -113,21 +120,6 @@ public class MainActivity extends AMenu {
             }
         });
 
-        for(String item : menu_categories){ menuCategory.add(item);}
-        for(String item : studentInfoItems){  studentInfoItemsList.add(item); }
-        for(String item : latestNewsItems){ latestNewsItemsList.add(item); }
-        for(String item : campusNavigationItems){ campusNavigationItemsList.add(item); }
-        for(String item : travelInfoItems){ travelInfoItemsList.add(item); }
-        for(String item : bbEmailItems){ bbEmailItemsList.add(item); }
-        for(String item : timetableItems){ timetableItemsList.add(item); }
-
-        menuItemsList.put(menuCategory.get(0), studentInfoItemsList);
-        menuItemsList.put(menuCategory.get(1), latestNewsItemsList);
-        menuItemsList.put(menuCategory.get(2), campusNavigationItemsList);
-        menuItemsList.put(menuCategory.get(3), travelInfoItemsList);
-        menuItemsList.put(menuCategory.get(4), bbEmailItemsList);
-        menuItemsList.put(menuCategory.get(5), timetableItemsList);
-
         final ExpandableListAdapter adapter = new MainMenuExpListAdapter(this, menuItemsList, menuCategory);
         expList.setAdapter(adapter);
 
@@ -140,21 +132,21 @@ public class MainActivity extends AMenu {
                         if (isNetworkAvailable()) {
                             launchWebView(selected);
                         }else {
-                            Toast.makeText(context, "This functionality requires an active network connection.", Toast.LENGTH_SHORT).show();
+                            displayToast("This functionality requires an active network connection.");
                         }
                         break;
                     case "Library":
                         if (isNetworkAvailable()) {
                             launchWebView(selected);
                         }else {
-                            Toast.makeText(context, "This functionality requires an active network connection.", Toast.LENGTH_SHORT).show();
+                            displayToast("This functionality requires an active network connection.");
                         }
                         break;
                     case "University Payments":
                         if (isNetworkAvailable()) {
                             launchWebView(selected);
                         }else {
-                            Toast.makeText(context, "This functionality requires an active network connection.", Toast.LENGTH_SHORT).show();
+                            displayToast("This functionality requires an active network connection.");
                         }
                         break;
                     case "RISIS": launchWebView(selected); break;
@@ -163,14 +155,14 @@ public class MainActivity extends AMenu {
                         if (isNetworkAvailable()) {
                         launchActivity("latest news");
                         } else {
-                            Toast.makeText(context, "This functionality requires an active network connection.", Toast.LENGTH_SHORT).show();
+                            displayToast("This functionality requires an active network connection.");
                         }
                         break;
                     case "Interactive Google Map":
                         if (isNetworkAvailable()) {
                             launchActivity("interactive map"); break;
                         } else {
-                            Toast.makeText(context, "This functionality requires an active network connection.", Toast.LENGTH_SHORT).show();
+                            displayToast("This functionality requires an active network connection.");
                         }
                         break;
                     case "Whiteknights Campus Map": launchWebView(selected); break;
@@ -185,11 +177,11 @@ public class MainActivity extends AMenu {
                         if (isNetworkAvailable()){
                             launchActivity("timetable");
                         } else {
-                            Toast.makeText(context, "This functionality requires an active network connection.", Toast.LENGTH_SHORT).show();
+                            displayToast("This functionality requires an active network connection.");
                         }
                          break;
                     default:
-                        Toast.makeText(getApplicationContext(), "Unknown request.", Toast.LENGTH_SHORT).show();
+                        displayToast("Unknown request.");
                         break;
                 }
                 return true;
@@ -215,7 +207,7 @@ public class MainActivity extends AMenu {
         }
 
         this.doubleBackToExitPressedOnce = true;
-        Toast.makeText(this, "Click Back button again to exit", Toast.LENGTH_SHORT).show();
+        displayToast("Click Back button again to exit");
 
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -224,5 +216,4 @@ public class MainActivity extends AMenu {
             }
         }, 2000);
     }
-
 }

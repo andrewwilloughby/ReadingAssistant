@@ -2,11 +2,11 @@ package com.example.andrewwilloughby.campus_assistant;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
@@ -14,21 +14,21 @@ import android.widget.Button;
 
 public class SafetyInfo extends AMenu {
 
-    private Button emergencyContactBtn;
-    private Button nonEmergencyContactBtn;
-    private Button personalSafetyBtn;
-    private Button healthAndSafetyBtn;
     private static final int MY_PERMISSIONS_REQUEST_CALL_PHONE = 1;
     private Activity activity = this;
     private Intent callIntent = new Intent(Intent.ACTION_DIAL);
 
-    public SafetyInfo(){
-
-    }
+    public SafetyInfo(){}
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Button emergencyContactBtn;
+        Button nonEmergencyContactBtn;
+        Button personalSafetyBtn;
+        Button healthAndSafetyBtn;
+
         setContentView(R.layout.activity_safety_info);
 
         final Activity thisActivity = this;
@@ -81,7 +81,6 @@ public class SafetyInfo extends AMenu {
                     callIntent.setData(Uri.parse("tel:07590917581"));
                     activity.startActivity(callIntent);
                 }
-                return;
             }
         }
     }

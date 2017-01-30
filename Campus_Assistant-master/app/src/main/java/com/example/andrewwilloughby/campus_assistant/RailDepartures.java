@@ -5,7 +5,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -15,7 +14,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -24,17 +22,15 @@ import java.util.HashMap;
 
 public class RailDepartures extends AppCompatActivity {
 
-    private String TAG = RailDepartures.class.getSimpleName();
     private ProgressDialog pDialog;
     private ListView railList;
-    private static String url = "http://transportapi.com/v3/uk/train/station/RDG/live.json?app_id=03bf8009&app_key=d9307fd91b0247c607e098d5effedc97&darwin=false&train_status=passenger";
     ArrayList<HashMap<String, String>> departureList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_rail_departures);
 
+        setContentView(R.layout.activity_rail_departures);
         setTitle("Live Rail Departures: Reading (RDG)");
 
         departureList = new ArrayList<>();
@@ -55,6 +51,12 @@ public class RailDepartures extends AppCompatActivity {
         });
     }
 
+    protected void displayToast(String toastContent){
+        if (!toastContent.isEmpty()){
+            Toast.makeText(getApplicationContext(), toastContent, Toast.LENGTH_SHORT).show();
+        }
+    }
+
     private class GetDepartures extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -68,6 +70,7 @@ public class RailDepartures extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... arg0) {
+            String url = "1v3/uk/train/station/RDG/live.json?app_id=03bf8009&app_key=d9307fd91b0247c607e098d5effedc97&darwin=false&train_status=passenger";
             DownloadUrl downloadUrl = new DownloadUrl();
             String jsonStr = downloadUrl.readUrl(url);
 
@@ -85,7 +88,6 @@ public class RailDepartures extends AppCompatActivity {
 
                         SimpleDateFormat sdf = new java.text.SimpleDateFormat("HH:mm");
 
-
                         String destination = ob.getString("destination_name");
                         String platform = ob.getString("platform");
                         String status = ob.getString("status");
@@ -95,19 +97,17 @@ public class RailDepartures extends AppCompatActivity {
 
                         // adding each child node to HashMap key => value
                         if(status.contains("LATE")){
-                            int departureDelay;
                             String depDelayString = null;
+
                             try{
-                                Date scheduledDepTime = sdf.parse(scheduledDep);
-                                Date expectedDepTime = sdf.parse(expectedDep);
-                                long diffInMins = ((expectedDepTime.getTime() - scheduledDepTime.getTime()) / 60) / 1000;
+                                Date scheduledDepTime = sdf.parse(scheduledDep), expectedDepTime = sdf.parse(expectedDep);
+                                long delayInMinutes = ((expectedDepTime.getTime() - scheduledDepTime.getTime()) / 60) / 1000;
 
-                                if (diffInMins == 1){
-                                    depDelayString = (Long.toString(diffInMins)) + " minute late";
+                                if (delayInMinutes == 1){
+                                    depDelayString = (Long.toString(delayInMinutes)) + " minute late";
                                 } else{
-                                    depDelayString = (Long.toString(diffInMins)) + " minutes late";
+                                    depDelayString = (Long.toString(delayInMinutes)) + " minutes late";
                                 }
-
                             } catch (ParseException e){
                                 //Invalid date obtained.
                             }
@@ -133,27 +133,19 @@ public class RailDepartures extends AppCompatActivity {
                         departureList.add(departure);
                     }
                 } catch (final JSONException e) {
-                    Log.e(TAG, "Json parsing error: " + e.getMessage());
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(getApplicationContext(),
-                                    "Json parsing error: " + e.getMessage(),
-                                    Toast.LENGTH_LONG)
-                                    .show();
+                            displayToast("Error with live information. Please retry.");
                         }
                     });
 
                 }
             } else {
-                Log.e(TAG, "Couldn't get json from server.");
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(getApplicationContext(),
-                                "Couldn't get json from server. Check LogCat for possible errors!",
-                                Toast.LENGTH_LONG)
-                                .show();
+                        displayToast("Couldn't get live departure data. Please check network connection.");
                     }
                 });
             }
@@ -163,18 +155,16 @@ public class RailDepartures extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-            // Dismiss the progress dialog
-            if (pDialog.isShowing())
+
+            if (pDialog.isShowing()) {
                 pDialog.dismiss();
-            /**
-             * Updating parsed JSON data into ListView
-             * */
+            }
+
             ListAdapter adapter = new SimpleAdapter(
                     RailDepartures.this, departureList,
                     R.layout.list_item, new String[]{"departureTime", "destination",
                     "platform", "expectedDepTime", "minsLate"}, new int[]{R.id.scheduledArrTextView,
                     R.id.destinationTextView, R.id.platformTextView, R.id.expectedDepTextView, R.id.minsLateTextView});
-
             railList.setAdapter(adapter);
         }
     }

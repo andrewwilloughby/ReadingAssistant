@@ -1,30 +1,27 @@
 package com.example.andrewwilloughby.campus_assistant;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
 public class StudentInfoMenu extends AMenu {
 
-    private Button studentServicesBtn;
-    private Button libraryBtn;
-    private Button paymentsBtn;
-    private Button risisBtn;
-    private Button staffDirectoryBtn;
-
-    public StudentInfoMenu(){
-
-    }
+    public StudentInfoMenu(){}
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Button studentServicesBtn;
+        Button libraryBtn;
+        Button paymentsBtn;
+        Button risisBtn;
+        Button staffDirectoryBtn;
+
         setContentView(R.layout.activity_student_info_menu);
 
         setTitle("Student Information");
         initialiseToolbarBtns();
-        final Context context = this;
 
         studentServicesBtn = (Button) findViewById(R.id.studentInfoServicesBtn);
         studentServicesBtn.setOnClickListener(new View.OnClickListener() {

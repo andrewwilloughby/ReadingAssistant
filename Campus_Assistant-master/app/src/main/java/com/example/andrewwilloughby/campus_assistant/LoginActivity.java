@@ -1,6 +1,5 @@
 package com.example.andrewwilloughby.campus_assistant;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -14,8 +13,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText usernameEditText;
     private EditText passwordEditText;
-    private Button loginButton;
-    private Context context;
     private String validationError;
     private String username;
     private String password;
@@ -23,11 +20,12 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Button loginButton;
+
         setContentView(R.layout.activity_login);
 
         setTitle("Authentication required");
-
-        context = this;
 
         usernameEditText = (EditText) findViewById(R.id.usernameEditText);
         passwordEditText = (EditText) findViewById(R.id.passwordEditText);
@@ -46,12 +44,12 @@ public class LoginActivity extends AppCompatActivity {
                 username = usernameEditText.getText().toString().toLowerCase();
                 password = passwordEditText.getText().toString();
 
-                if ((username != null) && (password != null)){
+                if ((!username.isEmpty()) && (!password.isEmpty())){
                     validationError = validateUserNameEditText(username);
 
                     switch (validationError){
                         case "valid": {
-                            Intent intent = new Intent(context, CalendarActivity.class);
+                            Intent intent = new Intent(getApplicationContext(), CalendarActivity.class);
                             intent.putExtra("username", username);
                             intent.putExtra("password", password);
 
@@ -59,10 +57,10 @@ public class LoginActivity extends AppCompatActivity {
 
                             break;
                         }
-                        case "invalid length": Toast.makeText(context, "Invalid username length.", Toast.LENGTH_SHORT).show(); break;
-                        case "special characters": Toast.makeText(context, "Special Characters in username are not permitted.", Toast.LENGTH_SHORT).show(); break;
+                        case "invalid length": displayToast("Invalid username length."); break;
+                        case "special characters": displayToast("Special Characters in username are not permitted."); break;
                         default:
-                            Toast.makeText(context, "An unknown error occured.", Toast.LENGTH_SHORT).show(); break;
+                            displayToast("An unknown error occured."); break;
                     }
                 }
             }
@@ -71,14 +69,18 @@ public class LoginActivity extends AppCompatActivity {
 
     public String validateUserNameEditText(String username){
         if (username.length() != 8){
-
             return "invalid length";
         } else if (!username.matches("^[a-zA-Z0-9]*$")){
             return "special characters";
         } else if (!username.matches(("^[a-zA-Z]{2}\\d{6}"))){
             return "invalid format";
         }
-
         return "valid";
+    }
+
+    protected void displayToast(String toastContent){
+        if (!toastContent.isEmpty()){
+            Toast.makeText(getApplicationContext(), toastContent, Toast.LENGTH_SHORT).show();
+        }
     }
 }

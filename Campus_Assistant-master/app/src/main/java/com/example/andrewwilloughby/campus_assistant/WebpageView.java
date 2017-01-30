@@ -1,7 +1,5 @@
 package com.example.andrewwilloughby.campus_assistant;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -11,11 +9,11 @@ import android.widget.Toast;
 
 public class WebpageView extends AppCompatActivity {
 
-    private WebView webView;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        WebView webView = new WebView(this);
         setContentView(R.layout.activity_web_view);
 
         Intent intent = getIntent();
@@ -24,11 +22,12 @@ public class WebpageView extends AppCompatActivity {
 
         setTitle(pageName);
 
-        if (pageURL.contains(".pdf")){
-            pageURL = "https://docs.google.com/gview?embedded=true&url=" + pageURL;
+        if (pageURL != null){
+            if (pageURL.contains(".pdf")) {
+                pageURL = "https://docs.google.com/gview?embedded=true&url=" + pageURL;
+            }
         }
 
-        webView = new WebView(this);
         webView.getSettings().setJavaScriptEnabled(true);
 
         webView.setWebViewClient(new WebViewClient() {
@@ -39,6 +38,5 @@ public class WebpageView extends AppCompatActivity {
 
         webView.loadUrl(pageURL);
         setContentView(webView);
-
     }
 }

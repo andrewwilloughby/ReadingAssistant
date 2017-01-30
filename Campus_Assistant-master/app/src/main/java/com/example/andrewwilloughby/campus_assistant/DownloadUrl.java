@@ -1,23 +1,18 @@
 package com.example.andrewwilloughby.campus_assistant;
 
-
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-/**
- * Created by andrewwilloughby on 27/11/2016.
- */
+ class DownloadUrl {
 
-public class DownloadUrl {
-
-    public String readUrl(String string){
-        String data = null;
+    String readUrl(String string){
+        String data;
         InputStream inputStream = null;
         HttpURLConnection httpURLConnection = null;
+        String line;
 
         try {
             URL url = new URL(string);
@@ -33,22 +28,19 @@ public class DownloadUrl {
 
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 
-            StringBuffer stringBuffer = new StringBuffer();
+            StringBuilder stringBuilder = new StringBuilder();
 
-            String line = "";
             while ((line = bufferedReader.readLine()) != null) {
-                stringBuffer.append(line);
+                stringBuilder.append(line);
             }
 
-            data = stringBuffer.toString();
+            data = stringBuilder.toString();
             bufferedReader.close();
             inputStream.close();
-
             httpURLConnection.disconnect();
         } catch (Exception e){
             return null;
         }
-        System.out.println(data);
         return data;
     }
 }

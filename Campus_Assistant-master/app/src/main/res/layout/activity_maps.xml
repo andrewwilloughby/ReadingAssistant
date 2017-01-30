@@ -54,6 +54,15 @@
         android:visibility="gone"
         android:layout_height="40dp">
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            map:srcCompat="@drawable/walking_icon"
+            android:id="@+id/imageView2"
+            android:layout_weight="1"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp" />
+
         <TextView
             android:text="@string/distanceTxtViewText"
             android:layout_height="match_parent"
@@ -81,11 +90,13 @@
         <ImageButton
             android:id="@+id/cancelRouteBtn"
             android:layout_weight="1"
-            android:background="@drawable/ic_close_dark"
+            android:background="@drawable/cancel_icon_white"
             android:elevation="0dp"
-            android:layout_height="match_parent"
-            android:layout_width="25dp"
-            android:contentDescription="Cancel current route." />
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:contentDescription="Cancel current route."
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp" />
 
         <Space
             android:layout_width="wrap_content"

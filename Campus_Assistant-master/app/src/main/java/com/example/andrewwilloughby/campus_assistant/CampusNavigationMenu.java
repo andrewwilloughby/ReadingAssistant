@@ -6,16 +6,15 @@ import android.widget.Button;
 
 public class CampusNavigationMenu extends AMenu {
 
-    private Button interactiveMapBtn;
-    private Button campusMapsBtn;
-
-    public CampusNavigationMenu(){
-
-    }
+    public CampusNavigationMenu(){}
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Button interactiveMapBtn;
+        Button campusMapsBtn;
+
         setContentView(R.layout.activity_campus_navigation_menu);
 
         setTitle("Campus Navigation");

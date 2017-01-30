@@ -6,17 +6,16 @@ import android.widget.Button;
 
 public class TravelInformationMenu extends AMenu implements View.OnClickListener {
 
-    private Button busTimesBtn;
-    private Button railTimesBtn;
-    private Button busTimetableBtn;
-
-    public TravelInformationMenu(){
-
-    }
+    public TravelInformationMenu(){}
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Button busTimesBtn;
+        Button railTimesBtn;
+        Button busTimetableBtn;
+
         setContentView(R.layout.activity_travel_information_menu);
 
         setTitle("Travel Information");

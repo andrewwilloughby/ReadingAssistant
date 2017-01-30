@@ -5,7 +5,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListAdapter;
@@ -22,7 +21,6 @@ import java.util.HashMap;
 
 public class BusTimes extends AppCompatActivity {
 
-    private String TAG = BusTimes.class.getSimpleName();
     private ProgressDialog pDialog;
     private ListView busListView;
     private static String url;
@@ -90,15 +88,18 @@ public class BusTimes extends AppCompatActivity {
         chancellorWayBusBtn.performClick();
     }
 
-    /**
-     * Async task class to get JSON by making HTTP call
-     */
+    protected void displayToast(String toastContent){
+        if (!toastContent.isEmpty()){
+            Toast.makeText(getApplicationContext(), toastContent, Toast.LENGTH_SHORT).show();
+        }
+    }
+
     private class GetDepartures extends AsyncTask<String, Void, Void> {
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            // Showing progress dialog
+
             pDialog = new ProgressDialog(BusTimes.this);
             pDialog.setMessage("Please wait...");
             pDialog.setCancelable(false);
@@ -123,7 +124,6 @@ public class BusTimes extends AppCompatActivity {
                         String destination = ob.getString("direction");
                         String expectedDep = ob.getString("aimed_departure_time");
 
-                        // tmp hash map for single contact
                         HashMap<String, String> busDeparture = new HashMap<>();
 
                         if (limitToRoute21){
@@ -140,31 +140,22 @@ public class BusTimes extends AppCompatActivity {
                             busDeparture.put("expectedDepTime", expectedDep);
 
                             departureList.add(busDeparture);
-
                         }
 
                     }
                 }catch (final JSONException e) {
-                    Log.e(TAG, "Json parsing error: " + e.getMessage());
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(getApplicationContext(),
-                                    "Json parsing error: " + e.getMessage(),
-                                    Toast.LENGTH_LONG)
-                                    .show();
+                            displayToast("Error with live information. Please retry.");
                         }
                     });
                 }
             } else {
-                Log.e(TAG, "Couldn't get json from server.");
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(getApplicationContext(),
-                                "Couldn't get json from server. Check LogCat for possible errors!",
-                                Toast.LENGTH_LONG)
-                                .show();
+                        displayToast("Couldn't get live departure data. Please check network connection.");
                     }
                 });
             }
@@ -174,21 +165,16 @@ public class BusTimes extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-            // Dismiss the progress dialog
+
             if (pDialog.isShowing())
                 pDialog.dismiss();
-            /**
-             * Updating parsed JSON data into ListView
-             * */
+
             ListAdapter adapter = new SimpleAdapter(
                     BusTimes.this, departureList,
                     R.layout.bus_list_item, new String[]{"routeNumber", "destination",
                     "expectedDepTime"}, new int[]{R.id.routeNumberTextView,
                     R.id.busDestinationTextView, R.id.busExpectedDepTextView});
-
             busListView.setAdapter(adapter);
         }
     }
-
-
 }

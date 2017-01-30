@@ -51,7 +51,6 @@ import java.util.HashMap;
 
 public class CalendarActivity extends AppCompatActivity {
 
-    private String TAG = CalendarActivity.class.getSimpleName();
     CalendarView calendarView;
     private ListView lv;
     ArrayList<HashMap<String, String>> eventsList;
@@ -63,8 +62,10 @@ public class CalendarActivity extends AppCompatActivity {
     DateFormat eventDateFormat = new SimpleDateFormat("dd/MM/yyyy");
     private String username = null;
     private String password = null;
+    private static String file_url = "https://www.reading.ac.uk/mytimetable/m/";
     String calendarString = null;
     Boolean credentialsFailFlag = false;
+    Boolean noCredentialsFlag = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +80,13 @@ public class CalendarActivity extends AppCompatActivity {
             username = getIntent().getExtras().getString("username");
             password = getIntent().getExtras().getString("password");
         } catch (NullPointerException e){
-            Toast.makeText(getApplicationContext(), "Please enter credentials in settings.", Toast.LENGTH_SHORT).show();
+            noCredentialsFlag = true;
+        }
+
+        if (noCredentialsFlag){
+            displayToast("Please enter credentials in settings.");
+        } else {
+            new DownloadTimetable().execute(file_url);
         }
 
         lv = (ListView) findViewById(R.id.dayEventsListView);
@@ -95,7 +102,7 @@ public class CalendarActivity extends AppCompatActivity {
                     intent.putExtra("search_value", addressToPass);
                     startActivity(intent);
                 } else {
-                    Toast.makeText(context, "Unable to perform search on that location.", Toast.LENGTH_SHORT).show();
+                    displayToast("Unable to perform search on that location.");
                 }
             }
         });
@@ -114,7 +121,7 @@ public class CalendarActivity extends AppCompatActivity {
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
-                if (credentialsFailFlag == false){
+                if (!credentialsFailFlag){
                     Date selected = null;
 
                     eventsList.clear();
@@ -140,29 +147,19 @@ public class CalendarActivity extends AppCompatActivity {
                         for (Object object : filter.filter(studentCalendar.getComponents(Component.VEVENT))) {
                             VEvent event = (VEvent) object;
 
-                            //get summary of event.
                             String summary = event.getSummary().toString();
                             summary = summary.replace("SUMMARY;LANGUAGE=en-gb:", "");
-                            System.out.println(summary);
 
-                            //get location of event.
                             String location = event.getLocation().toString();
                             location = location.replace("LOCATION:", "");
-                            System.out.println(location);
 
-                            //get start time of event.
                             DtStart eventStart = (DtStart) event.getProperty(Property.DTSTART);
                             String eventStartDate = eventDateFormat.format(eventStart.getDate());
                             String eventStartTime = eventTimeFormat.format(eventStart.getDate());
-                            System.out.println(eventStartDate);
-                            System.out.println(eventStartTime);
 
-                            //get end time of event.
                             DtEnd eventEnd = (DtEnd) event.getProperty(Property.DTEND);
                             String eventEndDate = eventDateFormat.format(eventEnd.getDate());
                             String eventEndTime = eventTimeFormat.format(eventEnd.getDate());
-                            System.out.println(eventEndDate);
-                            System.out.println(eventEndTime);
 
                             String eventTiming = eventStartTime + " to " + eventEndTime;
 
@@ -182,7 +179,6 @@ public class CalendarActivity extends AppCompatActivity {
                                     CalendarActivity.this, eventsList,
                                     R.layout.timetable_list_item, new String[]{"summary", "eventTiming"}
                                     , new int[]{R.id.summaryTextView, R.id.eventTimingTextView});
-
                             lv.setAdapter(adapter);
                         }
                     }
@@ -192,9 +188,7 @@ public class CalendarActivity extends AppCompatActivity {
     }
 
     protected String getBuildingAddress(String buildingName){
-        String building = buildingName.substring(0, 3).toLowerCase();
-
-        switch (building){
+        switch (buildingName.substring(0, 3).toLowerCase()){
             case "agr"  : return "Agriculture building, Reading RG6 6BZ";
             case "arch" : return "Archaeology Building, Reading RG6 6AX";
             case "all"  : return "The Allen Laboratory, Earley, Reading RG6 6AX";
@@ -230,6 +224,12 @@ public class CalendarActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    protected void displayToast(String toastContent){
+        if (!toastContent.isEmpty()){
+            Toast.makeText(getApplicationContext(), toastContent, Toast.LENGTH_SHORT).show();
+        }
+    }
+
     private class DownloadTimetable extends AsyncTask<String, Void, Void>{
 
         protected void onPreExecute(){
@@ -253,10 +253,8 @@ public class CalendarActivity extends AppCompatActivity {
                 String basicAuth = "Basic " + Base64.encodeToString(userpass.getBytes(), Base64.DEFAULT);
                 connection.setRequestProperty("Authorization", basicAuth);
                 inputStream = new BufferedInputStream(connection.getInputStream());
-            } catch (MalformedURLException e) {
-                Log.e("URL Error: ", e.getMessage());
             } catch (IOException e) {
-                Log.e("IO Error: ", e.getMessage());
+                displayToast("URL Error occurred.");
             }
 
             try{
@@ -270,13 +268,12 @@ public class CalendarActivity extends AppCompatActivity {
                 }
                 calendarString = stringBuilder.toString();
 
-            } catch (UnsupportedEncodingException e) {
-                Log.e("Encoding Error: ", e.getMessage());
             } catch (UnknownHostException e) {
-                Toast.makeText(context, "Download failed, no network connection.", Toast.LENGTH_SHORT);
-
+                displayToast("Download failed, no network connection.");
+            } catch (UnsupportedEncodingException e) {
+                displayToast("Timetable encoding error, please retry.");
             } catch (Exception e) {
-                Log.e("Error: ", e.getMessage());
+                displayToast("An unknown error occurred");
             }
 
             if (calendarString != null){
@@ -284,10 +281,8 @@ public class CalendarActivity extends AppCompatActivity {
                 CalendarBuilder calendarBuilder = new CalendarBuilder();
                 try {
                     studentCalendar = calendarBuilder.build(stringReader);
-                } catch (IOException e) {
-                    Log.e(TAG + "IO Error: ", e.getMessage());
-                } catch (ParserException e) {
-                    Log.e(TAG + "Parsing Error: ", e.getMessage());
+                } catch (IOException | ParserException e) {
+                    displayToast("Error reading Student Timetable. Please try again");
                 }
             } else {
                 credentialsFailFlag = true;
@@ -298,11 +293,8 @@ public class CalendarActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-            if (progressDialog.isShowing()){ progressDialog.dismiss(); }
-            if (credentialsFailFlag){
-                Toast.makeText(getApplicationContext(), "Couldn't load timetable : Invalid credentials.", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                startActivity(intent);
+            if (progressDialog.isShowing()){
+                progressDialog.dismiss();
             }
         }
     }

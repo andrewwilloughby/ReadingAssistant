@@ -1,26 +1,23 @@
 package com.example.andrewwilloughby.campus_assistant;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
 public class CampusMapsMenu extends AMenu {
 
-    private Button whiteknightsBtn;
-    private Button loroBtn;
-    private Button hallsBtn;
-
-    public CampusMapsMenu(){
-
-    }
+    public CampusMapsMenu(){}
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Button whiteknightsBtn;
+        Button loroBtn;
+        Button hallsBtn;
+
         setContentView(R.layout.activity_campus_maps_menu);
 
-        final Context context = this;
         setTitle("Campus Maps");
         initialiseToolbarBtns();
 

@@ -79,7 +79,6 @@ public class CampusMapsMenuInstrumentedTests {
                 hasExtra(equalTo("webpageURL"), equalTo("http://www.reading.ac.uk/web/FILES/whiteknights-campus-map-and-keys-2016.pdf")),
                 hasExtra(equalTo("webpageName"), equalTo("Whiteknights Campus Map")),
                 hasComponent("com.example.andrewwilloughby.campus_assistant.WebpageView")));
-
     }
 
     @Test
@@ -121,5 +120,4 @@ public class CampusMapsMenuInstrumentedTests {
                 hasExtra(equalTo("webpageName"), equalTo("Student Halls Map")),
                 hasComponent("com.example.andrewwilloughby.campus_assistant.WebpageView")));
     }
-
 }

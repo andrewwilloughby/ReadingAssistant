@@ -25,16 +25,16 @@ import io.fabric.sdk.android.Fabric;
 
 public class LatestNews extends AppCompatActivity {
 
-    // Note: Your consumer key and secret should be obfuscated in your source code before shipping.
     private static final String TWITTER_KEY = "icXPlnJKZL9eTOpDgtmSOklhi";
     private static final String TWITTER_SECRET = "ObkVdHNrCOFUvarHzS0OWvHkwCsCSefDpInYlJdGk2jVvnBima";
-
-    private Button uorButton;
-    private Button rusuButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Button uorButton;
+        Button rusuButton;
+
         setContentView(R.layout.activity_latest_news);
 
         TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
@@ -58,7 +58,7 @@ public class LatestNews extends AppCompatActivity {
                     ListView listView = (ListView) findViewById(R.id.tweetsListView);
                     listView.setAdapter(adapter);
                 } else {
-                    Toast.makeText(context, "Internet connection has been lost.", Toast.LENGTH_SHORT).show();
+                    displayToast("Internet connection has been lost.");
                 }
             }
         });
@@ -77,7 +77,7 @@ public class LatestNews extends AppCompatActivity {
                     ListView listView = (ListView) findViewById(R.id.tweetsListView);
                     listView.setAdapter(adapter);
                 } else {
-                    Toast.makeText(context, "Internet connection has been lost.", Toast.LENGTH_SHORT).show();
+                    displayToast("Internet connection has been lost.");
                 }
             }
         });
@@ -106,7 +106,7 @@ public class LatestNews extends AppCompatActivity {
 
                     @Override
                     public void failure(TwitterException exception) {
-                        Toast.makeText(getApplicationContext(), "Failed to refresh Twitter feed", Toast.LENGTH_LONG).show();
+                        displayToast("Failed to refresh Twitter feed");
                     }
                 });
             }
@@ -123,8 +123,14 @@ public class LatestNews extends AppCompatActivity {
         // Returns true or false indicating whether network is available.
         if (null != activeNetworkInfo){
             return true;
-        } else {
-            return false;
+        }
+
+        return false;
+    }
+
+    protected void displayToast(String toastContent){
+        if (!toastContent.isEmpty()){
+            Toast.makeText(getApplicationContext(), toastContent, Toast.LENGTH_SHORT).show();
         }
     }
 }
