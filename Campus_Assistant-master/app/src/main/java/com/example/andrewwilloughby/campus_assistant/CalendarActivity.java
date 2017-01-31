@@ -7,7 +7,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -39,7 +38,6 @@ import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.text.DateFormat;
@@ -84,7 +82,7 @@ public class CalendarActivity extends AppCompatActivity {
         }
 
         if (noCredentialsFlag){
-            displayToast("Please enter credentials in settings.");
+            Toast.makeText(context, "Please enter credentials in settings.", Toast.LENGTH_SHORT).show();
         } else {
             new DownloadTimetable().execute(file_url);
         }
@@ -102,7 +100,7 @@ public class CalendarActivity extends AppCompatActivity {
                     intent.putExtra("search_value", addressToPass);
                     startActivity(intent);
                 } else {
-                    displayToast("Unable to perform search on that location.");
+                    Toast.makeText(context, "Unable to perform search on that location.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -224,12 +222,6 @@ public class CalendarActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    protected void displayToast(String toastContent){
-        if (!toastContent.isEmpty()){
-            Toast.makeText(getApplicationContext(), toastContent, Toast.LENGTH_SHORT).show();
-        }
-    }
-
     private class DownloadTimetable extends AsyncTask<String, Void, Void>{
 
         protected void onPreExecute(){
@@ -249,12 +241,14 @@ public class CalendarActivity extends AppCompatActivity {
             try{
                 URL url = new URL(f_url[0]);
                 connection = (HttpURLConnection) url.openConnection();
+
                 String userpass = username + ":" + password;
-                String basicAuth = "Basic " + Base64.encodeToString(userpass.getBytes(), Base64.DEFAULT);
+                String basicAuth = "Basic " + Base64.encodeToString(userpass.getBytes(), Base64.NO_WRAP);
                 connection.setRequestProperty("Authorization", basicAuth);
+
                 inputStream = new BufferedInputStream(connection.getInputStream());
             } catch (IOException e) {
-                displayToast("URL Error occurred.");
+                System.out.println("IO error");
             }
 
             try{
@@ -269,11 +263,11 @@ public class CalendarActivity extends AppCompatActivity {
                 calendarString = stringBuilder.toString();
 
             } catch (UnknownHostException e) {
-                displayToast("Download failed, no network connection.");
+                Toast.makeText(context, "Download failed, no network connection.", Toast.LENGTH_SHORT).show();
             } catch (UnsupportedEncodingException e) {
-                displayToast("Timetable encoding error, please retry.");
+                Toast.makeText(context, "Timetable encoding error, please retry.", Toast.LENGTH_SHORT).show();
             } catch (Exception e) {
-                displayToast("An unknown error occurred");
+                Toast.makeText(context, "An unknown error occurred", Toast.LENGTH_SHORT).show();
             }
 
             if (calendarString != null){
@@ -282,7 +276,7 @@ public class CalendarActivity extends AppCompatActivity {
                 try {
                     studentCalendar = calendarBuilder.build(stringReader);
                 } catch (IOException | ParserException e) {
-                    displayToast("Error reading Student Timetable. Please try again");
+                    Toast.makeText(context, "Error reading Student Timetable. Please try again", Toast.LENGTH_SHORT).show();
                 }
             } else {
                 credentialsFailFlag = true;
