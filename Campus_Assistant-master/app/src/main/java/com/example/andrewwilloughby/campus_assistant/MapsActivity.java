@@ -283,6 +283,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
+
+        Marker disabledEntranceMarker;
+
         map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
         map.setOnPoiClickListener(this);
@@ -350,13 +353,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         double lat = Double.parseDouble("51.437977"), lng = Double.parseDouble("-0.944745");
         LatLng latLng = new LatLng(lat, lng);
 
-        MarkerOptions searchMarkerOptions = new MarkerOptions()
+        MarkerOptions disabledEntranceMarkerOptions = new MarkerOptions()
                 .position(latLng)
                 .title("Disabled entrance")
                 .icon(BitmapDescriptorFactory.fromResource(R.mipmap.wheelchair_icon));
 
-        searchMarker = map.addMarker(searchMarkerOptions);
-        searchMarker.showInfoWindow();
+        disabledEntranceMarker = map.addMarker(disabledEntranceMarkerOptions);
+        disabledEntranceMarker.showInfoWindow();
         map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         map.animateCamera(CameraUpdateFactory.zoomTo(11));
     }
