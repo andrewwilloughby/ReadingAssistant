@@ -26,16 +26,12 @@ public class BusTimes extends AppCompatActivity {
     private static String url;
     ArrayList<HashMap<String, String>> departureList;
 
-    private Button chancellorWayBusBtn;
-    private Button whiteknightsHouseBusBtn;
-    private Button readingStationBusBtn;
-
-    public Boolean limitToRoute21;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bus_times);
+
+        Button chancellorWayBusBtn, whiteknightsHouseBusBtn, readingStationBusBtn;
 
         setTitle("Live Bus Departures");
 
@@ -58,7 +54,6 @@ public class BusTimes extends AppCompatActivity {
         chancellorWayBusBtn = (Button) findViewById(R.id.chancellorWayBusBtn);
         chancellorWayBusBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                limitToRoute21 = false;
                 departureList.clear();
                 url = getApplicationContext().getString(R.string.chancellorWayBusUrl);
                 new GetDepartures().execute(url);
@@ -68,7 +63,6 @@ public class BusTimes extends AppCompatActivity {
         whiteknightsHouseBusBtn = (Button) findViewById(R.id.whiteknightsHouseBusBtn);
         whiteknightsHouseBusBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                limitToRoute21 = false;
                 departureList.clear();
                 url = getApplicationContext().getString(R.string.whiteknightsHouseBusUrl);
                 new GetDepartures().execute(url);
@@ -78,7 +72,6 @@ public class BusTimes extends AppCompatActivity {
         readingStationBusBtn = (Button) findViewById(R.id.readingStationBusBtn);
         readingStationBusBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                limitToRoute21 = true;
                 departureList.clear();
                 url = getApplicationContext().getString(R.string.railStationBusUrl);
                 new GetDepartures().execute(url);
@@ -126,22 +119,13 @@ public class BusTimes extends AppCompatActivity {
 
                         HashMap<String, String> busDeparture = new HashMap<>();
 
-                        if (limitToRoute21){
-                            if ((routeNumber.equals("21")) || (routeNumber.equals("21a"))){
-                                busDeparture.put("routeNumber", routeNumber);
-                                busDeparture.put("destination", destination);
-                                busDeparture.put("expectedDepTime", expectedDep);
-
-                                departureList.add(busDeparture);
-                            }
-                        } else{
+                        if ((routeNumber.equals("21")) || (routeNumber.equals("21a"))){
                             busDeparture.put("routeNumber", routeNumber);
                             busDeparture.put("destination", destination);
                             busDeparture.put("expectedDepTime", expectedDep);
 
                             departureList.add(busDeparture);
                         }
-
                     }
                 }catch (final JSONException e) {
                     runOnUiThread(new Runnable() {

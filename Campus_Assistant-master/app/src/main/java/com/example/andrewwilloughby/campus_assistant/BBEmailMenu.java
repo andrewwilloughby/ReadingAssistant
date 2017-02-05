@@ -12,8 +12,7 @@ public class BBEmailMenu extends AMenu {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Button blackboardBtn;
-        Button emailBtn;
+        Button blackboardBtn, emailBtn;
 
         setContentView(R.layout.activity_bbemail_menu);
 

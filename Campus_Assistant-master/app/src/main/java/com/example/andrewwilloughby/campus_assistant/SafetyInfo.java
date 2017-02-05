@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
@@ -24,17 +23,12 @@ public class SafetyInfo extends AMenu {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Button emergencyContactBtn;
-        Button nonEmergencyContactBtn;
-        Button personalSafetyBtn;
-        Button healthAndSafetyBtn;
-
         setContentView(R.layout.activity_safety_info);
 
         final Activity thisActivity = this;
         setTitle("Safety Information");
 
-        emergencyContactBtn = (Button) findViewById(R.id.securityEmergencyBtn);
+        Button emergencyContactBtn = (Button) findViewById(R.id.securityEmergencyBtn);
         emergencyContactBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){
             if(ContextCompat.checkSelfPermission(thisActivity, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED){
@@ -46,7 +40,7 @@ public class SafetyInfo extends AMenu {
             }
         });
 
-        nonEmergencyContactBtn = (Button) findViewById(R.id.securityNonEmergencyBtn);
+        Button nonEmergencyContactBtn = (Button) findViewById(R.id.securityNonEmergencyBtn);
         nonEmergencyContactBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){
                 if(ContextCompat.checkSelfPermission(thisActivity, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED){
@@ -58,19 +52,18 @@ public class SafetyInfo extends AMenu {
             }
         });
 
-        personalSafetyBtn = (Button) findViewById(R.id.personalSafetyBtn);
+        Button  personalSafetyBtn = (Button) findViewById(R.id.personalSafetyBtn);
         personalSafetyBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){launchWebView("Personal Safety Guide");
             }
         });
 
-        healthAndSafetyBtn = (Button) findViewById(R.id.healthAndSafetyBtn);
+        Button healthAndSafetyBtn = (Button) findViewById(R.id.healthAndSafetyBtn);
         healthAndSafetyBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){launchWebView("Report Health & Safety Incident"); }
         });
     }
 
-    //Code provided by Google Developer site.
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {

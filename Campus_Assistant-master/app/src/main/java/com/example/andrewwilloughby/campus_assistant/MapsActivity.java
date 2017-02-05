@@ -59,11 +59,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, AdapterView.OnItemSelectedListener, GoogleMap.OnPoiClickListener {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, AdapterView.OnItemSelectedListener, GoogleMap.OnPoiClickListener  {
     protected GoogleMap map;
     private GoogleApiClient googleApiClient;
-    protected Location lastLocation;
-    private Marker currentLocationMarker;
+    protected Location currentLocation;
+    protected int PROXIMITY_RADIUS = 1000;
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     private Button search_Btn;
     private Marker searchMarker;
@@ -82,13 +82,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected MarkerOptions currentLocationMarkerOptions;
     private LinearLayout searchNearbyItems;
     protected String currentNearbySearchCategory;
-
+    private ArrayList<Marker> disabledEntrancesMarkerArray = new ArrayList<>();
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        ImageButton cancelRouteBtn;
-        Spinner searchNearbySpinner;
 
         setContentView(R.layout.activity_maps);
 
@@ -120,7 +118,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         distanceTextView = (TextView) findViewById(R.id.distanceTxtView);
         durationTextView = (TextView) findViewById(R.id.durationTxtView);
 
-        cancelRouteBtn = (ImageButton) findViewById(R.id.cancelRouteBtn);
+        ImageButton cancelRouteBtn = (ImageButton) findViewById(R.id.cancelRouteBtn);
         cancelRouteBtn.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
                 if (routeLine != null){
@@ -129,17 +127,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     searchBox.setText("");
                 }
 
-                if (navDetailsLayout.getVisibility() == View.VISIBLE){
-                    navDetailsLayout.setVisibility(View.GONE);
-                }
-
-                if (searchNearbyItems.getVisibility() == View.GONE){
-                    searchNearbyItems.setVisibility(View.VISIBLE);
-                }
+                navDetailsLayout.setVisibility(View.GONE);
+                searchNearbyItems.setVisibility(View.VISIBLE);
             }
         });
 
-        searchNearbySpinner = (Spinner) findViewById(R.id.searchNearbySpinner);
+        Spinner  searchNearbySpinner = (Spinner) findViewById(R.id.searchNearbySpinner);
         searchNearbySpinner.setOnItemSelectedListener(this);
         searchNearbySpinner.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -149,9 +142,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
-        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, searchItems);
-
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, searchItems);
         spinnerAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+
         searchNearbySpinner.setAdapter(spinnerAdapter);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -159,37 +152,31 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }
-
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        if (!spinnerTouched){ return; }
+        if (spinnerTouched) {
+            map.clear();
 
-        map.clear();
-        map.addMarker(currentLocationMarkerOptions);
+            if (navDetailsLayout.getVisibility() == View.VISIBLE) {
+                navDetailsLayout.setVisibility(View.GONE);
+            }
 
-        if (navDetailsLayout.getVisibility() == View.VISIBLE){
-            navDetailsLayout.setVisibility(View.GONE);
-        }
+            String item = parent.getItemAtPosition(position).toString().toLowerCase().replace(" ", "_");
 
-        // On selecting a spinner item
-        String item = parent.getItemAtPosition(position).toString().toLowerCase().replace(" ", "_");
-
-        if (!item.equals("none_selected")){
-            String url = getPlacesUrl(currentLatLng.latitude, currentLatLng.longitude, item);
-            displayToast(item);
-            currentNearbySearchCategory = item;
-            Object[] DataTransfer = new Object[2];
-            DataTransfer[0] = map;
-            DataTransfer[1] = url;
-            GetNearbyPlacesData getNearbyPlacesData = new GetNearbyPlacesData();
-            getNearbyPlacesData.execute(DataTransfer);
+            if (!item.equals("none_selected")) {
+                String url = buildPlacesUrl(currentLatLng.latitude, currentLatLng.longitude, item);
+                currentNearbySearchCategory = item;
+                Object[] DataTransfer = new Object[2];
+                DataTransfer[0] = map;
+                DataTransfer[1] = url;
+                GetNearbyPlacesData getNearbyPlacesData = new GetNearbyPlacesData();
+                getNearbyPlacesData.execute(DataTransfer);
+            }
         }
     }
-
     public void onNothingSelected(AdapterView<?> arg0) {
         // TODO Auto-generated method stub
     }
-
     private boolean CheckGooglePlayServices(){
         GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
         int result = googleApiAvailability.isGooglePlayServicesAvailable(this);
@@ -202,7 +189,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         return true;
     }
-
     public void onMapSearch(View view) {
         EditText locationSearch = (EditText) findViewById(R.id.searchBox);
         String location = locationSearch.getText().toString();
@@ -257,7 +243,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             displayToast("No network available.");
         }
     }
-
     @Override
     public void onPoiClick(PointOfInterest poi) {
         LatLng poiLatLng;
@@ -266,30 +251,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             poiMarker.remove();
         }
 
-        //Place a marker for current location.
         poiLatLng = new LatLng(poi.latLng.latitude, poi.latLng.longitude);
 
-        MarkerOptions poiMarkerOptions = new MarkerOptions();
-        poiMarkerOptions.position(poiLatLng);
-        poiMarkerOptions.title(poi.name);
-        poiMarkerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+        MarkerOptions poiMarkerOptions = new MarkerOptions()
+                .position(poiLatLng)
+                .title(poi.name);
         poiMarker = map.addMarker(poiMarkerOptions);
-
         poiMarker.showInfoWindow();
 
         map.moveCamera(CameraUpdateFactory.newLatLng(poiLatLng));
     }
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
-
-        Marker disabledEntranceMarker;
-
         map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
-        map.setOnPoiClickListener(this);
+        addDisabledEntranceMarkers();
 
+        map.setOnPoiClickListener(this);
         map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
@@ -301,7 +280,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     searchNearbyItems.setVisibility(View.GONE);
                 }
 
-                LatLng originLatLng = currentLocationMarker.getPosition();
+                LatLng originLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
                 String originLatLngStr = originLatLng.toString().replace("lat/lng: ", "").replace("(", "").replace(")", "");
 
                 LatLng destinationLatLng = marker.getPosition();
@@ -317,7 +296,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
 
                 LatLngBounds.Builder builder = new LatLngBounds.Builder();
-                builder.include(currentLocationMarker.getPosition());
+                builder.include(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
                 builder.include(marker.getPosition());
 
                 LatLngBounds bounds = builder.build();
@@ -331,7 +310,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
-        //Initialise Google Play Services
+        map.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener() {
+            @Override
+            public void onCameraMove() {
+                if (map.getCameraPosition().zoom > 15.0){
+                    for (Marker marker : disabledEntrancesMarkerArray) {
+                        marker.setVisible(true);
+                    }
+                }
+                else {
+                    for (Marker marker : disabledEntrancesMarkerArray) {
+                        marker.setVisible(false);
+                    }
+                }
+            }
+        });
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
                 buildGoogleApiClient();
@@ -350,20 +344,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             searchBar.setText("");
         }
 
-        double lat = Double.parseDouble("51.437977"), lng = Double.parseDouble("-0.944745");
-        LatLng latLng = new LatLng(lat, lng);
+        LatLng universityLatLng = new LatLng(Double.parseDouble("51.441405"), Double.parseDouble("-0.941751"));
 
-        MarkerOptions disabledEntranceMarkerOptions = new MarkerOptions()
-                .position(latLng)
-                .title("Disabled entrance")
-                .icon(BitmapDescriptorFactory.fromResource(R.mipmap.wheelchair_icon));
-
-        disabledEntranceMarker = map.addMarker(disabledEntranceMarkerOptions);
-        disabledEntranceMarker.showInfoWindow();
-        map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+        map.moveCamera(CameraUpdateFactory.newLatLng(universityLatLng));
         map.animateCamera(CameraUpdateFactory.zoomTo(11));
     }
-
     protected synchronized void buildGoogleApiClient(){
         googleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -372,7 +357,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .build();
         googleApiClient.connect();
     }
-
     public void onConnected(Bundle bundle){
         LocationRequest locationRequest;
 
@@ -385,66 +369,48 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
         }
     }
+    public void addDisabledEntranceMarkers(){
+        LatLng latLng = new LatLng(Double.parseDouble("51.437977"), Double.parseDouble("-0.944745"));
 
-    protected String getPlacesUrl(double latitude, double longitude, String nearbyPlace){
-        StringBuilder placesUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
-        placesUrl.append("location=" + latitude + "," + longitude);
-        placesUrl.append("&radius=10000");
-        placesUrl.append("&type=" + nearbyPlace);
-        placesUrl.append("&sensor=true&key=AIzaSyATuUiZUkEc_UgHuqsBJa1oqaODI-3mLs0");
-        return (placesUrl.toString());
+        MarkerOptions disabledEntranceMarkerOptions = new MarkerOptions()
+                .position(latLng)
+                .title("Disabled entrance")
+                .icon(BitmapDescriptorFactory.fromResource(R.mipmap.wheelchair_icon))
+                .visible(false);
+
+        Marker marker = map.addMarker(disabledEntranceMarkerOptions);
+        disabledEntrancesMarkerArray.add(marker);
     }
-
+    protected String buildPlacesUrl(double latitude, double longitude, String nearbyPlace){
+        return "https://maps.googleapis.com/maps/api/place/nearbysearch/json?"
+                + "location=" + latitude + "," + longitude + "&radius=" + PROXIMITY_RADIUS + "&type="
+                + nearbyPlace + "&sensor=true&key=AIzaSyATuUiZUkEc_UgHuqsBJa1oqaODI-3mLs0";
+    }
     protected String makeDirectionsURL(String originLatLng, String destLatLng){
-        if ((!originLatLng.matches("^(\\-?\\d+(\\.\\d+)?),\\s*(\\-?\\d+(\\.\\d+)?)$")) || (!destLatLng.matches("^(\\-?\\d+(\\.\\d+)?),\\s*(\\-?\\d+(\\.\\d+)?)$"))){
-            return null;
+        if ((originLatLng.matches("^(\\-?\\d+(\\.\\d+)?),\\s*(\\-?\\d+(\\.\\d+)?)$")) && (destLatLng.matches("^(\\-?\\d+(\\.\\d+)?),\\s*(\\-?\\d+(\\.\\d+)?)$"))){
+            return "https://maps.googleapis.com/maps/api/directions/json?origin="
+                    + originLatLng + "&destination=" + destLatLng
+                    + "&sensor=false&mode=walking&alternatives=true&key=AIzaSyCWyi6EulBxUxWDPZKwV9Ud6AZnmBqkWfE";
         }
-
-        StringBuilder urlString = new StringBuilder();
-        urlString.append("https://maps.googleapis.com/maps/api/directions/json");
-        urlString.append("?origin=");
-        urlString.append(originLatLng);
-
-        urlString.append("&destination=");
-        urlString.append(destLatLng);
-
-        urlString.append("&sensor=false&mode=walking&alternatives=true");
-        urlString.append("&key=AIzaSyCWyi6EulBxUxWDPZKwV9Ud6AZnmBqkWfE");
-
-        return urlString.toString();
+        return null;
     }
-
     @Override
     public void onConnectionSuspended(int i){
 
     }
-
     @Override
     public void onLocationChanged(Location location){
-        lastLocation = location;
-        if (currentLocationMarker != null){
-            currentLocationMarker.remove();
-        }
+        currentLocation = location;
 
-        //Place a marker for current location.
         currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-
-        currentLocationMarkerOptions = new MarkerOptions()
-                .position(currentLatLng)
-                .title("Current Location")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
-
-        currentLocationMarker = map.addMarker(currentLocationMarkerOptions);
 
         if (googleApiClient != null){
             LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, this);
         }
     }
-
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult){
     }
-
     public boolean checkPermissionLocation(){
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)){
@@ -454,17 +420,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
             return false;
         }
-
         return true;
     }
-
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults){
         switch (requestCode){
             case MY_PERMISSIONS_REQUEST_LOCATION: {
-                //If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    //permission was granted.
                     if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
                         if (googleApiClient == null){
                             buildGoogleApiClient();
@@ -472,14 +434,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         map.setMyLocationEnabled(true);
                     }
                 } else {
-                    //Permission denied, disable the functionality that depends on this permission.
                     Toast.makeText(this, "permission denied", Toast.LENGTH_LONG).show();
                 }
-                return;
             }
         }
     }
-
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -490,7 +449,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         return false;
     }
-
     public Boolean drawPath(String result) {
         try {
             final JSONObject json = new JSONObject(result);
@@ -518,7 +476,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         return true;
     }
-
     protected void displayToast(String toastContent){
         if (!toastContent.isEmpty()){
             Toast.makeText(getApplicationContext(), toastContent, Toast.LENGTH_SHORT).show();
@@ -556,7 +513,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         return poly;
     }
-
     private class getJSONStr extends AsyncTask<Void, Void, String> {
         @Override
         protected void onPreExecute() {
@@ -577,28 +533,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         protected void onPostExecute(String jsonStr) {
             super.onPostExecute(jsonStr);
 
-            if(pDialog.isShowing())
+            if(pDialog.isShowing()) {
                 pDialog.dismiss();
+            }
         }
     }
-
-    // Code developed from tutorial: https://www.androidtutorialpoint.com/intermediate/google-maps-search-nearby-displaying-nearby-places-using-google-places-api-google-maps-api-v2/
     private class GetNearbyPlacesData extends AsyncTask<Object, String, String> {
-        String placesData;
-        GoogleMap map;
-        String url;
-
         @Override
         protected String doInBackground(Object... params) {
+            String placesData, url;
+
             try {
-                map = (GoogleMap) params[0];
                 url = (String) params[1];
                 DownloadUrl downloadUrl = new DownloadUrl();
                 placesData = downloadUrl.readUrl(url);
+
+                return placesData;
             } catch (Exception e){
                 return null;
             }
-            return placesData;
         }
 
         @Override
@@ -617,11 +570,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             for (int i = 0; i < nearbyPlacesList.size(); i++){
 
                 HashMap<String, String> googlePlace = nearbyPlacesList.get(i);
-
-                double lat = Double.parseDouble(googlePlace.get("lat"));
-                double lng = Double.parseDouble(googlePlace.get("lng"));
-                LatLng latLng = new LatLng(lat, lng);
-
+                LatLng latLng = new LatLng(Double.parseDouble(googlePlace.get("lat")), Double.parseDouble(googlePlace.get("lng")));
                 String placeName = googlePlace.get("place_name");
                 String vicinity = googlePlace.get("vicinity");
 
@@ -657,7 +606,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
 
                 map.addMarker(markerOptions);
-
                 map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
                 map.animateCamera(CameraUpdateFactory.zoomTo(11));
             }

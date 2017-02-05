@@ -31,10 +31,6 @@ public class LatestNews extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        Button uorButton;
-        Button rusuButton;
-
         setContentView(R.layout.activity_latest_news);
 
         TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
@@ -44,7 +40,7 @@ public class LatestNews extends AppCompatActivity {
 
         setTitle("Latest News");
 
-        uorButton = (Button) findViewById(R.id.uniTweetsBtn);
+        Button uorButton = (Button) findViewById(R.id.uniTweetsBtn);
         uorButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 if (isNetworkAvailable()) {
@@ -63,7 +59,7 @@ public class LatestNews extends AppCompatActivity {
             }
         });
 
-        rusuButton = (Button) findViewById(R.id.rusuTweetsBtn);
+        Button rusuButton = (Button) findViewById(R.id.rusuTweetsBtn);
         rusuButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 if (isNetworkAvailable()) {

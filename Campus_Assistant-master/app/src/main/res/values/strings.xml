@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">UoR Campus Assistant</string>
-
     <!-- Main Menu Activity Strings -->
     <string name="mainStudentInfoBtnText">Student Information</string>
     <string name="mainLatestNewsBtnText">Latest News</string>
@@ -8,7 +7,6 @@
     <string name="mainTravelInfoBtnText">Travel Information</string>
     <string name="mainBbEmailBtnText">Blackboard &amp; Email</string>
     <string name="mainTimetableBtnText">Timetable</string>
-
     <!-- Student Information Menu Activity Strings -->
     <string name="studentInfoMenuTitle">Student Information</string>
     <string name="studentInfoServicesBtnText">Student Services</string>
@@ -16,33 +14,27 @@
     <string name="studentInfoPaymentsBtnText">Payments</string>
     <string name="studentInfoRisisBtnText">RISIS</string>
     <string name="studentInfoStaffDirectoryBtnText">Staff Search</string>
-
     <!-- Campus Navigation Menu Activity Strings -->
     <string name="campusNavMenuTitle">Campus Navigation</string>
     <string name="campusNavInteractiveMapBtnText">Interactive Map</string>
     <string name="campusNavMapsBtnText">Campus Maps</string>
-
     <!-- Campus Maps Menu Activity Strings -->
     <string name="campusMapsWhiteknightsBtnText">Whiteknights Campus</string>
     <string name="campusMapsLoroBtnText">London Road Campus</string>
     <string name="campusMapsHallsBtnText">Student Halls</string>
-
     <!-- Travel Information Menu Activity Strings -->
     <string name="travelInfoMenuTitle">Travel Information</string>
     <string name="travelInfoBusTimesBtnText">Live Bus Times</string>
     <string name="travelInfoRailTimesBtnText">Live Rail Departures</string>
     <string name="travelInfoBusTimetableBtnText">Bus Timetable</string>
-
     <!-- Blackboard & Email Menu Activity Strings -->
     <string name="bbEmailMenuTitle">Blackboard &amp; Email</string>
     <string name="bbemailBlackboardBtnText">Blackboard</string>
     <string name="bbemailEmailBtnText">Email</string>
-
     <!-- Latest News Activity Strings -->
     <string name="uorTweetsBtnText">UoR Tweets</string>
     <string name="rusuTweetsBtnText">RUSU Tweets</string>
     <string name="refreshHeaderText">Pull to refresh</string>
-
     <!-- Safety Info Activity Strings -->
     <string name="safetyMessage1">In an emergency, always dial 999.</string>
     <string name="safetyMessage2">When safe to do so, contact University of Reading Security.</string>
@@ -51,7 +43,6 @@
     <string name="securityContactNumber">0118 123 4567</string>
     <string name="personalSafetyBtnText">Personal Safety Guide</string>
     <string name="healthAndSafetyBtnText">Report Health &amp; Safety Incident</string>
-
     <!-- Live Bus Departures Activity Strings -->
     <string name="chancellorWayBusBtnText">Chancellors Way</string>
     <string name="whiteknightsHouseBusBtnText">Whiteknights House</string>
@@ -78,6 +69,8 @@
     <string name="loginPasswordEditTextHint">Password</string>
     <string name="emergencyContactNumber">07590917581</string>
     <string name="nonEmergencyContactNumber">07590917581</string>
+
+    <string name="title_activity_maps">Map</string>
 
     <string-array name="menuCategories">
         <item>Student Information</item>

@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-// Code developed from tutorial: https://www.androidtutorialpoint.com/intermediate/google-maps-search-nearby-displaying-nearby-places-using-google-places-api-google-maps-api-v2/
-
 public class DataParser {
 
     public List<HashMap<String, String>> parse(String jsonData){
@@ -38,7 +36,6 @@ public class DataParser {
                 e.printStackTrace();
             }
         }
-        System.out.println(placesList);
         return placesList;
     }
 
@@ -46,9 +43,6 @@ public class DataParser {
         HashMap<String, String> googlePlaceMap = new HashMap<String, String>();
         String placeName = "-NA-";
         String vicinity = "-NA-";
-        String latitude;
-        String longitude;
-        String reference;
 
         try {
             if (!googlePlaceJson.isNull("name")){
@@ -57,9 +51,10 @@ public class DataParser {
             if (!googlePlaceJson.isNull("vicinity")){
                 vicinity = googlePlaceJson.getString("vicinity");
             }
-            latitude = googlePlaceJson.getJSONObject("geometry").getJSONObject("location").getString("lat");
-            longitude = googlePlaceJson.getJSONObject("geometry").getJSONObject("location").getString("lng");
-            reference = googlePlaceJson.getString("reference");
+            String latitude = googlePlaceJson.getJSONObject("geometry").getJSONObject("location").getString("lat");
+            String longitude = googlePlaceJson.getJSONObject("geometry").getJSONObject("location").getString("lng");
+            String reference = googlePlaceJson.getString("reference");
+
             googlePlaceMap.put("place_name", placeName);
             googlePlaceMap.put("vicinity", vicinity);
             googlePlaceMap.put("lat", latitude);

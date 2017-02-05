@@ -11,24 +11,16 @@ import android.widget.Toast;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private EditText usernameEditText;
-    private EditText passwordEditText;
-    private String validationError;
-    private String username;
-    private String password;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        Button loginButton;
 
         setContentView(R.layout.activity_login);
 
         setTitle("Authentication required");
 
-        usernameEditText = (EditText) findViewById(R.id.usernameEditText);
-        passwordEditText = (EditText) findViewById(R.id.passwordEditText);
+        final EditText usernameEditText = (EditText) findViewById(R.id.usernameEditText);
+        final EditText passwordEditText = (EditText) findViewById(R.id.passwordEditText);
         passwordEditText.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -37,15 +29,15 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        loginButton = (Button) findViewById(R.id.loginButton);
+        Button loginButton = (Button) findViewById(R.id.loginButton);
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                username = usernameEditText.getText().toString().toLowerCase();
-                password = passwordEditText.getText().toString();
+                String username = usernameEditText.getText().toString().toLowerCase();
+                String password = passwordEditText.getText().toString();
 
                 if ((!username.isEmpty()) && (!password.isEmpty())){
-                    validationError = validateUserNameEditText(username);
+                    String validationError = validateUserNameEditText(username);
 
                     switch (validationError){
                         case "valid": {
@@ -66,7 +58,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
-
     public String validateUserNameEditText(String username){
         if (username.length() != 8){
             return "invalid length";
@@ -77,7 +68,6 @@ public class LoginActivity extends AppCompatActivity {
         }
         return "valid";
     }
-
     protected void displayToast(String toastContent){
         if (!toastContent.isEmpty()){
             Toast.makeText(getApplicationContext(), toastContent, Toast.LENGTH_SHORT).show();

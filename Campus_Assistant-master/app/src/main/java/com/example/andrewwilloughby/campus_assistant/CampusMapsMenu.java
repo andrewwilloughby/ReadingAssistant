@@ -11,25 +11,20 @@ public class CampusMapsMenu extends AMenu {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        Button whiteknightsBtn;
-        Button loroBtn;
-        Button hallsBtn;
-
         setContentView(R.layout.activity_campus_maps_menu);
 
         setTitle("Campus Maps");
         initialiseToolbarBtns();
 
-        whiteknightsBtn = (Button) findViewById(R.id.campusMapsMenuWhiteknightsBtn);
+        Button whiteknightsBtn = (Button) findViewById(R.id.campusMapsMenuWhiteknightsBtn);
         whiteknightsBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){ launchWebView("Whiteknights Campus Map"); } });
 
-        loroBtn = (Button) findViewById(R.id.campusMapsLoroBtn);
+        Button loroBtn = (Button) findViewById(R.id.campusMapsLoroBtn);
         loroBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){ launchWebView("London Road Campus Map"); } });
 
-        hallsBtn = (Button) findViewById(R.id.campusMapsHallsBtn);
+        Button hallsBtn = (Button) findViewById(R.id.campusMapsHallsBtn);
         hallsBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){ launchWebView("Student Halls Map"); } });
 

@@ -9,10 +9,9 @@ import java.net.URL;
  class DownloadUrl {
 
     String readUrl(String string){
-        String data;
+        String data, line;
         InputStream inputStream = null;
         HttpURLConnection httpURLConnection = null;
-        String line;
 
         try {
             URL url = new URL(string);

@@ -26,13 +26,6 @@ public class MainActivity extends AMenu {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Button studentInfoBtn;
-        Button latestNewsBtn;
-        Button campusNavBtn;
-        Button travelInfoBtn;
-        Button bbEmailBtn;
-        Button timetableBtn;
-
         setContentView(R.layout.activity_main);
         final LinearLayout gridLayout = (LinearLayout) findViewById(R.id.gridLayout);
         expList = (ExpandableListView) findViewById(R.id.expandableList);
@@ -84,36 +77,36 @@ public class MainActivity extends AMenu {
         List<String> timetableItemsList = new ArrayList<>(Arrays.asList(timetableItems));
         menuItemsList.put(menuCategory.get(5), timetableItemsList);
 
-        studentInfoBtn = (Button) findViewById(R.id.mainStudentInfoBtn);
+        Button studentInfoBtn = (Button) findViewById(R.id.mainStudentInfoBtn);
         studentInfoBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){launchActivity("student info menu");
             }
         });
 
-        latestNewsBtn = (Button) findViewById(R.id.mainLatestNewsBtn);
+        Button latestNewsBtn = (Button) findViewById(R.id.mainLatestNewsBtn);
         latestNewsBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){launchActivity("latest news");
             }
         });
 
-        campusNavBtn = (Button) findViewById(R.id.mainCampusNavBtn);
+        Button campusNavBtn = (Button) findViewById(R.id.mainCampusNavBtn);
         campusNavBtn.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){launchActivity("campus nav menu");
             }
         });
 
-        travelInfoBtn = (Button) findViewById(R.id.mainTravelInfoBtn);
+        Button travelInfoBtn = (Button) findViewById(R.id.mainTravelInfoBtn);
         travelInfoBtn.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){launchActivity("travel info menu");
             }
         });
 
-        bbEmailBtn = (Button) findViewById(R.id.mainBbEmailBtn);
+        Button bbEmailBtn = (Button) findViewById(R.id.mainBbEmailBtn);
         bbEmailBtn.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){launchActivity("bb email menu"); }
         });
 
-        timetableBtn = (Button) findViewById(R.id.mainTimetableBtn);
+        Button timetableBtn = (Button) findViewById(R.id.mainTimetableBtn);
         timetableBtn.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
                 launchActivity("timetable");

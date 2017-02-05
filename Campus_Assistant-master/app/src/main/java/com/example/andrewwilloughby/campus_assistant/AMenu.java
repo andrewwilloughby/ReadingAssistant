@@ -12,8 +12,7 @@ import android.widget.Toast;
 public abstract class AMenu extends AppCompatActivity {
 
     // Defines the buttons used within the top toolbar.
-    protected ImageButton safetyBtn;
-    protected ImageButton viewStyleBtn;
+    protected ImageButton safetyBtn, viewStyleBtn;
 
     // Used to define which menu layout to use (1 = grid buttons, 2 = Expandable menu list).
     protected int MENU_MODE;
@@ -158,30 +157,24 @@ public abstract class AMenu extends AppCompatActivity {
     }
 
     protected boolean isNetworkAvailable() {
-
-        // Simple, but important, check for an active network connection.
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
 
-        // Returns true or false indicating whether network is available.
         if (null != activeNetworkInfo){
             return true;
         } else {
             return false;
         }
     }
-
     protected void displayToast(String toastContent){
         if (!toastContent.isEmpty()){
             Toast.makeText(getApplicationContext(), toastContent, Toast.LENGTH_SHORT).show();
         }
     }
-
     public int getMENU_MODE(){
         return MENU_MODE;
     }
-
     public void setMENU_MODE(int value){
         MENU_MODE = value;
     }

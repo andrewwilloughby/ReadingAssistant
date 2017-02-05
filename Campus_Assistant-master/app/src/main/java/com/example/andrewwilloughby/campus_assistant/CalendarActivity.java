@@ -55,22 +55,19 @@ public class CalendarActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     Calendar studentCalendar;
     Context context;
-    private Button todayBtn;
-    DateFormat eventTimeFormat = new SimpleDateFormat("h:mma");
-    DateFormat eventDateFormat = new SimpleDateFormat("dd/MM/yyyy");
-    private String username = null;
-    private String password = null;
-    private static String file_url = "https://www.reading.ac.uk/mytimetable/m/";
-    String calendarString = null;
-    Boolean credentialsFailFlag = false;
-    Boolean noCredentialsFlag = false;
+    DateFormat eventTimeFormat = new SimpleDateFormat("h:mma"), eventDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    private String username = null, password = null, calendarString = null;
+    Boolean credentialsFailFlag = false, noCredentialsFlag = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
 
+        String timetableUrl = "https://www.reading.ac.uk/mytimetable/m/";
+
         setTitle("Student Timetable");
+
         context = this;
         eventsList = new ArrayList<>();
 
@@ -84,7 +81,7 @@ public class CalendarActivity extends AppCompatActivity {
         if (noCredentialsFlag){
             Toast.makeText(context, "Please enter credentials in settings.", Toast.LENGTH_SHORT).show();
         } else {
-            new DownloadTimetable().execute(file_url);
+            new DownloadTimetable().execute(timetableUrl);
         }
 
         lv = (ListView) findViewById(R.id.dayEventsListView);
@@ -105,8 +102,7 @@ public class CalendarActivity extends AppCompatActivity {
             }
         });
 
-
-        todayBtn = (Button) findViewById(R.id.todayBtn);
+        Button todayBtn = (Button) findViewById(R.id.todayBtn);
         todayBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 calendarView.setDate(System.currentTimeMillis(),false,true);
