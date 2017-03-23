@@ -10,7 +10,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class LatestNewsUnitTests {
 
-    private LatestNews latestNews = new LatestNews();
+    private LatestNewsActivity latestNewsActivity = new LatestNewsActivity();
 
 
 }

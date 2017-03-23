@@ -80,7 +80,7 @@ public class openLibraryWebPage {
         intended(allOf(
                 hasExtra(equalTo("webpageURL"), equalTo("http://www.reading.ac.uk/library/")),
                 hasExtra(equalTo("webpageName"), equalTo("Library")),
-                hasComponent("com.example.andrewwilloughby.campus_assistant.WebpageView")));
+                hasComponent("com.example.andrewwilloughby.campus_assistant.WebpageViewActivity")));
 
         ViewInteraction textView = onView(
                 allOf(withText("Library"),

@@ -9,18 +9,22 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+/**
+ * Abstract class for menus.
+ *
+ * This class contains the methods commonly used by the Menu activities.
+ *
+ * @author Andrew Willoughby
+ */
 public abstract class AMenu extends AppCompatActivity {
 
-    // Defines the buttons used within the top toolbar.
     protected ImageButton safetyBtn, viewStyleBtn;
+    protected static int menuMode;
 
-    // Used to define which menu layout to use (1 = grid buttons, 2 = Expandable menu list).
-    protected int MENU_MODE;
-
-    public AMenu(){
-        setMENU_MODE(2);
-    }
-
+    /**
+     * Method executed when a menu activity opens.
+     * Sets up the Safety Button and View Style Button in the menu bar.
+     */
     protected void initialiseToolbarBtns(){
 
         // Calls the 'safety' activity when clicked.
@@ -34,24 +38,23 @@ public abstract class AMenu extends AppCompatActivity {
         viewStyleBtn = (ImageButton) findViewById(R.id.viewStyleBtn);
         viewStyleBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){
-                // When the current menu view is grid buttons, change viewStyleBtn to show grid, change MENU_MODE to 2 and launch the main menu activity.
-                if(getMENU_MODE() == 1){
+                if(getmenuMode() == 1){
                     viewStyleBtn.setImageResource(R.drawable.grid_icon);
-                    setMENU_MODE(2);
-                    System.out.println(getMENU_MODE());
+                    setMenuMode(2);
                     launchActivity("main menu");
-
-                    // Otherwise do the opposite, but no need to launch the main menu activity again.
-                } else if(getMENU_MODE() == 2){
+                } else if(getmenuMode() == 2){
                     viewStyleBtn.setImageResource(R.drawable.list_icon);
-                    setMENU_MODE(1);
-                    System.out.println(getMENU_MODE());
-                    launchActivity("main menu");
+                    setMenuMode(1);
                 }
             }
         });
     }
 
+    /**
+     * Method that launches an activity based on the value of activityName parameter.
+     *
+     * @param activityName name of the activity to be launched.
+     */
     protected void launchActivity(String activityName){
         Intent intent = null;
 
@@ -62,46 +65,50 @@ public abstract class AMenu extends AppCompatActivity {
                 intent.putExtra("listmode", true);
                 break;
             case "student info menu":
-                intent = new Intent(this, StudentInfoMenu.class);
+                intent = new Intent(this, StudentInfoMenuActivity.class);
                 break;
             case "latest news":
-                intent = new Intent(this, LatestNews.class);
+                intent = new Intent(this, LatestNewsActivity.class);
                 break;
             case "campus nav menu":
-                intent = new Intent(this, CampusNavigationMenu.class);
+                intent = new Intent(this, CampusNavigationMenuActivity.class);
                 break;
             case "travel info menu":
-                intent = new Intent(this, TravelInformationMenu.class);
+                intent = new Intent(this, TravelInformationMenuActivity.class);
                 break;
             case "bb email menu":
-                intent = new Intent(this, BBEmailMenu.class);
+                intent = new Intent(this, BBEmailMenuActivity.class);
                 break;
             case "timetable":
                 intent = new Intent(this, LoginActivity.class);
                 break;
             case "safety":
-                intent = new Intent(this, SafetyInfo.class);
+                intent = new Intent(this, SafetyInfoActivity.class);
                 break;
             case "interactive map":
-                intent = new Intent(this, MapsActivity.class);
+                intent = new Intent(this, InteractiveMapActivity.class);
                 break;
             case "campus maps":
-                intent = new Intent(this, CampusMapsMenu.class);
+                intent = new Intent(this, CampusMapsMenuActivity.class);
                 break;
             case "rail departures":
-                intent = new Intent(this, RailDepartures.class);
+                intent = new Intent(this, RailDeparturesActivity.class);
                 break;
             case "bus times":
-                intent = new Intent(this, BusTimes.class);
+                intent = new Intent(this, BusTimesActivity.class); break;
             default:
-                displayToast("No activity exists for that command.");
+                Toast.makeText(getApplicationContext(), "No activity exists for that command.", Toast.LENGTH_SHORT).show();
                 break;
         }
         startActivity(intent);
     }
 
+    /**
+     * Method that launches a web page based on the value of webpageName in the WebView activity.
+     *
+     * @param webpageName name of the web page to be launched.
+     */
     protected void launchWebView(String webpageName){
-        Intent intent = new Intent(this, WebpageView.class);
         String url = null;
 
         switch(webpageName){
@@ -149,33 +156,45 @@ public abstract class AMenu extends AppCompatActivity {
                 break;
         }
 
-        intent.putExtra("webpageURL", url);
-        intent.putExtra("webpageName", webpageName);
+        Intent intent = new Intent(this, WebpageViewActivity.class)
+                .putExtra("webpageURL", url)
+                .putExtra("webpageName", webpageName);
 
         startActivity(intent);
-
     }
 
+    /**
+     * Method that checks the availability of an active network connection.
+     *
+     * @return boolean value to indicate availability of network.
+     */
     protected boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
 
-        if (null != activeNetworkInfo){
+        if (activeNetworkInfo != null){
             return true;
         } else {
             return false;
         }
     }
-    protected void displayToast(String toastContent){
-        if (!toastContent.isEmpty()){
-            Toast.makeText(getApplicationContext(), toastContent, Toast.LENGTH_SHORT).show();
-        }
+
+    /**
+     * Getter method for the MENU_MODE value, to indicate the current menu mode.
+     *
+     * @return MENU_MODE value, indicating current view mode.
+     */
+    public int getmenuMode(){
+        return menuMode;
     }
-    public int getMENU_MODE(){
-        return MENU_MODE;
-    }
-    public void setMENU_MODE(int value){
-        MENU_MODE = value;
+
+    /**
+     * Setter method for MENU_MODE, to update the value of the current menu view mode.
+     *
+     * @param value
+     */
+    public void setMenuMode(int value){
+        menuMode = value;
     }
 }

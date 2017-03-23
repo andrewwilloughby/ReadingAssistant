@@ -19,28 +19,28 @@ public class LoginActivityUnitTests {
     @Test
     public void testUsernameValidation_ValidUsername() {
         String expected = "valid";
-        String actual = loginActivity.validateUserNameEditText("bc016938");
+        String actual = loginActivity.validateUsernameEditText("bc016938");
         assertThat(actual, is(expected));
     }
 
     @Test
     public void testUsernameValidation_IncorrectLength(){
         String expected = "invalid length";
-        String actual = loginActivity.validateUserNameEditText("bc016938000");
+        String actual = loginActivity.validateUsernameEditText("bc016938000");
         assertThat(actual, is(expected));
     }
 
     @Test
     public void testUsernameValidation_IncorrectFormat(){
         String expected = "invalid format";
-        String actual = loginActivity.validateUserNameEditText("00016938");
+        String actual = loginActivity.validateUsernameEditText("00016938");
         assertThat(actual, is(expected));
     }
 
     @Test
     public void testUsernameValidation_ContainsSpecialCharacters(){
         String expected = "special characters";
-        String actual = loginActivity.validateUserNameEditText("$$016938");
+        String actual = loginActivity.validateUsernameEditText("$$016938");
         assertThat(actual, is(expected));
     }
 }

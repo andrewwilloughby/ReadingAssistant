@@ -28,7 +28,7 @@ import static org.hamcrest.Matchers.equalTo;
 public class TravelInformationMenuInstrumentedTests {
 
     @Rule
-    public IntentsTestRule<TravelInformationMenu> travelInformationMenuIntentsTestRule = new IntentsTestRule<TravelInformationMenu>(TravelInformationMenu.class);
+    public IntentsTestRule<TravelInformationMenuActivity> travelInformationMenuIntentsTestRule = new IntentsTestRule<TravelInformationMenuActivity>(TravelInformationMenuActivity.class);
 
     @Test
     public void travelInformationMenuPreRequisites(){
@@ -58,7 +58,7 @@ public class TravelInformationMenuInstrumentedTests {
     @Test
     public void testSafetyButtonClickFiresCorrectIntent(){
         onView(withId(R.id.safetyBtn)).perform(click());
-        intended(hasComponent("com.example.andrewwilloughby.campus_assistant.SafetyInfo"));
+        intended(hasComponent("com.example.andrewwilloughby.campus_assistant.SafetyInfoActivity"));
     }
 
     @Test
@@ -74,7 +74,7 @@ public class TravelInformationMenuInstrumentedTests {
     @Test
     public void testBusTimesButtonClickFiresCorrectIntent(){
         onView(withId(R.id.travelInfoBusTimesBtn)).perform(click());
-        intended(hasComponent("com.example.andrewwilloughby.campus_assistant.BusTimes"));
+        intended(hasComponent("com.example.andrewwilloughby.campus_assistant.BusTimesActivity"));
     }
 
     @Test
@@ -90,7 +90,7 @@ public class TravelInformationMenuInstrumentedTests {
     @Test
     public void testRailTimesButtonClickFiresCorrectIntent(){
         onView(withId(R.id.travelInfoRailTimesBtn)).perform(click());
-        intended(hasComponent("com.example.andrewwilloughby.campus_assistant.RailDepartures"));
+        intended(hasComponent("com.example.andrewwilloughby.campus_assistant.RailDeparturesActivity"));
     }
 
     @Test
@@ -110,6 +110,6 @@ public class TravelInformationMenuInstrumentedTests {
         intended(allOf(
                 hasExtra(equalTo("webpageURL"), equalTo("http://www.reading-buses.co.uk/files/timetables/current/claret%20times.pdf")),
                 hasExtra(equalTo("webpageName"), equalTo("University Bus Timetable")),
-                hasComponent("com.example.andrewwilloughby.campus_assistant.WebpageView")));
+                hasComponent("com.example.andrewwilloughby.campus_assistant.WebpageViewActivity")));
     }
 }

@@ -20,104 +20,60 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.equalTo;
 
-/**
- * Created by andrewwilloughby on 18/01/2017.
- */
-
 @RunWith(AndroidJUnit4.class)
 public class CampusMapsMenuInstrumentedTests {
 
     @Rule
-    public IntentsTestRule<CampusMapsMenu> campusMapsMenuIntentsTestRule = new IntentsTestRule<CampusMapsMenu>(CampusMapsMenu.class);
+    public IntentsTestRule<CampusMapsMenuActivity> campusMapsMenuIntentsTestRule = new IntentsTestRule<CampusMapsMenuActivity>(CampusMapsMenuActivity.class);
 
     @Test
-    public void campusMapsMenuPreRequisites(){
-        onView(withId(R.id.viewStyleBtn)).check(matches(isDisplayed()));
-        onView(withId(R.id.safetyBtn)).check(matches(isDisplayed()));
-        onView(withId(R.id.campusMapsMenuWhiteknightsBtn)).check(matches(isDisplayed()));
-        onView(withId(R.id.campusMapsLoroBtn)).check(matches(isDisplayed()));
-        onView(withId(R.id.campusMapsHallsBtn)).check(matches(isDisplayed()));
+    public void testCampusMapsMenuLayout(){
+        onView(withId(R.id.viewStyleBtn)).check(matches(allOf(isDisplayed(), isClickable())));
+        onView(withId(R.id.safetyBtn)).check(matches(allOf(isDisplayed(), isClickable())));
+        onView(withId(R.id.campusMapsMenuWhiteknightsBtn)).check(matches(allOf(isDisplayed(), isClickable(), withText("Whiteknights Campus"))));
+        onView(withId(R.id.campusMapsLoroBtn)).check(matches(allOf(isDisplayed(), isClickable(), withText("London Road Campus"))));
+        onView(withId(R.id.campusMapsHallsBtn)).check(matches(allOf(isDisplayed(), isClickable(), withText("Student Halls"))));
     }
 
     @Test
-    public void testViewStyleButtonIsClickable(){
-        onView(withId(R.id.viewStyleBtn)).check(matches(isClickable()));
-    }
-
-    @Test
-    public void testViewStyleButtonFiresCorrectIntent(){
+    public void testViewStyleButtonOpensMainActivity(){
         onView(withId(R.id.viewStyleBtn)).perform(click());
         intended(hasComponent("com.example.andrewwilloughby.campus_assistant.MainActivity"));
     }
 
     @Test
-    public void testSafetyButtonIsClickable(){
-        onView(withId(R.id.safetyBtn)).check(matches(isClickable()));
-    }
-
-    @Test
-    public void testSafetyButtonClickFiresCorrectIntent(){
+    public void testSafetyButtonOpensSafetyInfoActivity(){
         onView(withId(R.id.safetyBtn)).perform(click());
-        intended(hasComponent("com.example.andrewwilloughby.campus_assistant.SafetyInfo"));
+        intended(hasComponent("com.example.andrewwilloughby.campus_assistant.SafetyInfoActivity"));
     }
 
     @Test
-    public void testWhiteknightsButtonIsClickable(){
-        onView(withId(R.id.campusMapsMenuWhiteknightsBtn)).check(matches(isClickable()));
-    }
-
-    @Test
-    public void testWhiteknightsButtonHasCorrectText(){
-        onView(allOf(withId(R.id.campusMapsMenuWhiteknightsBtn), withText(R.string.campusMapsWhiteknightsBtnText)));
-    }
-
-    @Test
-    public void testWhiteknightsButtonClickFiresCorrectIntent(){
+    public void testWhiteknightsButtonLoadsCorrectWebView(){
         onView(withId(R.id.campusMapsMenuWhiteknightsBtn)).perform(click());
 
         intended(allOf(
                 hasExtra(equalTo("webpageURL"), equalTo("http://www.reading.ac.uk/web/FILES/whiteknights-campus-map-and-keys-2016.pdf")),
                 hasExtra(equalTo("webpageName"), equalTo("Whiteknights Campus Map")),
-                hasComponent("com.example.andrewwilloughby.campus_assistant.WebpageView")));
+                hasComponent("com.example.andrewwilloughby.campus_assistant.WebpageViewActivity")));
     }
 
     @Test
-    public void testLoroButtonIsClickable(){
-        onView(withId(R.id.campusMapsLoroBtn)).check(matches(isClickable()));
-    }
-
-    @Test
-    public void testLoroButtonHasCorrectText(){
-        onView(allOf(withId(R.id.campusMapsLoroBtn), withText(R.string.campusMapsLoroBtnText)));
-    }
-
-    @Test
-    public void testLoroButtonClickFiresCorrectIntent(){
+    public void testLoroButtonLoadsCorrectWebView(){
         onView(withId(R.id.campusMapsLoroBtn)).perform(click());
 
         intended(allOf(
                 hasExtra(equalTo("webpageURL"), equalTo("http://www.reading.ac.uk/web/FILES/University-of-Reading-London-Road-COLOUR-NUMERIC.pdf")),
                 hasExtra(equalTo("webpageName"), equalTo("London Road Campus Map")),
-                hasComponent("com.example.andrewwilloughby.campus_assistant.WebpageView")));
+                hasComponent("com.example.andrewwilloughby.campus_assistant.WebpageViewActivity")));
     }
 
     @Test
-    public void testHallsButtonIsClickable(){
-        onView(withId(R.id.campusMapsHallsBtn)).check(matches(isClickable()));
-    }
-
-    @Test
-    public void testHallsButtonHasCorrectText(){
-        onView(allOf(withId(R.id.campusMapsHallsBtn), withText(R.string.campusMapsHallsBtnText)));
-    }
-
-    @Test
-    public void testHallsButtonClickFiresCorrectIntent(){
+    public void testHallsButtonLoadsCorrectWebView(){
         onView(withId(R.id.campusMapsHallsBtn)).perform(click());
 
         intended(allOf(
                 hasExtra(equalTo("webpageURL"), equalTo("https://www.reading.ac.uk/web/FILES/accommodation/Walking_distances_to_halls.pdf")),
                 hasExtra(equalTo("webpageName"), equalTo("Student Halls Map")),
-                hasComponent("com.example.andrewwilloughby.campus_assistant.WebpageView")));
+                hasComponent("com.example.andrewwilloughby.campus_assistant.WebpageViewActivity")));
     }
 }

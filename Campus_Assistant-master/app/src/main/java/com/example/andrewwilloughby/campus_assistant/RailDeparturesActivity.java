@@ -20,17 +20,28 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
-public class RailDepartures extends AppCompatActivity {
+/**
+ * Activity for displaying live rail departures.
+ *
+ * @author Andrew Willoughby
+ */
+public class RailDeparturesActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener{
 
     private ProgressDialog pDialog;
     private ListView railList;
-    ArrayList<HashMap<String, String>> departureList;
+    private ArrayList<HashMap<String, String>> departureList;
+    private SwipeRefreshLayout swipeLayout;
 
+    /**
+     * Method to set up the Activity upon creation.
+     *
+     * @param savedInstanceState parameter which indicates the previous state of the activity.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_rail_departures);
+        setContentView(R.layout.rail_departures);
         setTitle("Live Rail Departures: Reading (RDG)");
 
         departureList = new ArrayList<>();
@@ -39,30 +50,28 @@ public class RailDepartures extends AppCompatActivity {
 
         new GetDepartures().execute();
 
-        final SwipeRefreshLayout swipeLayout = (SwipeRefreshLayout) findViewById(R.id.rail_swipe_layout);
-
-        swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                swipeLayout.setRefreshing(true);
-                new GetDepartures().execute();
-                swipeLayout.setRefreshing(false);
-            }
-        });
+        swipeLayout = (SwipeRefreshLayout) findViewById(R.id.rail_swipe_layout);
+        swipeLayout.setOnRefreshListener(this);
     }
 
-    protected void displayToast(String toastContent){
-        if (!toastContent.isEmpty()){
-            Toast.makeText(getApplicationContext(), toastContent, Toast.LENGTH_SHORT).show();
-        }
+    /**
+     * Method to handle the onRefresh events from the swipe layout.
+     */
+    public void onRefresh() {
+        swipeLayout.setRefreshing(true);
+        new GetDepartures().execute();
+        swipeLayout.setRefreshing(false);
     }
 
+    /**
+     * Private AsyncTask to download the live rail departures away from the main thread.
+     */
     private class GetDepartures extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            pDialog = new ProgressDialog(RailDepartures.this);
+            pDialog = new ProgressDialog(RailDeparturesActivity.this);
             pDialog.setMessage("Please wait...");
             pDialog.setCancelable(false);
             pDialog.show();
@@ -70,7 +79,7 @@ public class RailDepartures extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... arg0) {
-            String url = "1v3/uk/train/station/RDG/live.json?app_id=03bf8009&app_key=d9307fd91b0247c607e098d5effedc97&darwin=false&train_status=passenger";
+            String url = "http://transportapi.com/v3/uk/train/station/RDG/live.json?app_id=03bf8009&app_key=d9307fd91b0247c607e098d5effedc97&darwin=false&train_status=passenger";
             DownloadUrl downloadUrl = new DownloadUrl();
             String jsonStr = downloadUrl.readUrl(url);
 
@@ -136,7 +145,7 @@ public class RailDepartures extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            displayToast("Error with live information. Please retry.");
+                            Toast.makeText(getApplicationContext(), "Error with live information. Please retry.", Toast.LENGTH_SHORT).show();
                         }
                     });
 
@@ -145,7 +154,7 @@ public class RailDepartures extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        displayToast("Couldn't get live departure data. Please check network connection.");
+                        Toast.makeText(getApplicationContext(), "Couldn't get live departure data. Please check network connection.", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -161,7 +170,7 @@ public class RailDepartures extends AppCompatActivity {
             }
 
             ListAdapter adapter = new SimpleAdapter(
-                    RailDepartures.this, departureList,
+                    RailDeparturesActivity.this, departureList,
                     R.layout.list_item, new String[]{"departureTime", "destination",
                     "platform", "expectedDepTime", "minsLate"}, new int[]{R.id.scheduledArrTextView,
                     R.id.destinationTextView, R.id.platformTextView, R.id.expectedDepTextView, R.id.minsLateTextView});

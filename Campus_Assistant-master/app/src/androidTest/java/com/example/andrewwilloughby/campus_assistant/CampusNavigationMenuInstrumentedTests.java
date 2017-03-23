@@ -18,75 +18,41 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 
-/**
- * Created by andrewwilloughby on 18/01/2017.
- */
-
 @RunWith(AndroidJUnit4.class)
 public class CampusNavigationMenuInstrumentedTests {
 
     @Rule
-    public IntentsTestRule<CampusNavigationMenu> studentInfoMenuIntentsTestRule = new IntentsTestRule<CampusNavigationMenu>(CampusNavigationMenu.class);
+    public IntentsTestRule<CampusNavigationMenuActivity> studentInfoMenuIntentsTestRule = new IntentsTestRule<CampusNavigationMenuActivity>(CampusNavigationMenuActivity.class);
 
     @Test
-    public void campusNavigationMenuPreRequisites(){
-        onView(withId(R.id.viewStyleBtn)).check(matches(isDisplayed()));
-        onView(withId(R.id.safetyBtn)).check(matches(isDisplayed()));
-        onView(withId(R.id.campusNavInteractiveMapBtn)).check(matches(isDisplayed()));
-        onView(withId(R.id.campusNavMapsBtn)).check(matches(isDisplayed()));
+    public void testCampusNavigationMenuLayout(){
+        onView(withId(R.id.viewStyleBtn)).check(matches(allOf(isDisplayed(), isClickable())));
+        onView(withId(R.id.safetyBtn)).check(matches(allOf(isDisplayed(), isClickable())));
+        onView(withId(R.id.campusNavInteractiveMapBtn)).check(matches(allOf(isDisplayed(), isClickable(), withText("Interactive Map"))));
+        onView(withId(R.id.campusNavMapsBtn)).check(matches(allOf(isDisplayed(), isClickable(), withText("Campus Maps"))));
     }
 
     @Test
-    public void testViewStyleButtonIsClickable(){
-        onView(withId(R.id.viewStyleBtn)).check(matches(isClickable()));
-    }
-
-    @Test
-    public void testViewStyleButtonFiresCorrectIntent(){
+    public void testViewStyleButtonOpensMainActivity(){
         onView(withId(R.id.viewStyleBtn)).perform(click());
         intended(hasComponent("com.example.andrewwilloughby.campus_assistant.MainActivity"));
     }
 
     @Test
-    public void testSafetyButtonIsClickable(){
-        onView(withId(R.id.safetyBtn)).check(matches(isClickable()));
-    }
-
-    @Test
-    public void testSafetyButtonClickFiresCorrectIntent(){
+    public void testSafetyButtonOpensSafetyInfoActivity(){
         onView(withId(R.id.safetyBtn)).perform(click());
-        intended(hasComponent("com.example.andrewwilloughby.campus_assistant.SafetyInfo"));
+        intended(hasComponent("com.example.andrewwilloughby.campus_assistant.SafetyInfoActivity"));
     }
 
     @Test
-    public void testInteractiveMapButtonIsClickable(){
-        onView(withId(R.id.campusNavInteractiveMapBtn)).check(matches(isClickable()));
-    }
-
-    @Test
-    public void testInteractiveMapButtonHasCorrectText(){
-        onView(allOf(withId(R.id.campusNavInteractiveMapBtn), withText(R.string.campusNavInteractiveMapBtnText)));
-    }
-
-    @Test
-    public void testInteractiveMapButtonFiresCorrectIntent(){
+    public void testInteractiveMapButtonOpensMapsActivity(){
         onView(withId(R.id.campusNavInteractiveMapBtn)).perform(click());
-        intended(hasComponent("com.example.andrewwilloughby.campus_assistant.MapsActivity"));
+        intended(hasComponent("com.example.andrewwilloughby.campus_assistant.InteractiveMapActivity"));
     }
 
     @Test
-    public void testCampusMapsButtonIsClickable(){
-        onView(withId(R.id.campusNavMapsBtn)).check(matches(isClickable()));
-    }
-
-    @Test
-    public void testCampusMapsButtonHasCorrectText(){
-        onView(allOf(withId(R.id.campusNavMapsBtn), withText(R.string.campusNavMapsBtnText)));
-    }
-
-    @Test
-    public void testCampusMapsButtonFiresCorrectIntent(){
+    public void testCampusMapsButtonOpensCampusMapsMenu(){
         onView(withId(R.id.campusNavMapsBtn)).perform(click());
-        intended(hasComponent("com.example.andrewwilloughby.campus_assistant.CampusMapsMenu"));
+        intended(hasComponent("com.example.andrewwilloughby.campus_assistant.CampusMapsMenuActivity"));
     }
 }

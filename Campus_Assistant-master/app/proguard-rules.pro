@@ -9,7 +9,7 @@
 
 # Add any project specific keep options here:
 
-# If your project uses WebpageView with JS, uncomment the following
+# If your project uses WebpageViewActivity with JS, uncomment the following
 # and specify the fully qualified class name to the JavaScript interface
 # class:
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {

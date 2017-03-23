@@ -40,7 +40,7 @@ public class SafetyInfoInstrumentedTests {
     private static final Uri INTENT_DATA_PHONE_NUMBER = Uri.parse("tel:" + VALID_PHONE_NUMBER);
 
     @Rule
-    public IntentsTestRule<SafetyInfo> safetyInfoIntentsTestRule = new IntentsTestRule<SafetyInfo>(SafetyInfo.class);
+    public IntentsTestRule<SafetyInfoActivity> safetyInfoIntentsTestRule = new IntentsTestRule<SafetyInfoActivity>(SafetyInfoActivity.class);
 
     @Test
     public void safetyInforPreRequisites(){
@@ -117,7 +117,7 @@ public class SafetyInfoInstrumentedTests {
         intended(Matchers.allOf(
                 hasExtra(equalTo("webpageURL"), equalTo("http://www.reading.ac.uk/web/FILES/security/secStayingSafe.pdf")),
                 hasExtra(equalTo("webpageName"), equalTo("Personal Safety Guide")),
-                hasComponent("com.example.andrewwilloughby.campus_assistant.WebpageView")));
+                hasComponent("com.example.andrewwilloughby.campus_assistant.WebpageViewActivity")));
     }
 
     @Test
@@ -137,7 +137,7 @@ public class SafetyInfoInstrumentedTests {
         intended(Matchers.allOf(
                 hasExtra(equalTo("webpageURL"), equalTo("http://www.reading.ac.uk/internal/health-and-safety/IncidentReportingandEmergencyProcedures/Report_an_Incident_online.aspx")),
                 hasExtra(equalTo("webpageName"), equalTo("Report Health & Safety Incident")),
-                hasComponent("com.example.andrewwilloughby.campus_assistant.WebpageView")));
+                hasComponent("com.example.andrewwilloughby.campus_assistant.WebpageViewActivity")));
     }
 
 }

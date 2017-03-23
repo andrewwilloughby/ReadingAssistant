@@ -20,7 +20,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 public class RailDeparturesInstrumentedTests {
 
     @Rule
-    public IntentsTestRule<RailDepartures> railDeparturesIntentsTestRule  = new IntentsTestRule<RailDepartures>(RailDepartures.class);
+    public IntentsTestRule<RailDeparturesActivity> railDeparturesIntentsTestRule  = new IntentsTestRule<RailDeparturesActivity>(RailDeparturesActivity.class);
 
     @Test
     public void railDeparturesPreRequisites(){

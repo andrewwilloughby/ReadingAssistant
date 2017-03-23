@@ -7,18 +7,25 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
-public class WebpageView extends AppCompatActivity {
+/**
+ * Activity for displaying web pages.
+ * @author Andrew Willoughby
+ */
+public class WebpageViewActivity extends AppCompatActivity {
 
+    /**
+     * Method to set up the Activity upon creation.
+     * @param savedInstanceState parameter which indicates the previous state of the activity.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         WebView webView = new WebView(this);
-        setContentView(R.layout.activity_web_view);
+        setContentView(R.layout.web_view);
 
-        Intent intent = getIntent();
-        String pageURL = intent.getExtras().getString("webpageURL");
-        String pageName = intent.getExtras().getString("webpageName");
+        String pageURL = getIntent().getExtras().getString("webpageURL");
+        String pageName = getIntent().getExtras().getString("webpageName");
 
         setTitle(pageName);
 

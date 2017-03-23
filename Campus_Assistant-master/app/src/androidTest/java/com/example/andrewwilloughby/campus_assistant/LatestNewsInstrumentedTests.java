@@ -23,7 +23,7 @@ import static org.hamcrest.Matchers.allOf;
 public class LatestNewsInstrumentedTests {
 
     @Rule
-    public IntentsTestRule<LatestNews> latestNewsIntentsTestRule = new IntentsTestRule<LatestNews>(LatestNews.class);
+    public IntentsTestRule<LatestNewsActivity> latestNewsIntentsTestRule = new IntentsTestRule<LatestNewsActivity>(LatestNewsActivity.class);
 
     @Test
     public void latestNewsPreRequisites(){

@@ -47,26 +47,35 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
-public class CalendarActivity extends AppCompatActivity {
+/**
+ * Activity for displaying student timetable.
+ *
+ * @author Andrew Willoughby
+ */
+public class CalendarActivity extends AppCompatActivity implements View.OnClickListener, CalendarView.OnDateChangeListener, AdapterView.OnItemClickListener{
 
-    CalendarView calendarView;
+    private CalendarView calendarView;
     private ListView lv;
-    ArrayList<HashMap<String, String>> eventsList;
+    private ArrayList<HashMap<String, String>> eventsList;
     private ProgressDialog progressDialog;
-    Calendar studentCalendar;
-    Context context;
-    DateFormat eventTimeFormat = new SimpleDateFormat("h:mma"), eventDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    private Calendar studentCalendar;
+    private Context context;
+    private DateFormat eventTimeFormat = new SimpleDateFormat("h:mma"), eventDateFormat = new SimpleDateFormat("dd/MM/yyyy");
     private String username = null, password = null, calendarString = null;
-    Boolean credentialsFailFlag = false, noCredentialsFlag = false;
+    private boolean credentialsFailFlag = false, noCredentialsFlag = false;
 
+    /**
+     * Method to set up the Activity upon creation.
+     *
+     * @param savedInstanceState parameter which indicates the previous state of the activity.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_calendar);
+        setContentView(R.layout.calendar_activity);
+        setTitle("Student Timetable");
 
         String timetableUrl = "https://www.reading.ac.uk/mytimetable/m/";
-
-        setTitle("Student Timetable");
 
         context = this;
         eventsList = new ArrayList<>();
@@ -79,108 +88,136 @@ public class CalendarActivity extends AppCompatActivity {
         }
 
         if (noCredentialsFlag){
-            Toast.makeText(context, "Please enter credentials in settings.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "No credentials found.", Toast.LENGTH_SHORT).show();
         } else {
             new DownloadTimetable().execute(timetableUrl);
         }
 
         lv = (ListView) findViewById(R.id.dayEventsListView);
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                HashMap<String, String> event =  (HashMap<String, String>) lv.getItemAtPosition(position);
-                String location = event.get("location");
-
-                String addressToPass = getBuildingAddress(location);
-                if ((addressToPass != null) && (addressToPass != "non existent")){
-                    Intent intent = new Intent(context, MapsActivity.class);
-                    intent.putExtra("search_value", addressToPass);
-                    startActivity(intent);
-                } else {
-                    Toast.makeText(context, "Unable to perform search on that location.", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+        lv.setOnItemClickListener(this);
 
         Button todayBtn = (Button) findViewById(R.id.todayBtn);
-        todayBtn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                calendarView.setDate(System.currentTimeMillis(),false,true);
-            }
-        });
+        todayBtn.setOnClickListener(this);
 
         calendarView = (CalendarView) findViewById(R.id.timetableCalendar);
         calendarView.setFirstDayOfWeek(2);
-
-        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-            @Override
-            public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
-                if (!credentialsFailFlag){
-                    Date selected = null;
-
-                    eventsList.clear();
-                    lv.setAdapter(null);
-
-                    String yearStr = Integer.toString(year);
-                    String monthStr = Integer.toString(month + 1);
-                    String dayStr = Integer.toString(dayOfMonth);
-                    String dateStr = dayStr + monthStr + yearStr;
-
-                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("ddMyyyy");
-
-                    try {
-                        selected = simpleDateFormat.parse(dateStr);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-
-                    if (selected != null) {
-                        Period period = new Period(new DateTime(selected), new Dur(1, 0, 0, 0));
-                        Filter filter = new Filter(new PeriodRule(period));
-
-                        for (Object object : filter.filter(studentCalendar.getComponents(Component.VEVENT))) {
-                            VEvent event = (VEvent) object;
-
-                            String summary = event.getSummary().toString();
-                            summary = summary.replace("SUMMARY;LANGUAGE=en-gb:", "");
-
-                            String location = event.getLocation().toString();
-                            location = location.replace("LOCATION:", "");
-
-                            DtStart eventStart = (DtStart) event.getProperty(Property.DTSTART);
-                            String eventStartDate = eventDateFormat.format(eventStart.getDate());
-                            String eventStartTime = eventTimeFormat.format(eventStart.getDate());
-
-                            DtEnd eventEnd = (DtEnd) event.getProperty(Property.DTEND);
-                            String eventEndDate = eventDateFormat.format(eventEnd.getDate());
-                            String eventEndTime = eventTimeFormat.format(eventEnd.getDate());
-
-                            String eventTiming = eventStartTime + " to " + eventEndTime;
-
-                            HashMap<String, String> calendarEvent = new HashMap<>();
-
-                            calendarEvent.put("summary", summary);
-                            calendarEvent.put("location", location);
-                            calendarEvent.put("startTime", eventStartTime);
-                            calendarEvent.put("startDate", eventStartDate);
-                            calendarEvent.put("endTime", eventEndTime);
-                            calendarEvent.put("endDate", eventEndDate);
-                            calendarEvent.put("eventTiming", eventTiming);
-
-                            eventsList.add(calendarEvent);
-
-                            ListAdapter adapter = new SimpleAdapter(
-                                    CalendarActivity.this, eventsList,
-                                    R.layout.timetable_list_item, new String[]{"summary", "eventTiming"}
-                                    , new int[]{R.id.summaryTextView, R.id.eventTimingTextView});
-                            lv.setAdapter(adapter);
-                        }
-                    }
-                }
-            }
-        });
+        calendarView.setOnDateChangeListener(this);
     }
 
+    /**
+     * Method to handle click events on items in the events listview.
+     *
+     * @param parent the parent of the item being clicked.
+     * @param view the listview.
+     * @param position the position in the listview of the item.
+     * @param id
+     */
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        HashMap<String, String> event =  (HashMap<String, String>) lv.getItemAtPosition(position);
+
+        String addressToPass = getBuildingAddress(event.get("location"));
+
+        if ((addressToPass != null) && (addressToPass != "non existent")){
+            Intent intent = new Intent(context, InteractiveMapActivity.class);
+            intent.putExtra("search_value", addressToPass);
+            startActivity(intent);
+        } else {
+            Toast.makeText(getApplicationContext(), "Unable to perform search on that location.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     * Method to handle dates within the Calendar being selected.
+     *
+     * @param view the CalendarView within which the change occurred.
+     * @param year the year of the date selected.
+     * @param month the month of the date selected.
+     * @param dayOfMonth the day of the month of the date selected.
+     */
+    public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
+        if (!credentialsFailFlag){
+            Date selected = null;
+
+            eventsList.clear();
+            lv.setAdapter(null);
+
+            String yearStr = Integer.toString(year);
+            String monthStr = Integer.toString(month + 1);
+            String dayStr = Integer.toString(dayOfMonth);
+            String dateStr = dayStr + monthStr + yearStr;
+
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("ddMyyyy");
+
+            try {
+                selected = simpleDateFormat.parse(dateStr);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            if (selected != null) {
+                Period period = new Period(new DateTime(selected), new Dur(1, 0, 0, 0));
+                Filter filter = new Filter(new PeriodRule(period));
+
+                for (Object object : filter.filter(studentCalendar.getComponents(Component.VEVENT))) {
+                    VEvent event = (VEvent) object;
+
+                    String summary = event.getSummary().toString();
+                    summary = summary.replace("SUMMARY;LANGUAGE=en-gb:", "");
+
+                    String location = event.getLocation().toString();
+                    location = location.replace("LOCATION:", "");
+
+                    DtStart eventStart = (DtStart) event.getProperty(Property.DTSTART);
+                    String eventStartDate = eventDateFormat.format(eventStart.getDate());
+                    String eventStartTime = eventTimeFormat.format(eventStart.getDate());
+
+                    DtEnd eventEnd = (DtEnd) event.getProperty(Property.DTEND);
+                    String eventEndDate = eventDateFormat.format(eventEnd.getDate());
+                    String eventEndTime = eventTimeFormat.format(eventEnd.getDate());
+
+                    String eventTiming = eventStartTime + " to " + eventEndTime;
+
+                    HashMap<String, String> calendarEvent = new HashMap<>();
+
+                    calendarEvent.put("summary", summary);
+                    calendarEvent.put("location", location);
+                    calendarEvent.put("startTime", eventStartTime);
+                    calendarEvent.put("startDate", eventStartDate);
+                    calendarEvent.put("endTime", eventEndTime);
+                    calendarEvent.put("endDate", eventEndDate);
+                    calendarEvent.put("eventTiming", eventTiming);
+
+                    eventsList.add(calendarEvent);
+
+                    ListAdapter adapter = new SimpleAdapter(
+                            CalendarActivity.this, eventsList,
+                            R.layout.timetable_list_item, new String[]{"summary", "eventTiming"}
+                            , new int[]{R.id.summaryTextView, R.id.eventTimingTextView});
+                    lv.setAdapter(adapter);
+                }
+            }
+        }
+    }
+
+    /**
+     * Method to handle onClick events from buttons displayed in the activity.
+     *
+     * @param viewInput the view initiating the onClick method.
+     */
+    public void onClick(View viewInput){
+        switch (viewInput.getId()){
+            case R.id.todayBtn:{
+                calendarView.setDate(System.currentTimeMillis(),false,true); break;
+            }
+        }
+    }
+
+    /**
+     * Method that returns the string value to search within the Google Map to find buildings on the UoR campus.
+     *
+     * @param buildingName the location of the event clicked in the timetable.
+     * @return string value which will be placed in the Search box within the Map activity.
+     */
     protected String getBuildingAddress(String buildingName){
         switch (buildingName.substring(0, 3).toLowerCase()){
             case "agr"  : return "Agriculture building, Reading RG6 6BZ";
@@ -210,6 +247,9 @@ public class CalendarActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Method that handles the hardware back button being pressed, opening the main activity.
+     */
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -218,6 +258,9 @@ public class CalendarActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    /**
+     * Private AsyncTask to download the student timetable away from the main thread.
+     */
     private class DownloadTimetable extends AsyncTask<String, Void, Void>{
 
         protected void onPreExecute(){
@@ -259,11 +302,11 @@ public class CalendarActivity extends AppCompatActivity {
                 calendarString = stringBuilder.toString();
 
             } catch (UnknownHostException e) {
-                Toast.makeText(context, "Download failed, no network connection.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Download failed, no network connection.", Toast.LENGTH_SHORT).show();
             } catch (UnsupportedEncodingException e) {
-                Toast.makeText(context, "Timetable encoding error, please retry.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Timetable encoding error, please retry.", Toast.LENGTH_SHORT).show();
             } catch (Exception e) {
-                Toast.makeText(context, "An unknown error occurred", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "An unknown error occurred", Toast.LENGTH_SHORT).show();
             }
 
             if (calendarString != null){
@@ -272,7 +315,7 @@ public class CalendarActivity extends AppCompatActivity {
                 try {
                     studentCalendar = calendarBuilder.build(stringReader);
                 } catch (IOException | ParserException e) {
-                    Toast.makeText(context, "Error reading Student Timetable. Please try again", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Error reading Student Timetable. Please try again", Toast.LENGTH_SHORT).show();
                 }
             } else {
                 credentialsFailFlag = true;

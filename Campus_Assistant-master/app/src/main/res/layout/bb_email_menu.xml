@@ -2,18 +2,18 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 xmlns:app="http://schemas.android.com/apk/res-auto"
 xmlns:tools="http://schemas.android.com/tools"
-android:id="@+id/activity_campus_navigation_menu"
+android:id="@+id/activity_bbemail_menu"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
-android:paddingBottom="0dp"
-android:paddingLeft="0dp"
-android:paddingRight="0dp"
-android:paddingTop="0dp"
-tools:context="com.example.andrewwilloughby.campus_assistant.CampusNavigationMenu">
+    tools:context="com.example.andrewwilloughby.campus_assistant.BBEmailMenuActivity"
+android:background="?android:attr/detailsElementBackground">
+
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
 
         <LinearLayout
         android:orientation="vertical"
@@ -34,6 +34,7 @@ tools:context="com.example.andrewwilloughby.campus_assistant.CampusNavigationMen
                 android:id="@+id/headBackgroundImage"
                 android:scaleType="fitXY"
                 android:layout_height="175dp" />
+
         </FrameLayout>
 
             <LinearLayout
@@ -86,40 +87,41 @@ tools:context="com.example.andrewwilloughby.campus_assistant.CampusNavigationMen
                 </LinearLayout>
 
             </LinearLayout>
-
-        <LinearLayout
+            <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:id="@+id/firstRowLayout"
+            android:id="@+id/first_row_layout"
             android:layout_height="wrap_content"
             android:paddingBottom="5dp"
             android:paddingLeft="5dp"
             android:paddingRight="5dp">
 
             <Button
-                android:text="@string/campusNavInteractiveMapBtnText"
+                android:text="@string/bbemailBlackboardBtnText"
                 android:layout_width="90dp"
-                android:id="@+id/campusNavInteractiveMapBtn"
+                android:layout_height="95dp"
+                android:id="@+id/bbemailMenuBlackboardBtn"
                 android:layout_weight="1"
                 android:textSize="12sp"
-                android:background="@color/CampusNavigationColor"
+                android:background="@color/BBEmailColour"
                 android:layout_marginRight="2.5dp"
-                android:textColor="@color/TextWhite"
                 android:textAllCaps="false"
-                android:layout_height="95dp" />
+                android:textColor="@color/TextWhite" />
 
             <Button
-                android:text="@string/campusNavMapsBtnText"
+                android:text="@string/bbemailEmailBtnText"
                 android:layout_width="90dp"
-                android:id="@+id/campusNavMapsBtn"
+                android:id="@+id/bbemailMenuEmailBtn"
                 android:layout_weight="1"
+                android:layout_height="95dp"
                 android:textSize="12sp"
-                android:background="@color/CampusNavigationColor"
+                android:background="@color/BBEmailColour"
                 android:layout_marginLeft="2.5dp"
-                android:textColor="@color/TextWhite"
                 android:textAllCaps="false"
-                android:layout_height="95dp" />
+                android:elevation="22dp"
+                android:textColor="@color/TextWhite" />
         </LinearLayout>
+
     </LinearLayout>
     </ScrollView>
 

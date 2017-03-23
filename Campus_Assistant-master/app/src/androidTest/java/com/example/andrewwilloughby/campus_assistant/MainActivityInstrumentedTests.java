@@ -67,7 +67,7 @@ public class MainActivityInstrumentedTests {
     @Test
     public void testSafetyButtonClickFiresCorrectIntent(){
         onView(withId(R.id.safetyBtn)).perform(click());
-        intended(hasComponent("com.example.andrewwilloughby.campus_assistant.SafetyInfo"));
+        intended(hasComponent("com.example.andrewwilloughby.campus_assistant.SafetyInfoActivity"));
     }
 
     @Test
@@ -84,11 +84,11 @@ public class MainActivityInstrumentedTests {
     public void testStudentInfoButtonClickFiresCorrectIntent(){
         try {
             onView(withId(R.id.mainStudentInfoBtn)).perform(click());
-            intended(hasComponent("com.example.andrewwilloughby.campus_assistant.StudentInfoMenu"));
+            intended(hasComponent("com.example.andrewwilloughby.campus_assistant.StudentInfoMenuActivity"));
         } catch (PerformException error){
             onView(withId(R.id.viewStyleBtn)).perform(click());
             onView(withId(R.id.mainStudentInfoBtn)).perform(click());
-            intended(hasComponent("com.example.andrewwilloughby.campus_assistant.StudentInfoMenu"));
+            intended(hasComponent("com.example.andrewwilloughby.campus_assistant.StudentInfoMenuActivity"));
         }
     }
 
@@ -106,11 +106,11 @@ public class MainActivityInstrumentedTests {
     public void testLatestNewsButtonClickFiresCorrectIntent(){
         try {
             onView(withId(R.id.mainLatestNewsBtn)).perform(click());
-            intended(hasComponent("com.example.andrewwilloughby.campus_assistant.LatestNews"));
+            intended(hasComponent("com.example.andrewwilloughby.campus_assistant.LatestNewsActivity"));
         } catch (PerformException e){
             onView(withId(R.id.viewStyleBtn)).perform(click());
             onView(withId(R.id.mainLatestNewsBtn)).perform(click());
-            intended(hasComponent("com.example.andrewwilloughby.campus_assistant.LatestNews"));
+            intended(hasComponent("com.example.andrewwilloughby.campus_assistant.LatestNewsActivity"));
         }
     }
 
@@ -128,11 +128,11 @@ public class MainActivityInstrumentedTests {
     public void testCampusNavigationButtonClickFiresCorrectIntent(){
         try {
             onView(withId(R.id.mainCampusNavBtn)).perform(click());
-            intended(hasComponent("com.example.andrewwilloughby.campus_assistant.CampusNavigationMenu"));
+            intended(hasComponent("com.example.andrewwilloughby.campus_assistant.CampusNavigationMenuActivity"));
         } catch (PerformException e){
             onView(withId(R.id.viewStyleBtn)).perform(click());
             onView(withId(R.id.mainCampusNavBtn)).perform(click());
-            intended(hasComponent("com.example.andrewwilloughby.campus_assistant.CampusNavigationMenu"));
+            intended(hasComponent("com.example.andrewwilloughby.campus_assistant.CampusNavigationMenuActivity"));
         }
     }
 
@@ -150,11 +150,11 @@ public class MainActivityInstrumentedTests {
     public void testTravelInformationButtonClickFiresCorrectIntent(){
         try {
             onView(withId(R.id.mainTravelInfoBtn)).perform(click());
-            intended(hasComponent("com.example.andrewwilloughby.campus_assistant.TravelInformationMenu"));
+            intended(hasComponent("com.example.andrewwilloughby.campus_assistant.TravelInformationMenuActivity"));
         } catch (PerformException e){
             onView(withId(R.id.viewStyleBtn)).perform(click());
             onView(withId(R.id.mainTravelInfoBtn)).perform(click());
-            intended(hasComponent("com.example.andrewwilloughby.campus_assistant.TravelInformationMenu"));
+            intended(hasComponent("com.example.andrewwilloughby.campus_assistant.TravelInformationMenuActivity"));
         }
     }
 
@@ -172,11 +172,11 @@ public class MainActivityInstrumentedTests {
     public void testBlackboardEmailButtonClickFiresCorrectIntent(){
         try {
             onView(withId(R.id.mainBbEmailBtn)).perform(click());
-            intended(hasComponent("com.example.andrewwilloughby.campus_assistant.BBEmailMenu"));
+            intended(hasComponent("com.example.andrewwilloughby.campus_assistant.BBEmailMenuActivity"));
         } catch (PerformException e){
             onView(withId(R.id.viewStyleBtn)).perform(click());
             onView(withId(R.id.mainBbEmailBtn)).perform(click());
-            intended(hasComponent("com.example.andrewwilloughby.campus_assistant.BBEmailMenu"));
+            intended(hasComponent("com.example.andrewwilloughby.campus_assistant.BBEmailMenuActivity"));
         }
     }
 

@@ -23,27 +23,61 @@ import com.twitter.sdk.android.tweetui.UserTimeline;
 
 import io.fabric.sdk.android.Fabric;
 
-public class LatestNews extends AppCompatActivity {
+/**
+ * Activity for latest Tweets from UoR and RUSU Twitter accounts.
+ *
+ * @author Andrew Willoughby
+ */
+public class LatestNewsActivity extends AppCompatActivity implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener{
 
     private static final String TWITTER_KEY = "icXPlnJKZL9eTOpDgtmSOklhi";
     private static final String TWITTER_SECRET = "ObkVdHNrCOFUvarHzS0OWvHkwCsCSefDpInYlJdGk2jVvnBima";
+    Context context;
+    SwipeRefreshLayout swipeLayout;
+    TweetTimelineListAdapter adapter;
 
+    /**
+     * Method to set up the Activity upon creation.
+     *
+     * @param savedInstanceState parameter which indicates the previous state of the activity.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_latest_news);
+        setContentView(R.layout.latest_news);
 
         TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
         Fabric.with(this, new Twitter(authConfig));
 
-        final Context context = this;
+        context = this;
 
         setTitle("Latest News");
 
+        final UserTimeline userTimeline = new UserTimeline.Builder().screenName("UniofReading").build();
+        adapter = new TweetTimelineListAdapter.Builder(this).setTimeline(userTimeline).build();
+        ListView listView = (ListView) findViewById(R.id.tweetsListView);
+        listView.setAdapter(adapter);
+
         Button uorButton = (Button) findViewById(R.id.uniTweetsBtn);
-        uorButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                if (isNetworkAvailable()) {
+        uorButton.setOnClickListener(this);
+
+        Button rusuButton = (Button) findViewById(R.id.rusuTweetsBtn);
+        rusuButton.setOnClickListener(this);
+
+        swipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_layout);
+        swipeLayout.setOnRefreshListener(this);
+    }
+
+    /**
+     * Method to handle onClick events from buttons displayed in the activity.
+     *
+     * @param viewInput the view initiating the onClick method.
+     */
+    public void onClick(View viewInput){
+        if (isNetworkAvailable()) {
+            switch (viewInput.getId()) {
+                case R.id.uniTweetsBtn: {
+
                     final UserTimeline userTimeline = new UserTimeline.Builder()
                             .screenName("UniofReading")
                             .build();
@@ -53,16 +87,11 @@ public class LatestNews extends AppCompatActivity {
 
                     ListView listView = (ListView) findViewById(R.id.tweetsListView);
                     listView.setAdapter(adapter);
-                } else {
-                    displayToast("Internet connection has been lost.");
                 }
-            }
-        });
+                break;
 
-        Button rusuButton = (Button) findViewById(R.id.rusuTweetsBtn);
-        rusuButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                if (isNetworkAvailable()) {
+                case R.id.rusuTweetsBtn: {
+
                     final UserTimeline userTimeline = new UserTimeline.Builder()
                             .screenName("RUSUtweets")
                             .build();
@@ -72,61 +101,46 @@ public class LatestNews extends AppCompatActivity {
 
                     ListView listView = (ListView) findViewById(R.id.tweetsListView);
                     listView.setAdapter(adapter);
-                } else {
-                    displayToast("Internet connection has been lost.");
+                    break;
                 }
             }
-        });
+        } else{
+            Toast.makeText(getApplicationContext(), "Internet connection has been lost.", Toast.LENGTH_SHORT).show();
+        }
+    }
 
-        final SwipeRefreshLayout swipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_layout);
-
-        final UserTimeline userTimeline = new UserTimeline.Builder()
-                .screenName("UniofReading")
-                .build();
-        final TweetTimelineListAdapter adapter = new TweetTimelineListAdapter.Builder(this)
-                .setTimeline(userTimeline)
-                .build();
-
-        ListView listView = (ListView) findViewById(R.id.tweetsListView);
-        listView.setAdapter(adapter);
-
-        swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+    /**
+     * Method to handle the onRefresh events from the swipe layout.
+     */
+    public void onRefresh() {
+        swipeLayout.setRefreshing(true);
+        adapter.refresh(new Callback<TimelineResult<Tweet>>() {
             @Override
-            public void onRefresh() {
-                swipeLayout.setRefreshing(true);
-                adapter.refresh(new Callback<TimelineResult<Tweet>>() {
-                    @Override
-                    public void success(Result<TimelineResult<Tweet>> result) {
-                        swipeLayout.setRefreshing(false);
-                    }
+            public void success(Result<TimelineResult<Tweet>> result) {
+                swipeLayout.setRefreshing(false);
+            }
 
-                    @Override
-                    public void failure(TwitterException exception) {
-                        displayToast("Failed to refresh Twitter feed");
-                    }
-                });
+            @Override
+            public void failure(TwitterException exception) {
+                Toast.makeText(getApplicationContext(), "Failed to refresh Twitter feed", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
+    /**
+     * Method that checks the availability of an active network connection.
+     *
+     * @return boolean value to indicate availability of network.
+     */
     protected boolean isNetworkAvailable() {
-
-        // Simple, but important, check for an active network connection.
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
 
-        // Returns true or false indicating whether network is available.
         if (null != activeNetworkInfo){
             return true;
         }
 
         return false;
-    }
-
-    protected void displayToast(String toastContent){
-        if (!toastContent.isEmpty()){
-            Toast.makeText(getApplicationContext(), toastContent, Toast.LENGTH_SHORT).show();
-        }
     }
 }

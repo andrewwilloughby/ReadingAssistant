@@ -28,7 +28,7 @@ import static org.hamcrest.Matchers.equalTo;
 public class StudentInfoMenuInstrumentedTests {
 
     @Rule
-    public IntentsTestRule<StudentInfoMenu> studentInfoMenuIntentsTestRule = new IntentsTestRule<StudentInfoMenu>(StudentInfoMenu.class);
+    public IntentsTestRule<StudentInfoMenuActivity> studentInfoMenuIntentsTestRule = new IntentsTestRule<StudentInfoMenuActivity>(StudentInfoMenuActivity.class);
 
     @Test
     public void studentInfoMenuPreRequisites(){
@@ -60,7 +60,7 @@ public class StudentInfoMenuInstrumentedTests {
     @Test
     public void testSafetyButtonClickFiresCorrectIntent(){
         onView(withId(R.id.safetyBtn)).perform(click());
-        intended(hasComponent("com.example.andrewwilloughby.campus_assistant.SafetyInfo"));
+        intended(hasComponent("com.example.andrewwilloughby.campus_assistant.SafetyInfoActivity"));
     }
 
     @Test
@@ -80,7 +80,7 @@ public class StudentInfoMenuInstrumentedTests {
         intended(allOf(
                 hasExtra(equalTo("webpageURL"), equalTo("https://student.reading.ac.uk/")),
                 hasExtra(equalTo("webpageName"), equalTo("Student Services")),
-                hasComponent("com.example.andrewwilloughby.campus_assistant.WebpageView")));
+                hasComponent("com.example.andrewwilloughby.campus_assistant.WebpageViewActivity")));
     }
 
     @Test
@@ -100,7 +100,7 @@ public class StudentInfoMenuInstrumentedTests {
         intended(allOf(
                 hasExtra(equalTo("webpageURL"), equalTo("http://www.reading.ac.uk/library/")),
                 hasExtra(equalTo("webpageName"), equalTo("Library")),
-                hasComponent("com.example.andrewwilloughby.campus_assistant.WebpageView")));
+                hasComponent("com.example.andrewwilloughby.campus_assistant.WebpageViewActivity")));
     }
 
     @Test
@@ -120,7 +120,7 @@ public class StudentInfoMenuInstrumentedTests {
         intended(allOf(
                 hasExtra(equalTo("webpageURL"), equalTo("https://www.webpay.reading.ac.uk/studentpayments/")),
                 hasExtra(equalTo("webpageName"), equalTo("University Payments")),
-                hasComponent("com.example.andrewwilloughby.campus_assistant.WebpageView")));
+                hasComponent("com.example.andrewwilloughby.campus_assistant.WebpageViewActivity")));
     }
 
     @Test
@@ -140,7 +140,7 @@ public class StudentInfoMenuInstrumentedTests {
         intended(allOf(
                 hasExtra(equalTo("webpageURL"), equalTo("https://www.risisweb.reading.ac.uk/")),
                 hasExtra(equalTo("webpageName"), equalTo("RISIS")),
-                hasComponent("com.example.andrewwilloughby.campus_assistant.WebpageView")));
+                hasComponent("com.example.andrewwilloughby.campus_assistant.WebpageViewActivity")));
     }
 
     @Test
@@ -161,6 +161,6 @@ public class StudentInfoMenuInstrumentedTests {
         intended(allOf(
                 hasExtra(equalTo("webpageURL"), equalTo("https://www.reading.ac.uk/search/search-staff.aspx")),
                 hasExtra(equalTo("webpageName"), equalTo("Staff Search")),
-                hasComponent("com.example.andrewwilloughby.campus_assistant.WebpageView")));
+                hasComponent("com.example.andrewwilloughby.campus_assistant.WebpageViewActivity")));
     }
 }

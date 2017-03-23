@@ -19,17 +19,28 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class BusTimes extends AppCompatActivity {
+/**
+ * Activity for displaying live bus times.
+ *
+ * @author Andrew Willoughby
+ */
+public class BusTimesActivity extends AppCompatActivity implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener{
 
     private ProgressDialog pDialog;
     private ListView busListView;
-    private static String url;
-    ArrayList<HashMap<String, String>> departureList;
+    private String url;
+    private ArrayList<HashMap<String, String>> departureList;
+    private SwipeRefreshLayout swipeLayout;
 
+    /**
+     * Method to set up the Activity upon creation.
+     *
+     * @param savedInstanceState parameter which indicates the previous state of the activity.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_bus_times);
+        setContentView(R.layout.bus_times);
 
         Button chancellorWayBusBtn, whiteknightsHouseBusBtn, readingStationBusBtn;
 
@@ -39,61 +50,56 @@ public class BusTimes extends AppCompatActivity {
 
         busListView = (ListView) findViewById(R.id.busList);
 
-        final SwipeRefreshLayout swipeLayout = (SwipeRefreshLayout) findViewById(R.id.bus_swipe_layout);
-
-        swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                departureList.clear();
-                swipeLayout.setRefreshing(true);
-                new GetDepartures().execute(url);
-                swipeLayout.setRefreshing(false);
-            }
-        });
+        swipeLayout = (SwipeRefreshLayout) findViewById(R.id.bus_swipe_layout);
+        swipeLayout.setOnRefreshListener(this);
 
         chancellorWayBusBtn = (Button) findViewById(R.id.chancellorWayBusBtn);
-        chancellorWayBusBtn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                departureList.clear();
-                url = getApplicationContext().getString(R.string.chancellorWayBusUrl);
-                new GetDepartures().execute(url);
-            }
-        });
+        chancellorWayBusBtn.setOnClickListener(this);
 
         whiteknightsHouseBusBtn = (Button) findViewById(R.id.whiteknightsHouseBusBtn);
-        whiteknightsHouseBusBtn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                departureList.clear();
-                url = getApplicationContext().getString(R.string.whiteknightsHouseBusUrl);
-                new GetDepartures().execute(url);
-            }
-        });
+        whiteknightsHouseBusBtn.setOnClickListener(this);
 
         readingStationBusBtn = (Button) findViewById(R.id.readingStationBusBtn);
-        readingStationBusBtn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                departureList.clear();
-                url = getApplicationContext().getString(R.string.railStationBusUrl);
-                new GetDepartures().execute(url);
-            }
-        });
+        readingStationBusBtn.setOnClickListener(this);
 
         chancellorWayBusBtn.performClick();
     }
 
-    protected void displayToast(String toastContent){
-        if (!toastContent.isEmpty()){
-            Toast.makeText(getApplicationContext(), toastContent, Toast.LENGTH_SHORT).show();
-        }
+    /**
+     * Method to handle the onRefresh events from the swipe layout.
+     */
+    public void onRefresh() {
+        departureList.clear();
+        swipeLayout.setRefreshing(true);
+        new GetDepartures().execute(url);
+        swipeLayout.setRefreshing(false);
     }
 
-    private class GetDepartures extends AsyncTask<String, Void, Void> {
+    /**
+     * Method to handle onClick events from buttons displayed in the activity.
+     *
+     * @param viewInput the view initiating the onClick method.
+     */
+    public void onClick(View viewInput) {
+        departureList.clear();
 
+        switch (viewInput.getId()){
+            case R.id.whiteknightsHouseBusBtn: url = getApplicationContext().getString(R.string.whiteknightsHouseBusUrl); break;
+            case R.id.readingStationBusBtn: url = getApplicationContext().getString(R.string.railStationBusUrl); break;
+            case R.id.chancellorWayBusBtn: url = getApplicationContext().getString(R.string.chancellorWayBusUrl); break;
+        }
+
+        new GetDepartures().execute(url);
+    }
+
+    /**
+     * Private AsyncTask to download the live bus times away from the main thread.
+     */
+    private class GetDepartures extends AsyncTask<String, Void, Void> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
-            pDialog = new ProgressDialog(BusTimes.this);
+            pDialog = new ProgressDialog(BusTimesActivity.this);
             pDialog.setMessage("Please wait...");
             pDialog.setCancelable(false);
             pDialog.show();
@@ -112,7 +118,6 @@ public class BusTimes extends AppCompatActivity {
 
                     for (int i = 0; i < departures.length(); i++) {
                         JSONObject ob = departures.getJSONObject(i);
-
                         String routeNumber = ob.getString("line");
                         String destination = ob.getString("direction");
                         String expectedDep = ob.getString("aimed_departure_time");
@@ -123,38 +128,34 @@ public class BusTimes extends AppCompatActivity {
                             busDeparture.put("routeNumber", routeNumber);
                             busDeparture.put("destination", destination);
                             busDeparture.put("expectedDepTime", expectedDep);
-
                             departureList.add(busDeparture);
                         }
                     }
-                }catch (final JSONException e) {
+                } catch (final JSONException e) {
                     runOnUiThread(new Runnable() {
                         @Override
-                        public void run() {
-                            displayToast("Error with live information. Please retry.");
-                        }
+                        public void run() {Toast.makeText(getApplicationContext(),
+                                "Error with live information. Please retry.",
+                                Toast.LENGTH_SHORT).show();}
                     });
                 }
-            } else {
-                runOnUiThread(new Runnable() {
+            } else { runOnUiThread(new Runnable() {
                     @Override
-                    public void run() {
-                        displayToast("Couldn't get live departure data. Please check network connection.");
-                    }
+                    public void run() {Toast.makeText(getApplicationContext(),
+                            "Network error. Please check connection.",
+                            Toast.LENGTH_SHORT).show();}
                 });
-            }
-            return null;
+            }return null;
         }
 
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
 
-            if (pDialog.isShowing())
-                pDialog.dismiss();
+            if (pDialog.isShowing()) {pDialog.dismiss();}
 
             ListAdapter adapter = new SimpleAdapter(
-                    BusTimes.this, departureList,
+                    BusTimesActivity.this, departureList,
                     R.layout.bus_list_item, new String[]{"routeNumber", "destination",
                     "expectedDepTime"}, new int[]{R.id.routeNumberTextView,
                     R.id.busDestinationTextView, R.id.busExpectedDepTextView});

@@ -65,7 +65,7 @@ public class openMapWhiteknightsCampus {
         intended(allOf(
                 hasExtra(equalTo("webpageURL"), equalTo("http://www.reading.ac.uk/web/FILES/whiteknights-campus-map-and-keys-2016.pdf")),
                 hasExtra(equalTo("webpageName"), equalTo("Whiteknights Campus Map")),
-                hasComponent("com.example.andrewwilloughby.campus_assistant.WebpageView")));
+                hasComponent("com.example.andrewwilloughby.campus_assistant.WebpageViewActivity")));
 
         ViewInteraction textView = onView(
                 allOf(withText("Whiteknights Campus Map"),

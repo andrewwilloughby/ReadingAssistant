@@ -8,10 +8,19 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Class which parses JSON data returned from a RESTful URL call.
+ * @author Andrew Willoughby
+ */
 public class DataParser {
 
+    /**
+     * Method that parses JSON string and returns List of places.
+     * @param jsonData the JSON data to parse.
+     * @return List populated with nearby places.
+     */
     public List<HashMap<String, String>> parse(String jsonData){
-        JSONArray jsonArray = null;
+        JSONArray jsonArray;
         JSONObject jsonObject;
 
         try {
@@ -23,10 +32,15 @@ public class DataParser {
         }
     }
 
+    /**
+     * Method called by parse method, returns a list of places to be returned from the class.
+     * @param jsonArray the array constructed in the parse method.
+     * @return the list of nearby places.
+     */
     private List<HashMap<String, String>> getPlaces(JSONArray jsonArray){
         int placesCount = jsonArray.length();
         List<HashMap<String, String>> placesList = new ArrayList<>();
-        HashMap<String, String> placeMap = null;
+        HashMap<String, String> placeMap;
 
         for (int i = 0; i < placesCount; i++){
             try {
@@ -39,10 +53,14 @@ public class DataParser {
         return placesList;
     }
 
+    /**
+     * Method which obtains each nearby place.
+     * @param googlePlaceJson the JSON object to manipulate.
+     * @return Hashmap containing one nearby place's data.
+     */
     private HashMap<String, String> getPlace(JSONObject googlePlaceJson){
         HashMap<String, String> googlePlaceMap = new HashMap<String, String>();
-        String placeName = "-NA-";
-        String vicinity = "-NA-";
+        String placeName = "-NA-", vicinity = "-NA-";
 
         try {
             if (!googlePlaceJson.isNull("name")){

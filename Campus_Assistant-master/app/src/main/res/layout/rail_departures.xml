@@ -9,7 +9,7 @@ android:paddingBottom="0dp"
 android:paddingLeft="0dp"
 android:paddingRight="0dp"
 android:paddingTop="0dp"
-tools:context="com.example.andrewwilloughby.campus_assistant.RailDepartures">
+tools:context="com.example.andrewwilloughby.campus_assistant.RailDeparturesActivity">
 
     <LinearLayout
     android:orientation="horizontal"

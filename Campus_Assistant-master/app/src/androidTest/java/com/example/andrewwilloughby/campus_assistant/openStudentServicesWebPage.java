@@ -79,7 +79,7 @@ public class openStudentServicesWebPage {
         intended(allOf(
                 hasExtra(equalTo("webpageURL"), equalTo("https://student.reading.ac.uk/")),
                 hasExtra(equalTo("webpageName"), equalTo("Student Services")),
-                hasComponent("com.example.andrewwilloughby.campus_assistant.WebpageView")));
+                hasComponent("com.example.andrewwilloughby.campus_assistant.WebpageViewActivity")));
 
         ViewInteraction textView = onView(
                 allOf(withText("Student Services"),

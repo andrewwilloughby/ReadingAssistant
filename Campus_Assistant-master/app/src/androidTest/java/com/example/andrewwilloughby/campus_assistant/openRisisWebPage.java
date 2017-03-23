@@ -70,7 +70,7 @@ public class openRisisWebPage {
         intended(allOf(
                 hasExtra(equalTo("webpageURL"), equalTo("https://www.risisweb.reading.ac.uk/")),
                 hasExtra(equalTo("webpageName"), equalTo("RISIS")),
-                hasComponent("com.example.andrewwilloughby.campus_assistant.WebpageView")));
+                hasComponent("com.example.andrewwilloughby.campus_assistant.WebpageViewActivity")));
 
         ViewInteraction textView = onView(
                 allOf(withText("RISIS"),

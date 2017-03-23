@@ -2,25 +2,24 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 xmlns:app="http://schemas.android.com/apk/res-auto"
 xmlns:tools="http://schemas.android.com/tools"
-android:id="@+id/activity_student_services_menu"
+android:id="@+id/activity_campus_maps_menu"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
 android:paddingBottom="0dp"
 android:paddingLeft="0dp"
 android:paddingRight="0dp"
 android:paddingTop="0dp"
-tools:context="com.example.andrewwilloughby.campus_assistant.StudentInfoMenu">
+tools:context="com.example.andrewwilloughby.campus_assistant.CampusMapsMenuActivity"
+android:background="?android:attr/detailsElementBackground">
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:id="@+id/activityContainer"
             android:layout_alignParentTop="true"
             android:layout_alignParentStart="true">
@@ -45,7 +44,7 @@ tools:context="com.example.andrewwilloughby.campus_assistant.StudentInfoMenu">
                 android:layout_marginTop="5dp"
                 android:paddingRight="5dp"
                 android:paddingLeft="5dp"
-                android:layout_height="wrap_content">
+                android:layout_height="40dp">
 
                 <LinearLayout
                     android:orientation="horizontal"
@@ -88,96 +87,62 @@ tools:context="com.example.andrewwilloughby.campus_assistant.StudentInfoMenu">
                 </LinearLayout>
 
             </LinearLayout>
+
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:id="@+id/firstRowLayout"
+                android:id="@+id/first_row_layout"
                 android:layout_height="wrap_content"
                 android:paddingBottom="5dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp">
 
                 <Button
-                    android:text="@string/studentInfoServicesBtnText"
+                    android:text="@string/campusMapsWhiteknightsBtnText"
                     android:layout_width="90dp"
-                    android:id="@+id/studentInfoServicesBtn"
+                    android:layout_height="95dp"
+                    android:id="@+id/campusMapsMenuWhiteknightsBtn"
                     android:layout_weight="1"
                     android:textSize="12sp"
-                    android:background="@color/StudentInfoColor"
+                    android:background="@color/CampusNavigationColor"
                     android:layout_marginRight="2.5dp"
-                    android:textColor="@color/TextWhite"
                     android:textAllCaps="false"
-                    android:layout_height="95dp" />
+                    android:textColor="@color/TextWhite" />
 
                 <Button
-                    android:text="@string/studentInfoLibraryBtnText"
+                    android:text="@string/campusMapsLoroBtnText"
                     android:layout_width="90dp"
-                    android:id="@+id/studentInfoLibraryBtn"
+                    android:id="@+id/campusMapsLoroBtn"
                     android:layout_weight="1"
+                    android:layout_height="95dp"
                     android:textSize="12sp"
-                    android:background="@color/StudentInfoColor"
+                    android:background="@color/CampusNavigationColor"
                     android:layout_marginLeft="2.5dp"
-                    android:textColor="@color/TextWhite"
                     android:textAllCaps="false"
-                    android:textAlignment="center"
-                    android:layout_height="95dp" />
+                    android:elevation="22dp"
+                    android:textColor="@color/TextWhite" />
             </LinearLayout>
 
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:id="@+id/secondRowLayout"
+                android:id="@+id/second_row_layout"
                 android:layout_height="wrap_content"
                 android:paddingBottom="5dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp">
 
                 <Button
-                    android:text="@string/studentInfoPaymentsBtnText"
-                    android:id="@+id/studentInfoPaymentsBtn"
+                    android:text="@string/campusMapsHallsBtnText"
+                    android:layout_height="95dp"
+                    android:id="@+id/campusMapsHallsBtn"
                     android:layout_weight="1"
                     android:layout_width="90dp"
-                    android:background="@color/StudentInfoColor"
+                    android:background="@color/CampusNavigationColor"
                     android:textSize="12sp"
                     android:layout_marginRight="2.5dp"
-                    android:textColor="@color/TextWhite"
                     android:textAllCaps="false"
-                    android:layout_height="95dp" />
-
-                <Button
-                    android:text="@string/studentInfoRisisBtnText"
-                    android:layout_width="90dp"
-                    android:id="@+id/studentInfoRisisBtn"
-                    android:layout_weight="1"
-                    android:textSize="12sp"
-                    android:background="@color/StudentInfoColor"
-                    android:layout_marginLeft="2.5dp"
-                    android:textColor="@color/TextWhite"
-                    android:textAllCaps="false"
-                    android:layout_height="95dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:id="@+id/thirdRowLayout"
-                android:layout_height="wrap_content"
-                android:paddingBottom="5dp"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp">
-
-                <Button
-                    android:text="@string/studentInfoStaffDirectoryBtnText"
-                    android:layout_width="90dp"
-                    android:id="@+id/studentInfoStaffDirectoryBtn"
-                    android:layout_weight="1"
-                    android:textSize="12sp"
-                    android:layout_marginRight="2.5dp"
-                    android:background="@color/StudentInfoColor"
-                    android:textColor="@color/TextWhite"
-                    android:capitalize="none"
-                    android:textAllCaps="false"
-                    android:layout_height="95dp" />
+                    android:textColor="@color/TextWhite" />
 
                 <Space
                     android:layout_width="89dp"
@@ -186,4 +151,5 @@ tools:context="com.example.andrewwilloughby.campus_assistant.StudentInfoMenu">
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
+
 </RelativeLayout>

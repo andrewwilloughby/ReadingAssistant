@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
 @RunWith(MockitoJUnitRunner.class)
 public class CalendarActivityUnitTests {
 
-    CalendarActivity calendarActivity = new CalendarActivity();
+    private CalendarActivity calendarActivity = new CalendarActivity();
 
     @Test
     public void testGetBuildingAddress_ValidInput() {

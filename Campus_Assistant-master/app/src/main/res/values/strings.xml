@@ -51,7 +51,7 @@
     <string name="whiteknightsHouseBusUrl">http://transportapi.com/v3/uk/bus/stop/039027900002/live.json?app_id=03bf8009&amp;app_key=d9307fd91b0247c607e098d5effedc97&amp;group=no&amp;limit=8&amp;nextbuses=yes</string>
     <string name="railStationBusUrl">http://transportapi.com/v3/uk/bus/stop/039028150004/live.json?app_id=03bf8009&amp;app_key=d9307fd91b0247c607e098d5effedc97&amp;group=no&amp;limit=15&amp;nextbuses=yes</string>
     <string name="routeTxtViewText">Route</string>
-    <string name="destinationTxtViewText">Destination</string>
+    <string name="destinationTxtViewText">Journey Destination</string>
     <string name="arrivalTxtViewText">Time</string>
 
     <string name="todayBtnText">Today</string>

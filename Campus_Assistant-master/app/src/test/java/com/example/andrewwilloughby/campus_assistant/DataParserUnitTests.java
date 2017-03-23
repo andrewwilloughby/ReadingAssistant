@@ -11,10 +11,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
 
-/**
- * Created by andrewwilloughby on 20/01/2017.
- */
-
 @RunWith(MockitoJUnitRunner.class)
 public class DataParserUnitTests {
 

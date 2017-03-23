@@ -70,7 +70,7 @@ public class openUniversityPaymentsWebPage {
         intended(allOf(
                 hasExtra(equalTo("webpageURL"), equalTo("https://www.webpay.reading.ac.uk/studentpayments/")),
                 hasExtra(equalTo("webpageName"), equalTo("University Payments")),
-                hasComponent("com.example.andrewwilloughby.campus_assistant.WebpageView")));
+                hasComponent("com.example.andrewwilloughby.campus_assistant.WebpageViewActivity")));
 
         ViewInteraction textView = onView(
                 allOf(withText("University Payments"),

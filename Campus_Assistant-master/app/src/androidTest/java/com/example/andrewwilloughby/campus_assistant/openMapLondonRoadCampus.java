@@ -65,7 +65,7 @@ public class openMapLondonRoadCampus {
         intended(allOf(
                 hasExtra(equalTo("webpageURL"), equalTo("http://www.reading.ac.uk/web/FILES/University-of-Reading-London-Road-COLOUR-NUMERIC.pdf")),
                 hasExtra(equalTo("webpageName"), equalTo("London Road Campus Map")),
-                hasComponent("com.example.andrewwilloughby.campus_assistant.WebpageView")));
+                hasComponent("com.example.andrewwilloughby.campus_assistant.WebpageViewActivity")));
 
         ViewInteraction textView = onView(
                 allOf(withText("London Road Campus Map"),

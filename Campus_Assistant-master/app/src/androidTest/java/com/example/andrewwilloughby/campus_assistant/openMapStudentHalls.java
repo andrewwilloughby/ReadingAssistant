@@ -64,7 +64,7 @@ public class openMapStudentHalls {
         intended(allOf(
                 hasExtra(equalTo("webpageURL"), equalTo("https://www.reading.ac.uk/web/FILES/accommodation/Walking_distances_to_halls.pdf")),
                 hasExtra(equalTo("webpageName"), equalTo("Student Halls Map")),
-                hasComponent("com.example.andrewwilloughby.campus_assistant.WebpageView")));
+                hasComponent("com.example.andrewwilloughby.campus_assistant.WebpageViewActivity")));
 
         ViewInteraction textView = onView(
                 allOf(withText("Student Halls Map"),

@@ -1,13 +1,8 @@
 package com.example.andrewwilloughby.campus_assistant;
 
-/**
- * Created by andrewwilloughby on 16/01/2017.
- */
-
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import org.hamcrest.CoreMatchers;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,76 +24,46 @@ import static org.hamcrest.Matchers.equalTo;
 public class BBEmailMenuInstrumentedTests {
 
     @Rule
-    public IntentsTestRule<BBEmailMenu> bbEmailMenuIntentsTestRule = new IntentsTestRule<BBEmailMenu>(BBEmailMenu.class);
+    public IntentsTestRule<BBEmailMenuActivity> bbEmailMenuIntentsTestRule = new IntentsTestRule<BBEmailMenuActivity>(BBEmailMenuActivity.class);
 
     @Test
-    public void blackboardEmailMenupreRequisites(){
-        onView(withId(R.id.viewStyleBtn)).check(matches(isDisplayed()));
-        onView(withId(R.id.safetyBtn)).check(matches(isDisplayed()));
-        onView(withId(R.id.bbemailMenuBlackboardBtn)).check(matches(isDisplayed()));
-        onView(withId(R.id.bbemailMenuEmailBtn)).check(matches(isDisplayed()));
+    public void testBlackboardEmailMenuLayout(){
+        onView(withId(R.id.viewStyleBtn)).check(matches(allOf(isDisplayed(), isClickable())));
+        onView(withId(R.id.safetyBtn)).check(matches(allOf(isDisplayed(), isClickable())));
+        onView(withId(R.id.bbemailMenuBlackboardBtn)).check(matches(allOf(isDisplayed(), isClickable(), withText("Blackboard"))));
+        onView(withId(R.id.bbemailMenuEmailBtn)).check(matches(allOf(isDisplayed(), isClickable(), withText("Email"))));
     }
 
     @Test
-    public void testViewStyleButtonIsClickable(){
-        onView(withId(R.id.viewStyleBtn)).check(matches(isClickable()));
-    }
-
-    @Test
-    public void testViewStyleButtonFiresCorrectIntent(){
+    public void testViewStyleButtonOpensMainActivity(){
         onView(withId(R.id.viewStyleBtn)).perform(click());
         intended(hasComponent("com.example.andrewwilloughby.campus_assistant.MainActivity"));
     }
 
     @Test
-    public void testSafetyButtonIsClickable(){
-        onView(withId(R.id.safetyBtn)).check(matches(isClickable()));
-    }
-
-    @Test
-    public void testSafetyButtonClickFiresCorrectIntent(){
+    public void testSafetyButtonOpensSafetyInfoActivity(){
         onView(withId(R.id.safetyBtn)).perform(click());
-        intended(hasComponent("com.example.andrewwilloughby.campus_assistant.SafetyInfo"));
+        intended(hasComponent("com.example.andrewwilloughby.campus_assistant.SafetyInfoActivity"));
     }
 
     @Test
-    public void testBlackboardButtonIsClickable(){
-        onView(withId(R.id.bbemailMenuBlackboardBtn)).check(matches(isClickable()));
-    }
-
-    @Test
-    public void testBlackboardButtonHasCorrectText(){
-        onView(CoreMatchers.allOf(withId(R.id.bbemailMenuBlackboardBtn), withText(R.string.bbemailBlackboardBtnText)));
-    }
-
-    @Test
-    public void testBlackboardButtonFiresCorrectIntent(){
+    public void testBlackboardButtonOpensBlackboardActivity(){
         onView(withId(R.id.bbemailMenuBlackboardBtn)).perform(click());
 
         intended(allOf(
                 hasExtra(equalTo("webpageURL"), equalTo("https://bb.reading.ac.uk/")),
                 hasExtra(equalTo("webpageName"), equalTo("Blackboard")),
-                hasComponent("com.example.andrewwilloughby.campus_assistant.WebpageView")));
+                hasComponent("com.example.andrewwilloughby.campus_assistant.WebpageViewActivity")));
     }
 
     @Test
-    public void testEmailButtonIsClickable(){
-        onView(withId(R.id.bbemailMenuEmailBtn)).check(matches(isClickable()));
-    }
-
-    @Test
-    public void testEmailButtonHasCorrectText(){
-        onView(CoreMatchers.allOf(withId(R.id.bbemailMenuEmailBtn), withText(R.string.bbemailEmailBtnText)));
-    }
-
-    @Test
-    public void testEmailButtonFiresCorrectIntent(){
+    public void testEmailButtonOpensEmailActivity(){
         onView(withId(R.id.bbemailMenuEmailBtn)).perform(click());
 
         intended(allOf(
                 hasExtra(equalTo("webpageURL"), equalTo("http://mail.live.reading.ac.uk/")),
                 hasExtra(equalTo("webpageName"), equalTo("University Email")),
-                hasComponent("com.example.andrewwilloughby.campus_assistant.WebpageView")));
+                hasComponent("com.example.andrewwilloughby.campus_assistant.WebpageViewActivity")));
     }
 }
 

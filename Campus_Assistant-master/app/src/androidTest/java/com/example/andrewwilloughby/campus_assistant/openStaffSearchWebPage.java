@@ -70,7 +70,7 @@ public class openStaffSearchWebPage {
         intended(allOf(
                 hasExtra(equalTo("webpageURL"), equalTo("https://www.reading.ac.uk/search/search-staff.aspx")),
                 hasExtra(equalTo("webpageName"), equalTo("Staff Search")),
-                hasComponent("com.example.andrewwilloughby.campus_assistant.WebpageView")));
+                hasComponent("com.example.andrewwilloughby.campus_assistant.WebpageViewActivity")));
 
         ViewInteraction textView = onView(
                 allOf(withText("Staff Search"),

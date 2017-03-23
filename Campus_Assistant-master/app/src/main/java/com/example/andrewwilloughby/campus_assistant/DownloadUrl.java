@@ -6,8 +6,17 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+/**
+ * Class used to download the data from a RESTful URL.
+ */
  class DownloadUrl {
 
+    /**
+     * Method to download data from URL.
+     *
+     * @param string the string value of the URL to download from.
+     * @return that data downloaded from the URL.
+     */
     String readUrl(String string){
         String data, line;
         InputStream inputStream = null;
@@ -16,13 +25,9 @@ import java.net.URL;
         try {
             URL url = new URL(string);
 
-            //Creating an http connection to communicate with url.
             httpURLConnection = (HttpURLConnection) url.openConnection();
-
-            //Connecting to url.
             httpURLConnection.connect();
 
-            //Reading data from url.
             inputStream = httpURLConnection.getInputStream();
 
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));

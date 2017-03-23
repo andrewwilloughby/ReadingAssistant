@@ -9,7 +9,7 @@
     android:paddingLeft="0dp"
     android:paddingRight="0dp"
     android:paddingTop="0dp"
-    tools:context="com.example.andrewwilloughby.campus_assistant.BusTimes">
+    tools:context="com.example.andrewwilloughby.campus_assistant.BusTimesActivity">
 
     <LinearLayout
         android:orientation="horizontal"
@@ -91,8 +91,9 @@
             android:layout_height="20dp"
             android:id="@+id/routeTxtView"
             android:layout_weight="1"
-            android:textAlignment="center"
-            android:text="@string/routeTxtViewText" />
+            android:textAlignment="textStart"
+            android:text="@string/routeTxtViewText"
+            android:paddingLeft="10dp" />
 
         <TextView
             android:text="@string/destinationTxtViewText"
