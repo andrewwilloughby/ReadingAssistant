@@ -27,12 +27,6 @@ public class MainActivity extends AMenu implements ExpandableListView.OnGroupExp
     private ExpandableListAdapter adapter;
     private LinearLayout gridLayout;
 
-    /**
-     * MainActivity constructor.
-     */
-    MainActivity(){
-        setMenuMode(2);
-    }
 
     /**
      * Method to set up the Activity upon creation.

@@ -47,12 +47,6 @@ public class StudentInfoMenuInstrumentedTests {
     }
 
     @Test
-    public void testViewStyleButtonFiresCorrectIntent(){
-        onView(withId(R.id.viewStyleBtn)).perform(click());
-        intended(hasComponent("com.example.andrewwilloughby.campus_assistant.MainActivity"));
-    }
-
-    @Test
     public void testSafetyButtonIsClickable(){
         onView(withId(R.id.safetyBtn)).check(matches(isClickable()));
     }
@@ -146,7 +140,6 @@ public class StudentInfoMenuInstrumentedTests {
     @Test
     public void testStaffSearchButtonIsClickable(){
         onView(withId(R.id.studentInfoStaffDirectoryBtn)).check(matches(isClickable()));
-
     }
 
     @Test

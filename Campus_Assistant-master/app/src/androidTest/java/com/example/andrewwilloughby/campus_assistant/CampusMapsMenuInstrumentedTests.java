@@ -28,23 +28,37 @@ public class CampusMapsMenuInstrumentedTests {
 
     @Test
     public void testCampusMapsMenuLayout(){
-        onView(withId(R.id.viewStyleBtn)).check(matches(allOf(isDisplayed(), isClickable())));
-        onView(withId(R.id.safetyBtn)).check(matches(allOf(isDisplayed(), isClickable())));
-        onView(withId(R.id.campusMapsMenuWhiteknightsBtn)).check(matches(allOf(isDisplayed(), isClickable(), withText("Whiteknights Campus"))));
-        onView(withId(R.id.campusMapsLoroBtn)).check(matches(allOf(isDisplayed(), isClickable(), withText("London Road Campus"))));
-        onView(withId(R.id.campusMapsHallsBtn)).check(matches(allOf(isDisplayed(), isClickable(), withText("Student Halls"))));
+        onView(withId(R.id.viewStyleBtn)).check(matches(isDisplayed()));
+        onView(withId(R.id.safetyBtn)).check(matches(isDisplayed()));
+        onView(withId(R.id.campusMapsMenuWhiteknightsBtn)).check(matches(isDisplayed()));
+        onView(withId(R.id.campusMapsLoroBtn)).check(matches(isDisplayed()));
+        onView(withId(R.id.campusMapsHallsBtn)).check(matches(isDisplayed()));
     }
 
     @Test
-    public void testViewStyleButtonOpensMainActivity(){
-        onView(withId(R.id.viewStyleBtn)).perform(click());
-        intended(hasComponent("com.example.andrewwilloughby.campus_assistant.MainActivity"));
+    public void testViewStyleButtonIsClickable(){
+        onView(withId(R.id.viewStyleBtn)).check(matches(isClickable()));
     }
 
     @Test
-    public void testSafetyButtonOpensSafetyInfoActivity(){
+    public void testSafetyButtonIsClickable(){
+        onView(withId(R.id.safetyBtn)).check(matches(isClickable()));
+    }
+
+    @Test
+    public void testSafetyButtonClickFiresCorrectIntent(){
         onView(withId(R.id.safetyBtn)).perform(click());
         intended(hasComponent("com.example.andrewwilloughby.campus_assistant.SafetyInfoActivity"));
+    }
+
+    @Test
+    public void testWhiteknightsButtonIsClickable(){
+        onView(withId(R.id.campusMapsMenuWhiteknightsBtn)).check(matches(isClickable()));
+    }
+
+    @Test
+    public void testWhiteknightsButtonHasCorrectText(){
+        onView(withId(R.id.campusMapsMenuWhiteknightsBtn)).check(matches(withText("Whiteknights Campus")));
     }
 
     @Test
@@ -58,6 +72,16 @@ public class CampusMapsMenuInstrumentedTests {
     }
 
     @Test
+    public void testLondonRoadButtonIsClickable(){
+        onView(withId(R.id.campusMapsLoroBtn)).check(matches(isClickable()));
+    }
+
+    @Test
+    public void testLondonRoadButtonHasCorrectText(){
+        onView(withId(R.id.campusMapsLoroBtn)).check(matches(withText("London Road Campus")));
+    }
+
+    @Test
     public void testLoroButtonLoadsCorrectWebView(){
         onView(withId(R.id.campusMapsLoroBtn)).perform(click());
 
@@ -65,6 +89,16 @@ public class CampusMapsMenuInstrumentedTests {
                 hasExtra(equalTo("webpageURL"), equalTo("http://www.reading.ac.uk/web/FILES/University-of-Reading-London-Road-COLOUR-NUMERIC.pdf")),
                 hasExtra(equalTo("webpageName"), equalTo("London Road Campus Map")),
                 hasComponent("com.example.andrewwilloughby.campus_assistant.WebpageViewActivity")));
+    }
+
+    @Test
+    public void testHallsButtonIsClickable(){
+        onView(withId(R.id.campusMapsHallsBtn)).check(matches(isClickable()));
+    }
+
+    @Test
+    public void testHallsButtonHasCorrectText(){
+        onView(withId(R.id.campusMapsHallsBtn)).check(matches(withText("Student Halls")));
     }
 
     @Test

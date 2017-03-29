@@ -21,10 +21,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.allOf;
 
-/**
- * Created by andrewwilloughby on 19/01/2017.
- */
-
 @RunWith(AndroidJUnit4.class)
 public class LoginActivityInstrumentedTests {
 
@@ -44,27 +40,37 @@ public class LoginActivityInstrumentedTests {
 
     @Test
     public void testLoginTextViewHasCorrectText(){
-        onView(allOf(withId(R.id.loginTextView), withText(R.string.loginTextViewText)));
+        onView(withId(R.id.loginTextView)).check(matches(withText(R.string.loginTextViewText)));
     }
 
     @Test
     public void testLoginTextView2HasCorrectText(){
-        onView(allOf(withId(R.id.loginTextView2), withText(R.string.loginTextView2Text)));
+        onView(withId(R.id.loginTextView2)).check(matches(withText(R.string.loginTextView2Text)));
     }
 
     @Test
     public void testUsernameTextViewHasCorrectText(){
-        onView(allOf(withId(R.id.usernameTextView), withText(R.string.uniUsernameTextView)));
+        onView(withId(R.id.usernameTextView)).check(matches(withText(R.string.uniUsernameTextView)));
     }
 
     @Test
     public void testPasswordTextViewHasCorrectText(){
-        onView(allOf(withId(R.id.passwordTextView), withText(R.string.uniPasswordTextView)));
+        onView(withId(R.id.passwordTextView)).check(matches(withText(R.string.uniPasswordTextView)));
+    }
+
+    @Test
+    public void testUsernameEditTextIsClickable(){
+        onView(withId(R.id.usernameEditText)).check(matches(isClickable()));
     }
 
     @Test
     public void testUsernameEditTextHasCorrectHintText(){
-        onView(allOf(withId(R.id.usernameEditText), withHint(R.string.loginUsernameEditTextHint)));
+        onView(withId(R.id.usernameEditText)).check(matches(withHint(R.string.loginUsernameEditTextHint)));
+    }
+
+    @Test
+    public void testPasswordEditTextIsClickable(){
+        onView(withId(R.id.passwordEditText)).check(matches(isClickable()));
     }
 
     @Test
@@ -84,7 +90,6 @@ public class LoginActivityInstrumentedTests {
 
     @Test
     public void testLoginButtonClickFiresCorrectIntent(){
-
         /*
         Dummy data which will meet the format requirements, allowing intent
         to be issued on LoginButton click()

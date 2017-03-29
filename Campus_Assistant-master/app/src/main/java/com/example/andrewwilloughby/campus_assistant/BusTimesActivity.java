@@ -95,7 +95,7 @@ public class BusTimesActivity extends AppCompatActivity implements View.OnClickL
     /**
      * Private AsyncTask to download the live bus times away from the main thread.
      */
-    private class GetDepartures extends AsyncTask<String, Void, Void> {
+    protected class GetDepartures extends AsyncTask<String, Void, Void> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();

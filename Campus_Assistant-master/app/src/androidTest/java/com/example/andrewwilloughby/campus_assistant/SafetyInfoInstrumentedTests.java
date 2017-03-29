@@ -29,15 +29,23 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.Matchers.equalTo;
 
-/**
- * Created by andrewwilloughby on 20/01/2017.
- */
-
 @RunWith(AndroidJUnit4.class)
 public class SafetyInfoInstrumentedTests {
 
-    private static final String VALID_PHONE_NUMBER = "07590917581";
+    private static final String VALID_PHONE_NUMBER = "123";
     private static final Uri INTENT_DATA_PHONE_NUMBER = Uri.parse("tel:" + VALID_PHONE_NUMBER);
+
+    @Before
+    public void stubAllExternalIntents() {
+        intending(hasAction(Intent.ACTION_DIAL)).respondWith(
+                new Instrumentation.ActivityResult(Activity.RESULT_OK, null));
+    }
+
+    @Test
+    public void testSecurityEmergencyButtonFiresCorrectIntent(){
+        onView(withId(R.id.securityEmergencyBtn)).perform(ViewActions.click());
+        intended(allOf(hasAction(Intent.ACTION_DIAL), hasData(INTENT_DATA_PHONE_NUMBER)));
+    }
 
     @Rule
     public IntentsTestRule<SafetyInfoActivity> safetyInfoIntentsTestRule = new IntentsTestRule<SafetyInfoActivity>(SafetyInfoActivity.class);
@@ -70,18 +78,6 @@ public class SafetyInfoInstrumentedTests {
     @Test
     public void testSecurityEmergencyButtonIsClickable(){
         onView(withId(R.id.securityEmergencyBtn)).check(matches(isClickable()));
-    }
-
-    @Before
-    public void stubAllExternalIntents() {
-        intending(hasAction(Intent.ACTION_DIAL)).respondWith(
-                new Instrumentation.ActivityResult(Activity.RESULT_OK, null));
-    }
-
-    @Test
-    public void testSecurityEmergencyButtonFiresCorrectIntent(){
-        onView(withId(R.id.securityEmergencyBtn)).perform(ViewActions.click());
-        intended(allOf(hasAction(Intent.ACTION_DIAL), hasData(INTENT_DATA_PHONE_NUMBER)));
     }
 
     @Test
@@ -133,11 +129,9 @@ public class SafetyInfoInstrumentedTests {
     @Test
     public void testHealthSafetyButtonClickFiresCorrectIntent(){
         onView(withId(R.id.healthAndSafetyBtn)).perform(ViewActions.click());
-
         intended(Matchers.allOf(
                 hasExtra(equalTo("webpageURL"), equalTo("http://www.reading.ac.uk/internal/health-and-safety/IncidentReportingandEmergencyProcedures/Report_an_Incident_online.aspx")),
                 hasExtra(equalTo("webpageName"), equalTo("Report Health & Safety Incident")),
                 hasComponent("com.example.andrewwilloughby.campus_assistant.WebpageViewActivity")));
     }
-
 }

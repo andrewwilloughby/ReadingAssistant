@@ -11,19 +11,23 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-
-/**
- * Created by andrewwilloughby on 19/01/2017.
- */
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 @RunWith(AndroidJUnit4.class)
 public class RailDeparturesInstrumentedTests {
 
     @Rule
-    public IntentsTestRule<RailDeparturesActivity> railDeparturesIntentsTestRule  = new IntentsTestRule<RailDeparturesActivity>(RailDeparturesActivity.class);
+    public IntentsTestRule<RailDeparturesActivity> railDeparturesIntentsTestRule  =
+            new IntentsTestRule<>(RailDeparturesActivity.class);
 
     @Test
-    public void railDeparturesPreRequisites(){
+    public void railDeparturesLayout(){
         onView(withId(R.id.railList)).check(matches(isDisplayed()));
+        onView(withId(R.id.trainHeaderTextView)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testRefreshTextViewHasCorrectText(){
+        onView(withId(R.id.trainHeaderTextView)).check(matches(withText("Pull to refresh")));
     }
 }

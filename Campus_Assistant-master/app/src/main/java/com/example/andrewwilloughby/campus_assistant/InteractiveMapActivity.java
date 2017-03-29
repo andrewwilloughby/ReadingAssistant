@@ -489,9 +489,8 @@ public class InteractiveMapActivity extends FragmentActivity implements OnMapRea
      * @return the populated RESTful URL, ready to be executed.
      */
     protected String buildPlacesUrl(double latitude, double longitude, String nearbyPlace){
-        return "https://maps.googleapis.com/maps/api/place/nearbysearch/json?"
-                + "location=" + latitude + "," + longitude + "&radius=" + proximityRadius + "&type="
-                + nearbyPlace + "&sensor=true&key=AIzaSyATuUiZUkEc_UgHuqsBJa1oqaODI-3mLs0";
+        String places = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?" + "location=" + latitude + "," + longitude + "&radius=" + proximityRadius + "&type=" + nearbyPlace + "&sensor=true&key=AIzaSyATuUiZUkEc_UgHuqsBJa1oqaODI-3mLs0";
+        return places;
     }
 
     /**
@@ -504,6 +503,7 @@ public class InteractiveMapActivity extends FragmentActivity implements OnMapRea
     protected String makeDirectionsUrl(String originLatLng, String destLatLng){
         if ((originLatLng.matches("^(\\-?\\d+(\\.\\d+)?),\\s*(\\-?\\d+(\\.\\d+)?)$"))
                 && (destLatLng.matches("^(\\-?\\d+(\\.\\d+)?),\\s*(\\-?\\d+(\\.\\d+)?)$"))){
+
             return "https://maps.googleapis.com/maps/api/directions/json?origin="
                     + originLatLng + "&destination=" + destLatLng
                     + "&sensor=false&mode=walking&alternatives=true&key=AIzaSyCWyi6EulBxUxWDPZKwV9Ud6AZnmBqkWfE";
@@ -533,7 +533,7 @@ public class InteractiveMapActivity extends FragmentActivity implements OnMapRea
      *
      * @return boolean value to indicate availability of network.
      */
-    private boolean isNetworkAvailable() {
+    protected boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
@@ -566,6 +566,7 @@ public class InteractiveMapActivity extends FragmentActivity implements OnMapRea
             String encodedString = overviewPolylines.getString("points");
 
             List<LatLng> list = decodePoly(encodedString);
+
             routeLine = map.addPolyline(new PolylineOptions()
                     .addAll(list)
                     .width(12)
@@ -584,7 +585,7 @@ public class InteractiveMapActivity extends FragmentActivity implements OnMapRea
      * @param encodedString the encoded route string.
      * @return the route in polyline form.
      */
-    private List<LatLng> decodePoly(String encodedString) {
+    protected List<LatLng> decodePoly(String encodedString) {
         List<LatLng> poly = new ArrayList<>();
         int index = 0, length = encodedString.length();
         int lat = 0, lng = 0;

@@ -25,20 +25,18 @@ import io.fabric.sdk.android.Fabric;
 
 /**
  * Activity for latest Tweets from UoR and RUSU Twitter accounts.
- *
  * @author Andrew Willoughby
  */
 public class LatestNewsActivity extends AppCompatActivity implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener{
 
     private static final String TWITTER_KEY = "icXPlnJKZL9eTOpDgtmSOklhi";
     private static final String TWITTER_SECRET = "ObkVdHNrCOFUvarHzS0OWvHkwCsCSefDpInYlJdGk2jVvnBima";
-    Context context;
-    SwipeRefreshLayout swipeLayout;
-    TweetTimelineListAdapter adapter;
+    private Context context;
+    private SwipeRefreshLayout swipeLayout;
+    private TweetTimelineListAdapter adapter;
 
     /**
      * Method to set up the Activity upon creation.
-     *
      * @param savedInstanceState parameter which indicates the previous state of the activity.
      */
     @Override
@@ -70,7 +68,6 @@ public class LatestNewsActivity extends AppCompatActivity implements View.OnClic
 
     /**
      * Method to handle onClick events from buttons displayed in the activity.
-     *
      * @param viewInput the view initiating the onClick method.
      */
     public void onClick(View viewInput){
@@ -129,7 +126,6 @@ public class LatestNewsActivity extends AppCompatActivity implements View.OnClic
 
     /**
      * Method that checks the availability of an active network connection.
-     *
      * @return boolean value to indicate availability of network.
      */
     protected boolean isNetworkAvailable() {
@@ -140,7 +136,6 @@ public class LatestNewsActivity extends AppCompatActivity implements View.OnClic
         if (null != activeNetworkInfo){
             return true;
         }
-
         return false;
     }
 }

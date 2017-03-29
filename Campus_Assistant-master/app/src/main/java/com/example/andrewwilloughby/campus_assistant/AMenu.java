@@ -11,15 +11,13 @@ import android.widget.Toast;
 
 /**
  * Abstract class for menus.
- *
  * This class contains the methods commonly used by the Menu activities.
- *
  * @author Andrew Willoughby
  */
 public abstract class AMenu extends AppCompatActivity {
 
     protected ImageButton safetyBtn, viewStyleBtn;
-    protected static int menuMode;
+    protected static int menuMode = 2;
 
     /**
      * Method executed when a menu activity opens.
@@ -165,7 +163,6 @@ public abstract class AMenu extends AppCompatActivity {
 
     /**
      * Method that checks the availability of an active network connection.
-     *
      * @return boolean value to indicate availability of network.
      */
     protected boolean isNetworkAvailable() {

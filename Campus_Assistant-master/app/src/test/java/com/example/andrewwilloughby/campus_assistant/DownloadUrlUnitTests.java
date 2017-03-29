@@ -22,7 +22,7 @@ public class DownloadUrlUnitTests {
     @Test
     public void testUrlDownload_PageWithText(){
         String expected = "line1line2line3line4line5";
-        String actual = downloadUrl.readUrl("http://www-eng-x.llnl.gov/documents/tests/pc.txt");
+        String actual = downloadUrl.readUrl("https://www-eng-x.llnl.gov/documents/tests/pc.txt");
 
         assertThat(actual, is(expected));
     }

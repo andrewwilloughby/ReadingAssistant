@@ -15,18 +15,15 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 
-/**
- * Created by andrewwilloughby on 20/01/2017.
- */
-
 @RunWith(AndroidJUnit4.class)
 public class CalendarActivityInstrumentedTests {
 
     @Rule
-    public IntentsTestRule<CalendarActivity> calendarActivityIntentsTestRule = new IntentsTestRule<CalendarActivity>(CalendarActivity.class);
+    public IntentsTestRule<CalendarActivity> calendarActivityIntentsTestRule =
+            new IntentsTestRule<>(CalendarActivity.class);
 
     @Test
-    public void mainActivityPreRequisites(){
+    public void calendarActivityPreRequisites(){
         onView(withId(R.id.todayBtn)).check(matches(isDisplayed()));
         onView(withId(R.id.dayEventsListView)).check(matches(isDisplayed()));
         onView(withId(R.id.timetableCalendar)).check(matches(isDisplayed()));

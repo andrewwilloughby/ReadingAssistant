@@ -37,7 +37,7 @@ public class DataParser {
      * @param jsonArray the array constructed in the parse method.
      * @return the list of nearby places.
      */
-    private List<HashMap<String, String>> getPlaces(JSONArray jsonArray){
+    public List<HashMap<String, String>> getPlaces(JSONArray jsonArray){
         int placesCount = jsonArray.length();
         List<HashMap<String, String>> placesList = new ArrayList<>();
         HashMap<String, String> placeMap;
@@ -58,8 +58,8 @@ public class DataParser {
      * @param googlePlaceJson the JSON object to manipulate.
      * @return Hashmap containing one nearby place's data.
      */
-    private HashMap<String, String> getPlace(JSONObject googlePlaceJson){
-        HashMap<String, String> googlePlaceMap = new HashMap<String, String>();
+    public HashMap<String, String> getPlace(JSONObject googlePlaceJson){
+        HashMap<String, String> googlePlaceMap = new HashMap<>();
         String placeName = "-NA-", vicinity = "-NA-";
 
         try {
@@ -69,6 +69,7 @@ public class DataParser {
             if (!googlePlaceJson.isNull("vicinity")){
                 vicinity = googlePlaceJson.getString("vicinity");
             }
+
             String latitude = googlePlaceJson.getJSONObject("geometry").getJSONObject("location").getString("lat");
             String longitude = googlePlaceJson.getJSONObject("geometry").getJSONObject("location").getString("lng");
             String reference = googlePlaceJson.getString("reference");

@@ -22,9 +22,9 @@ import static org.hamcrest.Matchers.equalTo;
 
 @RunWith(AndroidJUnit4.class)
 public class BBEmailMenuInstrumentedTests {
-
     @Rule
-    public IntentsTestRule<BBEmailMenuActivity> bbEmailMenuIntentsTestRule = new IntentsTestRule<BBEmailMenuActivity>(BBEmailMenuActivity.class);
+    public IntentsTestRule<BBEmailMenuActivity> bbEmailMenuIntentsTestRule =
+            new IntentsTestRule<>(BBEmailMenuActivity.class);
 
     @Test
     public void testBlackboardEmailMenuLayout(){
@@ -35,15 +35,29 @@ public class BBEmailMenuInstrumentedTests {
     }
 
     @Test
-    public void testViewStyleButtonOpensMainActivity(){
-        onView(withId(R.id.viewStyleBtn)).perform(click());
-        intended(hasComponent("com.example.andrewwilloughby.campus_assistant.MainActivity"));
+    public void testViewStyleButtonIsClickable(){
+        onView(withId(R.id.viewStyleBtn)).check(matches(isClickable()));
     }
 
     @Test
-    public void testSafetyButtonOpensSafetyInfoActivity(){
+    public void testSafetyButtonIsClickable(){
+        onView(withId(R.id.safetyBtn)).check(matches(isClickable()));
+    }
+
+    @Test
+    public void testSafetyButtonClickFiresCorrectIntent(){
         onView(withId(R.id.safetyBtn)).perform(click());
         intended(hasComponent("com.example.andrewwilloughby.campus_assistant.SafetyInfoActivity"));
+    }
+
+    @Test
+    public void testBlackboardButtonIsClickable(){
+        onView(withId(R.id.bbemailMenuBlackboardBtn)).check(matches(isClickable()));
+    }
+
+    @Test
+    public void testBlackboardButtonHasCorrectText(){
+        onView(withId(R.id.bbemailMenuBlackboardBtn)).check(matches(withText("Blackboard")));
     }
 
     @Test
@@ -54,6 +68,16 @@ public class BBEmailMenuInstrumentedTests {
                 hasExtra(equalTo("webpageURL"), equalTo("https://bb.reading.ac.uk/")),
                 hasExtra(equalTo("webpageName"), equalTo("Blackboard")),
                 hasComponent("com.example.andrewwilloughby.campus_assistant.WebpageViewActivity")));
+    }
+
+    @Test
+    public void testEmailButtonIsClickable(){
+        onView(withId(R.id.bbemailMenuEmailBtn)).check(matches(isClickable()));
+    }
+
+    @Test
+    public void testEmailButtonHasCorrectText(){
+        onView(withId(R.id.bbemailMenuEmailBtn)).check(matches(withText("Email")));
     }
 
     @Test

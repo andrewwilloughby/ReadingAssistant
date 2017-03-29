@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.view.View;
@@ -29,6 +30,7 @@ import net.fortuna.ical4j.model.Property;
 import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.model.property.DtEnd;
 import net.fortuna.ical4j.model.property.DtStart;
+import net.fortuna.ical4j.model.property.ExDate;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -46,10 +48,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 
 /**
  * Activity for displaying student timetable.
- *
  * @author Andrew Willoughby
  */
 public class CalendarActivity extends AppCompatActivity implements View.OnClickListener, CalendarView.OnDateChangeListener, AdapterView.OnItemClickListener{
@@ -60,13 +62,12 @@ public class CalendarActivity extends AppCompatActivity implements View.OnClickL
     private ProgressDialog progressDialog;
     private Calendar studentCalendar;
     private Context context;
-    private DateFormat eventTimeFormat = new SimpleDateFormat("h:mma"), eventDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    private DateFormat eventTimeFormat = new SimpleDateFormat("h:mma", Locale.UK), eventDateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.UK);
     private String username = null, password = null, calendarString = null;
-    private boolean credentialsFailFlag = false, noCredentialsFlag = false;
+    private boolean credentialsFailFlag = false, noCredentialsFlag = false, failedLoadFlag = false;
 
     /**
      * Method to set up the Activity upon creation.
-     *
      * @param savedInstanceState parameter which indicates the previous state of the activity.
      */
     @Override
@@ -106,18 +107,17 @@ public class CalendarActivity extends AppCompatActivity implements View.OnClickL
 
     /**
      * Method to handle click events on items in the events listview.
-     *
      * @param parent the parent of the item being clicked.
      * @param view the listview.
      * @param position the position in the listview of the item.
-     * @param id
+     * @param id the ID of the item to click.
      */
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         HashMap<String, String> event =  (HashMap<String, String>) lv.getItemAtPosition(position);
 
         String addressToPass = getBuildingAddress(event.get("location"));
 
-        if ((addressToPass != null) && (addressToPass != "non existent")){
+        if ((addressToPass != null) && (!addressToPass.equals("non existent"))){
             Intent intent = new Intent(context, InteractiveMapActivity.class);
             intent.putExtra("search_value", addressToPass);
             startActivity(intent);
@@ -128,13 +128,12 @@ public class CalendarActivity extends AppCompatActivity implements View.OnClickL
 
     /**
      * Method to handle dates within the Calendar being selected.
-     *
      * @param view the CalendarView within which the change occurred.
      * @param year the year of the date selected.
      * @param month the month of the date selected.
      * @param dayOfMonth the day of the month of the date selected.
      */
-    public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
+    public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
         if (!credentialsFailFlag){
             Date selected = null;
 
@@ -146,7 +145,7 @@ public class CalendarActivity extends AppCompatActivity implements View.OnClickL
             String dayStr = Integer.toString(dayOfMonth);
             String dateStr = dayStr + monthStr + yearStr;
 
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("ddMyyyy");
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("ddMyyyy", Locale.UK);
 
             try {
                 selected = simpleDateFormat.parse(dateStr);
@@ -178,7 +177,6 @@ public class CalendarActivity extends AppCompatActivity implements View.OnClickL
                     String eventTiming = eventStartTime + " to " + eventEndTime;
 
                     HashMap<String, String> calendarEvent = new HashMap<>();
-
                     calendarEvent.put("summary", summary);
                     calendarEvent.put("location", location);
                     calendarEvent.put("startTime", eventStartTime);
@@ -201,31 +199,27 @@ public class CalendarActivity extends AppCompatActivity implements View.OnClickL
 
     /**
      * Method to handle onClick events from buttons displayed in the activity.
-     *
      * @param viewInput the view initiating the onClick method.
      */
     public void onClick(View viewInput){
         switch (viewInput.getId()){
-            case R.id.todayBtn:{
-                calendarView.setDate(System.currentTimeMillis(),false,true); break;
-            }
+            case R.id.todayBtn: calendarView.setDate(System.currentTimeMillis(),false,true); break;
         }
     }
 
     /**
      * Method that returns the string value to search within the Google Map to find buildings on the UoR campus.
-     *
      * @param buildingName the location of the event clicked in the timetable.
      * @return string value which will be placed in the Search box within the Map activity.
      */
     protected String getBuildingAddress(String buildingName){
         switch (buildingName.substring(0, 3).toLowerCase()){
             case "agr"  : return "Agriculture building, Reading RG6 6BZ";
-            case "arch" : return "Archaeology Building, Reading RG6 6AX";
+            case "arc" : return "Archaeology Building, Reading RG6 6AX";
             case "all"  : return "The Allen Laboratory, Earley, Reading RG6 6AX";
             case "bus"  : return "Centre for Entrepreneurship, Henley Business School, Reading RG6 6UD";
             case "car"  : return "Carrington Building, Reading RG6 6UA";
-            case "cha"  : return "51.440210, -0.949907"; //Currently co-ordinates for the new building.
+            case "cha"  : return "51.440210, -0.949907"; //Current co-ordinates for the Chancellor's building.
             case "che"  : return "Chemistry and Pharmacy Building, Reading RG6 6LA";
             case "whi"  : return "Whiteknights House, Reading RG6";
             case "eng"  : return "Engineering Building, Pepper Lane, Earley";
@@ -253,7 +247,6 @@ public class CalendarActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-
         Intent intent = new Intent(context, MainActivity.class);
         startActivity(intent);
     }
@@ -286,7 +279,7 @@ public class CalendarActivity extends AppCompatActivity implements View.OnClickL
                 connection.setRequestProperty("Authorization", basicAuth);
 
                 inputStream = new BufferedInputStream(connection.getInputStream());
-            } catch (IOException e) {
+            } catch (Exception e) {
                 System.out.println("IO error");
             }
 
@@ -302,11 +295,28 @@ public class CalendarActivity extends AppCompatActivity implements View.OnClickL
                 calendarString = stringBuilder.toString();
 
             } catch (UnknownHostException e) {
-                Toast.makeText(getApplicationContext(), "Download failed, no network connection.", Toast.LENGTH_SHORT).show();
+                runOnUiThread(new Runnable(){
+                    @Override
+                    public void run(){
+                        Toast.makeText(getApplicationContext(), "Download failed, no network connection.", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
             } catch (UnsupportedEncodingException e) {
-                Toast.makeText(getApplicationContext(), "Timetable encoding error, please retry.", Toast.LENGTH_SHORT).show();
+                runOnUiThread(new Runnable(){
+                    @Override
+                    public void run(){
+                        Toast.makeText(getApplicationContext(), "Timetable encoding error, please retry.", Toast.LENGTH_SHORT).show();
+                    }
+                });
             } catch (Exception e) {
-                Toast.makeText(getApplicationContext(), "An unknown error occurred", Toast.LENGTH_SHORT).show();
+                runOnUiThread(new Runnable(){
+                    @Override
+                    public void run(){
+                        Toast.makeText(getApplicationContext(), "Please verify your University Credentials.", Toast.LENGTH_SHORT).show();
+                        failedLoadFlag = true;
+                    }
+                });
             }
 
             if (calendarString != null){
@@ -315,7 +325,7 @@ public class CalendarActivity extends AppCompatActivity implements View.OnClickL
                 try {
                     studentCalendar = calendarBuilder.build(stringReader);
                 } catch (IOException | ParserException e) {
-                    Toast.makeText(getApplicationContext(), "Error reading Student Timetable. Please try again", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Error reading Student Timetable. Please try again.", Toast.LENGTH_SHORT).show();
                 }
             } else {
                 credentialsFailFlag = true;
@@ -326,9 +336,8 @@ public class CalendarActivity extends AppCompatActivity implements View.OnClickL
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-            if (progressDialog.isShowing()){
-                progressDialog.dismiss();
-            }
+            if (progressDialog.isShowing()){ progressDialog.dismiss(); }
+            if (failedLoadFlag){ onBackPressed(); }
         }
     }
 }

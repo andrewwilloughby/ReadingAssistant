@@ -12,6 +12,7 @@ import android.view.ViewParent;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
+import org.hamcrest.core.IsInstanceOf;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,118 +22,108 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 
-@LargeTest
 @RunWith(AndroidJUnit4.class)
-public class openSafetyInfoVerifyUIComponents {
+public class MainActivityInstrumentedTest {
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     @Test
-    public void openSafetyInfoVerifyUIComponents() {
-        ViewInteraction appCompatImageButton = onView(
-                allOf(withId(R.id.safetyBtn), isDisplayed()));
-        appCompatImageButton.perform(click());
+    public void mainActivityInstrumentedTest() {
+        onView(withId(R.id.expandableList)).check(matches(isDisplayed()));
+        onView(withId(R.id.viewStyleBtn)).check(matches(isDisplayed()));
 
-        ViewInteraction textView = onView(
-                allOf(withText("Safety Information"),
-                        childAtPosition(
-                                allOf(withId(R.id.action_bar),
-                                        childAtPosition(
-                                                withId(R.id.action_bar_container),
-                                                0)),
-                                0),
-                        isDisplayed()));
-        textView.check(matches(withText("Safety Information")));
-
-        ViewInteraction imageView = onView(
-                allOf(withId(R.id.headBackgroundImage),
-                        childAtPosition(
-                                allOf(withId(R.id.headImageContainer),
-                                        childAtPosition(
-                                                withId(R.id.activityContainer),
-                                                0)),
-                                0),
-                        isDisplayed()));
-        imageView.check(matches(isDisplayed()));
-
-        ViewInteraction textView2 = onView(
-                allOf(withId(R.id.emergencyMessage1), withText("In an emergency, always dial 999."),
-                        childAtPosition(
-                                allOf(withId(R.id.activityContainer),
-                                        childAtPosition(
-                                                withId(R.id.activity_safety_info),
-                                                0)),
-                                1),
-                        isDisplayed()));
-        textView2.check(matches(withText("In an emergency, always dial 999.")));
-
-        ViewInteraction textView3 = onView(
-                allOf(withId(R.id.emergencyMessage2), withText("When safe to do so, contact University of Reading Security."),
-                        childAtPosition(
-                                allOf(withId(R.id.activityContainer),
-                                        childAtPosition(
-                                                withId(R.id.activity_safety_info),
-                                                0)),
-                                2),
-                        isDisplayed()));
-        textView3.check(matches(withText("When safe to do so, contact University of Reading Security.")));
-
-        ViewInteraction button = onView(
-                allOf(withId(R.id.securityEmergencyBtn),
+        ViewInteraction imageButton2 = onView(
+                allOf(withId(R.id.safetyBtn),
                         childAtPosition(
                                 childAtPosition(
-                                        withId(R.id.activityContainer),
-                                        3),
+                                        IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
+                                        2),
+                                0),
+                        isDisplayed()));
+        imageButton2.check(matches(isDisplayed()));
+
+        ViewInteraction imageButton3 = onView(
+                allOf(withId(R.id.safetyBtn),
+                        childAtPosition(
+                                childAtPosition(
+                                        IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
+                                        2),
+                                0),
+                        isDisplayed()));
+        imageButton3.check(matches(isDisplayed()));
+
+        ViewInteraction appCompatImageButton = onView(
+                allOf(withId(R.id.viewStyleBtn), isDisplayed()));
+        appCompatImageButton.perform(click());
+
+        ViewInteraction button = onView(
+                allOf(withId(R.id.mainStudentInfoBtn),
+                        childAtPosition(
+                                allOf(withId(R.id.firstRowLayout),
+                                        childAtPosition(
+                                                withId(R.id.gridLayout),
+                                                0)),
                                 0),
                         isDisplayed()));
         button.check(matches(isDisplayed()));
 
         ViewInteraction button2 = onView(
-                allOf(withId(R.id.securityNonEmergencyBtn),
+                allOf(withId(R.id.mainLatestNewsBtn),
                         childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.activityContainer),
-                                        3),
+                                allOf(withId(R.id.firstRowLayout),
+                                        childAtPosition(
+                                                withId(R.id.gridLayout),
+                                                0)),
                                 1),
                         isDisplayed()));
         button2.check(matches(isDisplayed()));
 
         ViewInteraction button3 = onView(
-                allOf(withId(R.id.personalSafetyBtn),
+                allOf(withId(R.id.mainCampusNavBtn),
                         childAtPosition(
-                                allOf(withId(R.id.safetyGridLayout),
+                                allOf(withId(R.id.secondRowLayout),
                                         childAtPosition(
                                                 withId(R.id.gridLayout),
-                                                0)),
+                                                1)),
                                 0),
                         isDisplayed()));
         button3.check(matches(isDisplayed()));
 
         ViewInteraction button4 = onView(
-                allOf(withId(R.id.healthAndSafetyBtn),
+                allOf(withId(R.id.mainTravelInfoBtn),
                         childAtPosition(
-                                allOf(withId(R.id.safetyGridLayout),
+                                allOf(withId(R.id.secondRowLayout),
                                         childAtPosition(
                                                 withId(R.id.gridLayout),
-                                                0)),
+                                                1)),
                                 1),
                         isDisplayed()));
         button4.check(matches(isDisplayed()));
 
         ViewInteraction button5 = onView(
-                allOf(withId(R.id.healthAndSafetyBtn),
+                allOf(withId(R.id.mainBbEmailBtn),
                         childAtPosition(
-                                allOf(withId(R.id.safetyGridLayout),
+                                allOf(withId(R.id.thirdRowLayout),
                                         childAtPosition(
                                                 withId(R.id.gridLayout),
-                                                0)),
-                                1),
+                                                2)),
+                                0),
                         isDisplayed()));
         button5.check(matches(isDisplayed()));
+
+        ViewInteraction button6 = onView(
+                allOf(withId(R.id.mainTimetableBtn),
+                        childAtPosition(
+                                allOf(withId(R.id.thirdRowLayout),
+                                        childAtPosition(
+                                                withId(R.id.gridLayout),
+                                                2)),
+                                1),
+                        isDisplayed()));
+        button6.check(matches(isDisplayed()));
 
     }
 

@@ -117,6 +117,7 @@
 
     <string name="search_nearby_textView_text">Show nearby:</string>
     <string name="search_nearby_prompt">Show nearby</string>
+    <string name="cancel_current_route">Cancel current route.</string>
     <string-array name="search_nearby_items">
         <item>None Selected</item>
         <item>Cafe</item>

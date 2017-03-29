@@ -20,15 +20,12 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.equalTo;
 
-/**
- * Created by andrewwilloughby on 18/01/2017.
- */
-
 @RunWith(AndroidJUnit4.class)
-public class TravelInformationMenuInstrumentedTests {
+public class
+TravelInformationMenuInstrumentedTests {
 
     @Rule
-    public IntentsTestRule<TravelInformationMenuActivity> travelInformationMenuIntentsTestRule = new IntentsTestRule<TravelInformationMenuActivity>(TravelInformationMenuActivity.class);
+    public IntentsTestRule<TravelInformationMenuActivity> travelInformationMenuIntentsTestRule = new IntentsTestRule<>(TravelInformationMenuActivity.class);
 
     @Test
     public void travelInformationMenuPreRequisites(){
@@ -42,12 +39,6 @@ public class TravelInformationMenuInstrumentedTests {
     @Test
     public void testViewStyleButtonIsClickable(){
         onView(withId(R.id.viewStyleBtn)).check(matches(isClickable()));
-    }
-
-    @Test
-    public void testViewStyleButtonFiresCorrectIntent(){
-        onView(withId(R.id.viewStyleBtn)).perform(click());
-        intended(hasComponent("com.example.andrewwilloughby.campus_assistant.MainActivity"));
     }
 
     @Test

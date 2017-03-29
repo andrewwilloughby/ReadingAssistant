@@ -13,7 +13,6 @@ import java.net.URL;
 
     /**
      * Method to download data from URL.
-     *
      * @param string the string value of the URL to download from.
      * @return that data downloaded from the URL.
      */
