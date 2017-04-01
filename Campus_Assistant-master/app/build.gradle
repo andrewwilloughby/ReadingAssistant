@@ -92,3 +92,4 @@ dependencies {
     // add this for webview testing support
     androidTestCompile 'com.android.support.test.espresso:espresso-web:2.2.2'
 }
+apply plugin: 'com.google.gms.google-services'

@@ -204,9 +204,7 @@ public class InteractiveMapActivity extends FragmentActivity implements OnMapRea
 
         double lowerLeftLat = 49.871159, lowerLeftLng = -6.37988, upperRightLat = 55.811741, upperRightLng = 1.76896;
 
-        if (navDetailsLayout.getVisibility() == View.VISIBLE){
-            navDetailsLayout.setVisibility(View.GONE);
-        }
+        if (navDetailsLayout.getVisibility() == View.VISIBLE){ navDetailsLayout.setVisibility(View.GONE); }
 
         if (isNetworkAvailable()) {
             if (view != null) {
@@ -214,22 +212,22 @@ public class InteractiveMapActivity extends FragmentActivity implements OnMapRea
                 inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
             }
 
-            if (!location.isEmpty()) {
+            if (location.isEmpty()) {
+                Toast.makeText(getApplicationContext(), "No search value entered.", Toast.LENGTH_SHORT).show();
+            } else {
                 Geocoder geocoder = new Geocoder(this);
+
                 try {
                     addressList = geocoder.getFromLocationName(location, 1, lowerLeftLat, lowerLeftLng, upperRightLat, upperRightLng);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
 
-                if (addressList.size() < 1) {
-                    Toast.makeText(getApplicationContext(), "No locations found.", Toast.LENGTH_SHORT).show();
-                } else {
-                    if (searchMarker != null){
+                if ((addressList != null) && (addressList.size() >= 1)) {
+                    if (searchMarker != null) {
                         searchMarker.remove();
                     }
-
-                    if (poiMarker != null){
+                    if (poiMarker != null) {
                         poiMarker.remove();
                     }
 
@@ -240,13 +238,9 @@ public class InteractiveMapActivity extends FragmentActivity implements OnMapRea
                     searchMarker.showInfoWindow();
                     map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
                     map.animateCamera(CameraUpdateFactory.zoomTo(11));
-                }
-            } else {
-                Toast.makeText(getApplicationContext(), "No search value entered.", Toast.LENGTH_SHORT).show();
+                } else { Toast.makeText(getApplicationContext(), "No locations found.", Toast.LENGTH_SHORT).show(); }
             }
-        } else {
-            Toast.makeText(getApplicationContext(), "No network available.", Toast.LENGTH_SHORT).show();
-        }
+        } else { Toast.makeText(getApplicationContext(), "No network available.", Toast.LENGTH_SHORT).show(); }
     }
 
     /**
@@ -285,41 +279,42 @@ public class InteractiveMapActivity extends FragmentActivity implements OnMapRea
         map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
-                if (routeLine != null){
-                    routeLine.remove();
+
+                if (routeLine != null){ routeLine.remove(); }
+
+                if (searchNearbyItems.getVisibility() == View.VISIBLE){ searchNearbyItems.setVisibility(View.GONE); }
+
+                if (currentLocation != null){
+                    LatLng originLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+                    String originLatLngStr = originLatLng.toString().replace("lat/lng: ", "").replace("(", "").replace(")", "");
+
+                    LatLng destinationLatLng = marker.getPosition();
+                    String destinationlatLngStr = destinationLatLng.toString().replace("lat/lng: ", "").replace("(", "").replace(")", "");
+
+                    url = makeDirectionsUrl(originLatLngStr, destinationlatLngStr);
+
+                    try {
+                        String jsonStr = new GetJSONStr().execute().get();
+                        drawPath(jsonStr);
+                    } catch (InterruptedException | ExecutionException e) {
+                        Toast.makeText(getApplicationContext(), "Error obtaining route information. Check network connection.", Toast.LENGTH_SHORT).show();
+                    }
+
+                    LatLngBounds.Builder builder = new LatLngBounds.Builder();
+                    builder.include(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
+                    builder.include(marker.getPosition());
+
+                    LatLngBounds bounds = builder.build();
+
+                    CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, 100);
+                    map.animateCamera(cameraUpdate);
+
+                    navDetailsLayout.setVisibility(View.VISIBLE);
+                    distanceTextView.setText(distance);
+                    durationTextView.setText(duration);
+                } else {
+                    Toast.makeText(getApplicationContext(), "No current location established. Check network connection.", Toast.LENGTH_SHORT).show();
                 }
-
-                if (searchNearbyItems.getVisibility() == View.VISIBLE){
-                    searchNearbyItems.setVisibility(View.GONE);
-                }
-
-                LatLng originLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-                String originLatLngStr = originLatLng.toString().replace("lat/lng: ", "").replace("(", "").replace(")", "");
-
-                LatLng destinationLatLng = marker.getPosition();
-                String destinationlatLngStr = destinationLatLng.toString().replace("lat/lng: ", "").replace("(", "").replace(")", "");
-
-                url = makeDirectionsUrl(originLatLngStr, destinationlatLngStr);
-
-                try {
-                    String jsonStr = new GetJSONStr().execute().get();
-                    drawPath(jsonStr);
-                } catch (InterruptedException | ExecutionException e) {
-                    Toast.makeText(getApplicationContext(), "Error obtaining route information. Check network connection.", Toast.LENGTH_SHORT).show();
-                }
-
-                LatLngBounds.Builder builder = new LatLngBounds.Builder();
-                builder.include(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
-                builder.include(marker.getPosition());
-
-                LatLngBounds bounds = builder.build();
-
-                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, 100);
-                map.animateCamera(cameraUpdate);
-
-                navDetailsLayout.setVisibility(View.VISIBLE);
-                distanceTextView.setText(distance);
-                durationTextView.setText(duration);
             }
         });
 
@@ -489,8 +484,7 @@ public class InteractiveMapActivity extends FragmentActivity implements OnMapRea
      * @return the populated RESTful URL, ready to be executed.
      */
     protected String buildPlacesUrl(double latitude, double longitude, String nearbyPlace){
-        String places = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?" + "location=" + latitude + "," + longitude + "&radius=" + proximityRadius + "&type=" + nearbyPlace + "&sensor=true&key=AIzaSyATuUiZUkEc_UgHuqsBJa1oqaODI-3mLs0";
-        return places;
+        return "https://maps.googleapis.com/maps/api/place/nearbysearch/json?" + "location=" + latitude + "," + longitude + "&radius=" + proximityRadius + "&type=" + nearbyPlace + "&sensor=true&key=AIzaSyATuUiZUkEc_UgHuqsBJa1oqaODI-3mLs0";
     }
 
     /**

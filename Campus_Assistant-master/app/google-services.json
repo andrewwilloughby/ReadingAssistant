@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1078310951632",
+    "firebase_url": "https://tokyo-mind-150815.firebaseio.com",
+    "project_id": "tokyo-mind-150815",
+    "storage_bucket": "tokyo-mind-150815.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1078310951632:android:9bfcc4581646b1f9",
+        "android_client_info": {
+          "package_name": "com.example.andrewwilloughby.campus_assistant"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1078310951632-ne3hl18l114qhgt1grghgk16b87cikdr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDaIZKVU5FRuAldF5CQCpAyYtaogusObe4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -299,17 +299,16 @@ public class CalendarActivity extends AppCompatActivity implements View.OnClickL
                     @Override
                     public void run(){
                         Toast.makeText(getApplicationContext(), "Download failed, no network connection.", Toast.LENGTH_SHORT).show();
-
                     }
                 });
-            } catch (UnsupportedEncodingException e) {
+            } catch (IOException e) {
                 runOnUiThread(new Runnable(){
                     @Override
                     public void run(){
-                        Toast.makeText(getApplicationContext(), "Timetable encoding error, please retry.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Error reading timetable, please retry.", Toast.LENGTH_SHORT).show();
                     }
                 });
-            } catch (Exception e) {
+            } catch (RuntimeException e) {
                 runOnUiThread(new Runnable(){
                     @Override
                     public void run(){
